@@ -12,6 +12,8 @@ export const FontFamily = {
 };
 
 export const Color = {
+  gray: "#7D86A9",
+
   colorGainsboro: "#e3e3e3",
   colorDarkgray: "#9b9b9b",
   colorDarkslategray: "#363636",
@@ -20,6 +22,7 @@ export const Color = {
   colorGray: "#828282",
   appDefaultColor: "#1C4BF4",
   secondaryColor: "#102C8E",
-  colorGrayLight: "#C4C4C4",
+  backGroundColor: "#DCE5F3",
+  textGraycolor: "#7D86A9",
   colorGrayNormal: "#4C4E64",
 };
