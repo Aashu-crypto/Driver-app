@@ -8,6 +8,9 @@ import {
   SafeAreaView,
 } from "react-native";
 import { Color } from "../../../GlobalStyles";
+import HeaderComponent from "../../components/HeaderComponent";
+import Button from "../../components/Button";
+import { Route } from "../../../routes";
 
 const OptionSelector = ({ options, selectedOption, setSelectedOption }) => {
   return (
@@ -56,7 +59,7 @@ const Section = ({
   );
 };
 
-export default function VehicleInspectionScreen() {
+export default function VehicleInspectionScreen({ navigation }) {
   const [vehicleBodyCondition, setVehicleBodyCondition] = useState("Very Good");
   const [headlightsWorking, setHeadlightsWorking] = useState("No");
   const [tailLightsWorking, setTailLightsWorking] = useState("No");
@@ -70,9 +73,8 @@ export default function VehicleInspectionScreen() {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <HeaderComponent title={"Vehicle Self-Inspection via App"} />
       <ScrollView style={styles.container}>
-        <Text style={styles.header}>Vehicle Self-Inspection via App</Text>
-
         <Section
           title="1. Condition"
           description="Check for dents, scratches, or any damage."
@@ -161,9 +163,12 @@ export default function VehicleInspectionScreen() {
           setSelectedOption={setSpareTireCondition}
         />
 
-        <TouchableOpacity style={styles.nextButton}>
-          <Text style={styles.nextButtonText}>Next</Text>
-        </TouchableOpacity>
+        <Button
+          placeholder={"Next"}
+          onPress={() => {
+            navigation.navigate(Route.UPLOADDOCUMENT);
+          }}
+        />
       </ScrollView>
     </SafeAreaView>
   );
@@ -173,7 +178,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 20,
-    backgroundColor: "#f0f4fa",
+    backgroundColor: "#fff",
   },
   header: {
     fontSize: 22,
@@ -185,7 +190,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginVertical: 10,
-    color: Color.appDefaultColor
+    color: Color.appDefaultColor,
   },
   subHeader: {
     fontSize: 16,

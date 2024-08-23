@@ -81,8 +81,6 @@ const OnBoarding = () => {
 
   return (
     <SafeAreaView>
-      <Text>OnBoarding</Text>
-
       <FlatList
         data={obj}
         horizontal
@@ -104,7 +102,13 @@ const OnBoarding = () => {
         )}
       />
       <Paginator data={obj} scrollX={scrollX} />
-      <View>
+      <View
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: 30,
+        }}
+      >
         <Button placeholder={"Next"} onPress={onNext} />
       </View>
     </SafeAreaView>

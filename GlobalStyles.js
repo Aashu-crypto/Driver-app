@@ -23,6 +23,6 @@ export const Color = {
   appDefaultColor: "#1C4BF4",
   secondaryColor: "#102C8E",
   backGroundColor: "#DCE5F3",
-  textGraycolor: "#7D86A9",
+  textGraycolor: "#4A4A4A",
   colorGrayNormal: "#4C4E64",
 };

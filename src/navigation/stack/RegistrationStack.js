@@ -9,6 +9,7 @@ import DriverRegistration from "../../screens/driverRegistration/DriverRegistrat
 import Welcome from "../../screens/driverRegistration/Welcome";
 import VehicleType from "../../screens/driverRegistration/VehicleType";
 import VehicleInspection from "../../screens/driverRegistration/VehicleInspection";
+import UploadDocument from "../../screens/driverRegistration/UploadDocument";
 
 const RegistrationStack = () => {
   const Stack = createStackNavigator();
@@ -20,7 +21,11 @@ const RegistrationStack = () => {
       />
       <Stack.Screen name={Route.WELCOME} component={Welcome} />
       <Stack.Screen name={Route.VEHICLETYPE} component={VehicleType} />
-      <Stack.Screen name={Route.VEHICLEINSPECION} component={VehicleInspection}/>
+      <Stack.Screen
+        name={Route.VEHICLEINSPECION}
+        component={VehicleInspection}
+      />
+      <Stack.Screen name={Route.UPLOADDOCUMENT} component={UploadDocument} />
     </Stack.Navigator>
   );
 };
