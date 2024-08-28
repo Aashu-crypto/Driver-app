@@ -10,11 +10,17 @@ import Welcome from "../../screens/driverRegistration/Welcome";
 import VehicleType from "../../screens/driverRegistration/VehicleType";
 import VehicleInspection from "../../screens/driverRegistration/VehicleInspection";
 import UploadDocument from "../../screens/driverRegistration/UploadDocument";
+import VehicleSelfInspection from "../../screens/vehicleInspection/VehicleSelfInspection";
+import QuizScreen from "../../screens/vehicleInspection/VehicleQuiz";
+import ApplicationSubmittedScreen from "../../screens/vehicleInspection/ApplicationSubmittedScreen";
 
 const RegistrationStack = () => {
   const Stack = createStackNavigator();
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator
+      screenOptions={{ headerShown: false }}
+      initialRouteName={Route.VEHICLESELFINSPECION}
+    >
       <Stack.Screen
         name={Route.DRIVERREGISTRATION}
         component={DriverRegistration}
@@ -26,6 +32,16 @@ const RegistrationStack = () => {
         component={VehicleInspection}
       />
       <Stack.Screen name={Route.UPLOADDOCUMENT} component={UploadDocument} />
+      <Stack.Screen
+        name={Route.VEHICLESELFINSPECION}
+        component={VehicleSelfInspection}
+      />
+      <Stack.Screen name={Route.VEHICLEQUIZ} component={QuizScreen} />
+
+      <Stack.Screen
+        name={Route.APPLICATIONSUBMITTED}
+        component={ApplicationSubmittedScreen}
+      />
     </Stack.Navigator>
   );
 };
