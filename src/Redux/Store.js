@@ -1,8 +1,8 @@
-import {configureStore, combineReducers} from '@reduxjs/toolkit';
-import indexSlice from './Slice/indexSlice';
-import screenSlice from './Slice/screenNameSlice';
-import docSlice from './Slice/DoctorDetailSlice';
-import profileSlice from './Slice/ProfileDataSlice';
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import indexSlice from "./Slice/indexSlice";
+import screenSlice from "./Slice/screenNameSlice";
+import docSlice from "./Slice/DoctorDetailSlice";
+import profileSlice from "./Slice/ProfileDataSlice";
 import {
   persistReducer,
   persistStore,
@@ -12,31 +12,32 @@ import {
   PERSIST,
   PURGE,
   REGISTER,
-} from 'redux-persist';
-import OptionSlice from './Slice/OptionSlice';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import heightSlice from './Slice/heightSlice';
-import articleIdSlice from './Slice/ArticleIdSlice';
+} from "redux-persist";
+import OptionSlice from "./Slice/OptionSlice";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import articleIdSlice from "./Slice/ArticleIdSlice";
+import UserStatusSlice from "./Slice/UserStatusSlice";
 const rootReducer = combineReducers({
   screen: screenSlice,
-  height: heightSlice,
+  status: UserStatusSlice,
   index: indexSlice,
   doc: docSlice,
-  option:OptionSlice,
+  option: OptionSlice,
   profile: profileSlice,
-  articleId:articleIdSlice
+  articleId: articleIdSlice,
 });
 
 const persistConfig = {
-  key: 'root',
+  key: "root",
   storage: AsyncStorage,
-  blacklist: ['screen', 'index', 'height','article'],
+  blacklist: ["screen", "index",  "article"],
 };
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
-  middleware: getDefaultMiddleware =>
+  middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],

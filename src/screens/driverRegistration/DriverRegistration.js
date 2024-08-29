@@ -12,7 +12,7 @@ import { Color, FontFamily, height, width } from "../../../GlobalStyles";
 import Checkbox from "expo-checkbox";
 import Button from "../../components/Button";
 import { Route } from "../../../routes";
-const DriverRegistration = ({navigation}) => {
+const DriverRegistration = ({ navigation }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -32,7 +32,7 @@ const DriverRegistration = ({navigation}) => {
           <View
             style={{
               flexDirection: "row",
-              width: "90%",
+              width: "100%",
               justifyContent: "space-between",
             }}
           >
@@ -84,7 +84,12 @@ const DriverRegistration = ({navigation}) => {
           </Text>
         </View>
 
-       <Button placeholder={"Continue"} onPress={()=>{navigation.navigate(Route.WELCOME)}}/>
+        <Button
+          placeholder={"Continue"}
+          onPress={() => {
+            navigation.navigate(Route.WELCOME);
+          }}
+        />
       </View>
     </SafeAreaView>
   );
@@ -128,12 +133,12 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.poppinsRegular,
     color: Color.textGraycolor,
     textAlign: "left",
-  
-    alignSelf:'flex-start'
+
+    alignSelf: "flex-start",
   },
   inputContainer: {
-    width: width,
-   
+    width: width * 0.9,
+
     alignItems: "center",
   },
   nameInput: {
@@ -144,7 +149,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginBottom: 10,
     backgroundColor: "#fff",
-    width: "47%",
+    width: "49%",
     justifyContent: "space-between",
   },
   input: {
@@ -155,12 +160,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginBottom: 10,
     backgroundColor: "#fff",
-    width: "90%",
+    width: "100%",
   },
   checkboxContainer: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 20,
+    width: width * 0.9,
   },
   checkboxLabel: {
     marginLeft: 10,

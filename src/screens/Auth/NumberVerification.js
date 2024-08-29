@@ -10,10 +10,12 @@ import {
   Alert,
   Image,
   Dimensions,
+  TouchableNativeFeedback,
+  Keyboard,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { FontFamily } from "../../../GlobalStyles";
+import { Color, FontFamily } from "../../../GlobalStyles";
 import { Route } from "../../../routes";
 
 const { width, height } = Dimensions.get("window");
@@ -33,32 +35,63 @@ export default function NumberVerfication({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor={"#1C4BF4"} />
-      <LinearGradient
-        colors={["#1C4BF4", "#3b5998", "#192f6a"]}
-        style={styles.headerContainer}
-      >
-        <Text style={styles.headerText}>Find a best ride for yourself</Text>
-      </LinearGradient>
-      <View style={styles.inputContainer}>
-        <Text style={styles.PhoneText}>Phone Number</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter mobile number"
-          placeholderTextColor="#aaa"
-          keyboardType="phone-pad"
-          value={phoneNumber}
-          onChangeText={setPhoneNumber}
-        />
-        <TouchableOpacity
-          style={styles.continueButton}
-          onPress={handleContinue}
+    <TouchableNativeFeedback onPress={() => Keyboard.dismiss()}>
+      <SafeAreaView style={styles.container}>
+        <StatusBar barStyle="light-content" backgroundColor={"#1C4BF4"} />
+        <LinearGradient
+          colors={["#1C4BF4", "#3b5998", "#192f6a"]}
+          style={styles.headerContainer}
         >
-          <Text style={styles.continueButtonText}>Continue</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+          <Image
+            source={require("../../../assets/img/Logo.png")}
+            style={{ width: "60%", resizeMode: "contain" }}
+          />
+          <Text style={styles.headerText}>Welcome to Zaptric driver app</Text>
+        </LinearGradient>
+        <Text
+          style={{
+            fontSize: 24,
+            lineHeight: 36,
+
+            color: Color.textGraycolor,
+            marginTop: 20,
+            fontFamily: FontFamily.poppinsRegular,
+          }}
+        >
+          Login/Register
+        </Text>
+        <View style={styles.inputContainer}>
+          <Text style={styles.PhoneText}>Enter your phone number</Text>
+          <Text
+            style={{
+              fontSize: 11,
+              lineHeight: 16.5,
+
+              color: Color.textGraycolor,
+
+              fontFamily: FontFamily.poppinsRegular,
+            }}
+          >
+            Payment info, ride details and important updated will be sent to
+            this number
+          </Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter mobile number"
+            placeholderTextColor="#aaa"
+            keyboardType="phone-pad"
+            value={phoneNumber}
+            onChangeText={setPhoneNumber}
+          />
+          <TouchableOpacity
+            style={styles.continueButton}
+            onPress={handleContinue}
+          >
+            <Text style={styles.continueButtonText}>Continue</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    </TouchableNativeFeedback>
   );
 }
 
@@ -98,15 +131,17 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   inputContainer: {
-    width: "100%",
+    width: "92%",
     alignItems: "center",
     marginTop: 20,
+    flex: 1,
+    gap: 10,
   },
   input: {
-    width: "90%",
+    width: "100%",
     height: 50,
     backgroundColor: "#ffffff",
-    borderRadius: 25,
+    borderRadius: 10,
     paddingHorizontal: 20,
     marginBottom: 20,
     fontSize: 14,
@@ -117,12 +152,14 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.poppinsRegular,
   },
   continueButton: {
-    width: "90%",
+    width: "100%",
     height: 50,
-    backgroundColor: "#1C4BF4",
-    borderRadius: 25,
+    backgroundColor: Color.appDefaultColor,
+    borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
+    position: "absolute",
+    bottom: 10,
   },
   continueButtonText: {
     color: "#ffffff",

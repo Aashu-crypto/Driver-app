@@ -5,7 +5,7 @@ import { Color, width } from "../../GlobalStyles";
 const Button = ({ placeholder, onPress }) => {
   return (
     <Pressable
-      style={{ justifyContent: "center", alignItems: "center" }}
+      style={{ justifyContent: "center", alignItems: "center" ,width:width*0.90,alignSelf:'center'}}
       onPress={onPress}
     >
       <LinearGradient
@@ -26,14 +26,14 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "orange",
+  
   },
 
   button: {
     padding: 15,
     alignItems: "center",
     borderRadius: 5,
-    width: "80%",
+    width: "100%",
     alignSelf: "center",
     marginTop: 20,
   },
