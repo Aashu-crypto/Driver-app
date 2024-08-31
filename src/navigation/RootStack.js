@@ -6,6 +6,7 @@ import { Route } from "../../routes";
 import OnBoardingStack from "./stack/OnBoardingStack";
 import RegistrationStack from "./stack/RegistrationStack";
 import HomeStack from "./stack/HomeStack";
+import MyDrawer from "./drawer/DrawerNavigation";
 
 const RootStack = () => {
   const navigation = useSelector((state) => state.screen.screen);
@@ -13,11 +14,11 @@ const RootStack = () => {
 
   switch (navigation) {
     case Route.MAIN:
-      return <HomeStack />;
+      return <MyDrawer />;
     case Route.REGISTRATION_STACK:
       return <RegistrationStack />;
     case Route.HOME_STACK:
-      return <HomeStack />;
+      return <MyDrawer />;
 
     default:
       return <OnBoardingStack />;
