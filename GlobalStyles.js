@@ -13,6 +13,8 @@ export const FontFamily = {
 
 export const Color = {
   gray: "#7D86A9",
+  green: "#209447",
+  borderColor: "#C3C2FF",
 
   colorGainsboro: "#e3e3e3",
   colorDarkgray: "#9b9b9b",

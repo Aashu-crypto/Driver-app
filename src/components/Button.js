@@ -2,10 +2,16 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { Color, width } from "../../GlobalStyles";
-const Button = ({ placeholder, onPress }) => {
+
+const Button = ({ placeholder, onPress, btnWidth }) => {
   return (
     <Pressable
-      style={{ justifyContent: "center", alignItems: "center" ,width:width*0.90,alignSelf:'center'}}
+      style={{
+        justifyContent: "center",
+        alignItems: "center",
+        width: btnWidth || width * 0.9, // Use btnWidth if provided, otherwise default to 90% of screen width
+        alignSelf: "center",
+      }}
       onPress={onPress}
     >
       <LinearGradient
@@ -26,7 +32,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-  
   },
 
   button: {

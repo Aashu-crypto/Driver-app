@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import Button from "../../components/Button";
 import { Route } from "../../../routes";
 
-const HomeScreen = ({navigation}) => {
+const HomeScreen = ({ navigation }) => {
   const status = useSelector((state) => state.status.status);
   const [findRide, setFindRide] = useState();
   return (
@@ -75,7 +75,7 @@ const HomeScreen = ({navigation}) => {
               </View>
             </View>
 
-            <View style={[styles.rideDetail,{marginLeft:15}]}>
+            <View style={[styles.rideDetail, { marginLeft: 15 }]}>
               <View style={styles.locationIconContainer}>
                 <MaterialIcons name="access-time" size={20} color="#4169e1" />
               </View>
@@ -99,7 +99,10 @@ const HomeScreen = ({navigation}) => {
             </View>
           </View>
           <View>
-            <Button placeholder={"Accept"} onPress={()=>navigation.navigate(Route.CLIENTLOCATION)}/>
+            <Button
+              placeholder={"Accept"}
+              onPress={() => navigation.navigate(Route.CLIENTLOCATION)}
+            />
           </View>
         </View>
       )}
@@ -188,7 +191,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     position: "absolute",
     alignSelf: "center", // Center the bottom card horizontally
-    bottom: 0,
+    bottom: 10,
     backgroundColor: "#fff",
   },
   iconContainer: {
@@ -250,7 +253,7 @@ const styles = StyleSheet.create({
   },
   rideTextContainer: {
     flex: 1,
-    marginRight:15
+    marginRight: 15,
   },
   rideLocation: {
     fontSize: 13,
@@ -266,7 +269,6 @@ const styles = StyleSheet.create({
     color: Color.colorDarkslategray,
     fontFamily: FontFamily.poppinsRegular,
   },
- 
 });
 
 export default HomeScreen;
