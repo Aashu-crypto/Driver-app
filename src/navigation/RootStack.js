@@ -15,7 +15,7 @@ const RootStack = () => {
 
   switch (navigation) {
     case Route.MAIN:
-      return <EarningStack />;
+      return <MyDrawer />;
     case Route.REGISTRATION_STACK:
       return <RegistrationStack />;
     case Route.HOME_STACK:
