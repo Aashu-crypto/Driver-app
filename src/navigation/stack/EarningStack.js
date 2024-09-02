@@ -7,11 +7,16 @@ import EarningMainScreen from "../../screens/earning/EarningMainScreen";
 import EarningHistory from "../../screens/earning/EarningHistory";
 import SubscriptionPlanScreen from "../../screens/earning/SubscriptionPlanScreen";
 import Wallet from "../../screens/earning/Wallet";
+import AllOrders from "../../screens/earning/AllOrders";
+import OrderDetailsScreen from "../../screens/earning/OrderDetails";
 
 const EarningStack = () => {
   const Stack = createStackNavigator();
   return (
-    <Stack.Navigator initialRouteName={Route.EARNINGHISTORY} screenOptions={{ headerShown: true }}>
+    <Stack.Navigator
+      initialRouteName={Route.ORDERDETAILS}
+      screenOptions={{ headerShown: true }}
+    >
       <Stack.Screen
         name={Route.EARNING}
         component={EarningMainScreen}
@@ -31,6 +36,16 @@ const EarningStack = () => {
         component={SubscriptionPlanScreen}
       />
       <Stack.Screen name={Route.WALLET} component={Wallet} />
+      <Stack.Screen
+        name={Route.ALLORDERS}
+        component={AllOrders}
+        options={{ title: "All Orders" }}
+      />
+      <Stack.Screen
+        name={Route.ORDERDETAILS}
+        component={OrderDetailsScreen}
+        options={{ title: "Order Details" }}
+      />
     </Stack.Navigator>
   );
 };

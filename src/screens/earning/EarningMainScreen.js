@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { FontAwesome, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 import { Route } from "../../../routes";
-import Earningcard from "../../components/Earningcard";
+import EarningCard from "../../components/EarningCard";
 import Button from "../../components/Button";
 import { Color, width } from "../../../GlobalStyles";
 
@@ -87,7 +87,7 @@ const EarningsScreen = ({ navigation }) => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {/* Today's Earning Card */}
-      <Earningcard amount={"2500"} ridesCount={"6"} />
+      <EarningCard amount={"2500"} ridesCount={"6"} />
 
       {/* Payment Card */}
       <View style={styles.paymentCard}>

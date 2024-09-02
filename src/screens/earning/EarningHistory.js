@@ -1,4 +1,4 @@
-import React, { useState,useRef } from "react";
+import React, { useState, useRef } from "react";
 import {
   View,
   Text,
@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import { BarChart } from "react-native-chart-kit";
-import Earningcard from "../../components/Earningcard";
+import EarningCard from "../../components/EarningCard";
 import Animated, { useSharedValue } from "react-native-reanimated";
 import { Color, FontFamily, width } from "../../../GlobalStyles";
 // Constants for colors and font sizes
@@ -54,14 +54,14 @@ const EarningsScreen = () => {
   const scrollViewRef = useRef(null);
   const scrollLeft = () => {
     scrollViewRef.current.scrollTo({
-      x: scrollViewRef.current.contentOffset.x - 300, // Adjust scroll offset for left
+      x: scrollViewRef.value - 300, // Adjust scroll offset for left
       animated: true,
     });
   };
 
   const scrollRight = () => {
     scrollViewRef.current.scrollTo({
-      x: scrollViewRef.current.contentOffset.x + 300, // Adjust scroll offset for right
+      x: scrollViewRef.value + 300, // Adjust scroll offset for right
       animated: true,
     });
   };
@@ -120,45 +120,32 @@ const EarningsScreen = () => {
         </View>
       )}
       {active == 0 && (
-         <View
-         style={{
-           flexDirection: "row",
-           alignItems: "center",
-         }}
-       >
-         <Pressable onPress={scrollLeft}>
-           <Feather name="arrow-left" size={24} color="black" />
-         </Pressable>
-   
-         <ScrollView
-           horizontal
-           ref={scrollViewRef}
-           showsHorizontalScrollIndicator={false}
-           contentContainerStyle={{ alignItems: "center" }}
-         >
-           {date.map((item, index) => (
-             <Pressable
-               key={index}
-               style={{
-                 paddingHorizontal: 15,
-                 backgroundColor: "lightgray",
-                 margin: 4,
-                 borderRadius: 8,
-               }}
-             >
-               <Text style={{ color: "red" }}>{item}</Text>
-             </Pressable>
-           ))}
-         </ScrollView>
-   
-         <Pressable onPress={scrollRight}>
-           <Feather name="arrow-right" size={24} color="black" />
-         </Pressable>
-       </View>
+        <View style={styles.dateRangeContainer}>
+          <Pressable onPress={scrollLeft}>
+            <Feather name="arrow-left" size={24} color="black" />
+          </Pressable>
+
+          <ScrollView
+            horizontal
+            ref={scrollViewRef}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ alignItems: "center", gap: 10 }}
+          >
+            {date.map((item, index) => (
+              <Pressable key={index} style={styles.activeDateRange}>
+                <Text style={styles.tabText}>{item}</Text>
+              </Pressable>
+            ))}
+          </ScrollView>
+
+          <Pressable onPress={scrollRight}>
+            <Feather name="arrow-right" size={24} color="black" />
+          </Pressable>
+        </View>
       )}
 
       {/* Earning Card */}
-      <Earningcard amount={"7500"} ridesCount={"2"} />
+      <EarningCard amount={"7500"} ridesCount={"2"} />
 
       {/* Highest Earning Card */}
       <View style={styles.highestEarningCard}>
@@ -337,6 +324,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
+    
     elevation: 2,
   },
   highestEarningLabel: {
@@ -418,13 +406,15 @@ const styles = StyleSheet.create({
     color: Color.colorDarkslategray,
   },
   totalLabel: {
-    fontSize: 10,
-    fontWeight: "bold",
+    fontSize: 15,
+    fontWeight: "500",
+    lineHeight: 22.5,
   },
   totalValue: {
-    fontSize: 10,
-    fontWeight: "bold",
+    fontSize: 15,
+    fontWeight: "500",
     color: Color.appDefaultColor,
+    lineHeight: 22.5,
   },
   tabButton: {
     flex: 1,

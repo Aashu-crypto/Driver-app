@@ -2,7 +2,10 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import React from "react";
 import { Color, FontFamily } from "../../GlobalStyles";
 import Coin from "../../assets/img/coin.svg";
-export default function Earningcard({ amount, ridesCount }) {
+import { Route } from "../../routes";
+import { useNavigation } from "@react-navigation/native";
+export default function EarningCard({ amount, ridesCount }) {
+  const navigation = useNavigation();
   return (
     <View style={styles.earningCard}>
       <View style={styles.earningContent}>
@@ -10,7 +13,11 @@ export default function Earningcard({ amount, ridesCount }) {
         <Text style={styles.earningAmount}>₹{amount}</Text>
         <Text style={styles.ridesLabel}>Rides</Text>
         <Text style={styles.ridesCount}>{ridesCount}</Text>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate(Route.ALLORDERS);
+          }}
+        >
           <Text style={styles.viewOrders}>View all orders →</Text>
         </TouchableOpacity>
       </View>
@@ -63,7 +70,7 @@ const styles = StyleSheet.create({
   ridesCount: {
     fontSize: 24,
     color: Color.appDefaultColor,
-  
+
     lineHeight: 36,
     fontWeight: "500",
     fontFamily: FontFamily.poppinsRegular,
@@ -73,7 +80,7 @@ const styles = StyleSheet.create({
     color: Color.gray,
     fontWeight: "500",
     fontFamily: FontFamily.poppinsRegular,
-    lineHeight:18,
+    lineHeight: 18,
   },
   earningImage: {
     width: 100,
