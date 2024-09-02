@@ -19,7 +19,7 @@ import Checkbox from "expo-checkbox";
 import Button from "../../components/Button";
 import { Route } from "../../../routes";
 
-const VehicleSelfInspection = ({navigation}) => {
+const VehicleSelfInspection = ({ navigation }) => {
   const data = [
     { img: exteriorInspection, name: "Exterior Inspection" },
     { img: interiorInspection, name: "Interior Inspection" },

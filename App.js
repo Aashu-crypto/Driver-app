@@ -1,3 +1,4 @@
+import './gesture-handler';
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
@@ -13,7 +14,7 @@ export default function App() {
     "Poppins-Regular": require("./assets/fonts/Poppins-Regular.ttf"),
   });
 
-  // If fonts are not loaded, return AppLoading component or a custom loading screen
+  // If fonts are not loaded, return AppLoading componenxt or a custom loading screen
   if (!loaded) {
     return <Text>Loading</Text>;
   }
