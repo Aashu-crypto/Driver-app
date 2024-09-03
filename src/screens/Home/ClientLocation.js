@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
   },
   rideLocation: {
     fontSize: 13,
-    color: "#4169e1",
+    color: "#4.169e1",
     fontFamily: FontFamily.poppinsRegular,
   },
   rideAddress: {
