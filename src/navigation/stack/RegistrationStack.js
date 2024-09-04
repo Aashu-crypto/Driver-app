@@ -19,7 +19,7 @@ const RegistrationStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false }}
-      initialRouteName={Route.VEHICLESELFINSPECION}
+      initialRouteName={Route.DRIVERREGISTRATION}
     >
       <Stack.Screen
         name={Route.DRIVERREGISTRATION}

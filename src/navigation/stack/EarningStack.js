@@ -14,7 +14,7 @@ const EarningStack = () => {
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator
-      initialRouteName={Route.EARNING}
+      initialRouteName={Route.EARNINGHISTORY}
       screenOptions={{ headerShown: true }}
     >
       <Stack.Screen

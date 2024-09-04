@@ -152,7 +152,7 @@ export default function App() {
         },
       }}
     >
-      <Drawer.Screen name="Performance" component={HomeStack} />
+      <Drawer.Screen name="Home" component={HomeStack} />
       <Drawer.Screen name={Route.EARNING_STACK} component={EarningStack} />
       {/* Add other screens here */}
     </Drawer.Navigator>
