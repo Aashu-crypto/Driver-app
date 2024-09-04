@@ -66,9 +66,7 @@ export default function NumberVerfication({ navigation }) {
             style={{
               fontSize: 11,
               lineHeight: 16.5,
-
               color: Color.textGraycolor,
-
               fontFamily: FontFamily.poppinsRegular,
             }}
           >
