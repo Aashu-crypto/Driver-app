@@ -1,11 +1,20 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  SafeAreaView,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-
+import HeaderComponent from "../../../components/HeaderComponent";
+import { LinearGradient } from "expo-linear-gradient";
+import { Color } from "../../../../GlobalStyles";
+import Button from "../../../components/Button";
 const VideoVerificationScreen = () => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Video Verification</Text>
+    <SafeAreaView style={styles.container}>
+      <HeaderComponent title="Video Verification" />
 
       <View style={styles.instructionsContainer}>
         <StepItem
@@ -26,32 +35,36 @@ const VideoVerificationScreen = () => {
         />
       </View>
 
-      <TouchableOpacity style={styles.button}>
-        <Ionicons name="videocam" size={24} color="white" />
-        <Text style={styles.buttonText}>Record Video</Text>
-      </TouchableOpacity>
-    </View>
+     <Button placeholder={"Record Video"}/>
+    </SafeAreaView>
   );
 };
 
 const StepItem = ({ stepNumber, text }) => {
   return (
-    <View style={styles.stepContainer}>
+    <LinearGradient
+      colors={[Color.backGroundColor, "#fff"]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 0 }}
+      style={[
+        styles.stepContainer,
+        { flexDirection: "row", alignItems: "center" },
+      ]}
+    >
       <View style={styles.circle}>
         <Text style={styles.stepNumber}>{stepNumber}</Text>
       </View>
       <View style={styles.textContainer}>
         <Text style={styles.stepText}>{text}</Text>
       </View>
-    </View>
+    </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F3F6FF",
-    padding: 20,
+    backgroundColor: "#fff",
   },
   header: {
     fontSize: 20,
@@ -62,11 +75,14 @@ const styles = StyleSheet.create({
   instructionsContainer: {
     flex: 1,
     justifyContent: "center",
+    padding: 10,
   },
   stepContainer: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 20,
+    padding: 15,
+    borderRadius: 10,
   },
   circle: {
     width: 30,
@@ -77,16 +93,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   stepNumber: {
-    color: "#fff",
-    fontWeight: "bold",
+    color: "#677093",
+    fontWeight: "400",
+    fontSize: 12,
+    lineHeight: 18,
   },
   textContainer: {
     marginLeft: 10,
     flex: 1,
   },
   stepText: {
-    fontSize: 16,
-    color: "#666",
+    color: "#677093",
+    fontWeight: "400",
+    fontSize: 12,
+    lineHeight: 18,
   },
   button: {
     backgroundColor: "#007BFF",

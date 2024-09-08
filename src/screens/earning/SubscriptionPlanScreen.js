@@ -8,7 +8,10 @@ import {
   Dimensions,
 } from "react-native";
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
-
+import Zero from "../../../assets/img/Zero.svg";
+import { Color, FontFamily } from "../../../GlobalStyles";
+import Divider from "../../components/Divider";
+import Button from "../../components/Button";
 // Constants for colors and font sizes
 const COLORS = {
   primary: "#0a74f3",
@@ -31,70 +34,122 @@ const SubscriptionPlanScreen = () => {
   const [selectedPlan, setSelectedPlan] = useState(2);
 
   const plans = [
-    { id: 1, earnings: "₹250", day: "1 Day", price: "₹25", originalPrice: "₹55" },
-    { id: 2, earnings: "₹450", day: "1 Day", price: "₹45", originalPrice: "₹75" },
-    { id: 3, earnings: "₹650", day: "1 Day", price: "₹65", originalPrice: "₹85" },
-    { id: 4, earnings: "₹950", day: "1 Day", price: "₹95", originalPrice: "₹195" },
+    {
+      id: 1,
+      earnings: "₹250",
+      day: "1 Day",
+      price: "₹25",
+      originalPrice: "₹55",
+    },
+    {
+      id: 2,
+      earnings: "₹450",
+      day: "1 Day",
+      price: "₹45",
+      originalPrice: "₹75",
+    },
+    {
+      id: 3,
+      earnings: "₹650",
+      day: "1 Day",
+      price: "₹65",
+      originalPrice: "₹85",
+    },
+    {
+      id: 4,
+      earnings: "₹950",
+      day: "1 Day",
+      price: "₹95",
+      originalPrice: "₹195",
+    },
   ];
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity>
-          <FontAwesome name="angle-left" size={24} color={COLORS.white} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Subscription plan</Text>
-        <TouchableOpacity>
-          <Text style={styles.helpText}>? Help</Text>
-        </TouchableOpacity>
-      </View>
-
       {/* Promo Section */}
       <View style={styles.promoSection}>
-        <Text style={styles.promoTitle}>₹0</Text>
-        <Text style={styles.promoSubtitle}>ZERO COMMISSION RIDES</Text>
+        <Zero />
+        <View>
+          <Text
+            style={[styles.promoSubtitle, { fontSize: 32, lineHeight: 44 }]}
+          >
+            ZERO
+          </Text>
+          <Text style={styles.promoSubtitle}>COMMISSION RIDES</Text>
+        </View>
       </View>
 
       {/* Plan Selection */}
-      <Text style={styles.planSelectionTitle}>Select your plan</Text>
-      {plans.map((plan) => (
-        <TouchableOpacity
-          key={plan.id}
-          style={[
-            styles.planCard,
-            selectedPlan === plan.id && styles.selectedPlanCard,
-          ]}
-          onPress={() => setSelectedPlan(plan.id)}
-        >
-          <View style={styles.planDetails}>
-            <Text style={styles.planEarnings}>{plan.earnings}</Text>
-            <Text style={styles.planDay}>{plan.day}</Text>
-            <Text style={styles.planPrice}>{plan.price}</Text>
-          </View>
-          <Text style={styles.planOriginalPrice}>{plan.originalPrice}</Text>
-          {selectedPlan === plan.id && (
-            <View style={styles.radioSelected}>
-              <FontAwesome5 name="check-circle" size={20} color={COLORS.primary} />
+      <View style={{ padding: 10 }}>
+        <Text style={styles.planSelectionTitle}>Select your plan</Text>
+        {plans.map((plan) => (
+          <TouchableOpacity
+            key={plan.id}
+            style={[
+              styles.planCard,
+              selectedPlan === plan.id && styles.selectedPlanCard,
+            ]}
+            onPress={() => setSelectedPlan(plan.id)}
+          >
+            {selectedPlan === plan.id && (
+              <View style={styles.radioSelected}>
+                <FontAwesome5
+                  name="check-circle"
+                  size={20}
+                  color={COLORS.primary}
+                />
+              </View>
+            )}
+            {selectedPlan !== plan.id && (
+              <View style={styles.radioUnselected} />
+            )}
+            <View style={styles.planDetails}>
+              <View style={styles.planItems}>
+                <Text style={styles.planEarnings}>{plan.earnings}</Text>
+                <Text style={styles.planItemText}>Earnings</Text>
+              </View>
+
+              <View style={styles.planItems}>
+                <Text style={styles.planEarnings}>{plan.day}</Text>
+                <Text style={styles.planItemText}>Day</Text>
+              </View>
+              <View style={[styles.planItems, { borderRightWidthZZZZZ: 0 }]}>
+                <Text style={styles.planEarnings}>{plan.price}</Text>
+                <Text style={styles.planItemText}>{plan.originalPrice}</Text>
+              </View>
             </View>
-          )}
-          {selectedPlan !== plan.id && <View style={styles.radioUnselected} />}
-        </TouchableOpacity>
-      ))}
+          </TouchableOpacity>
+        ))}
 
-      {/* Terms & Conditions */}
-      <Text style={styles.termsTitle}>Terms & conditions</Text>
-      <Text style={styles.termsText}>
-        I confirm that the details above provided has received training as per
-        all the applicable government regulations.
-      </Text>
+        {/* Terms & Conditions */}
+        <Text style={styles.termsTitle}>Terms & conditions</Text>
+        <Text style={styles.termsText}>
+          I confirm that the details above provided has received training as per
+          all the applicable government regulations.
+        </Text>
 
-      {/* Subscribe Button */}
-      <View style={styles.subscribeSection}>
-        <Text style={styles.payAmount}>Pay ₹250.0</Text>
-        <TouchableOpacity style={styles.subscribeButton}>
-          <Text style={styles.subscribeButtonText}>Subscribe</Text>
-        </TouchableOpacity>
+        {/* Subscribe Button */}
+        <View style={styles.subscribeSection}>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              marginHorizontal: 15,
+            }}
+          >
+            <Text style={styles.payAmount}>Pay</Text>
+            <Text
+              style={[
+                styles.payAmount,
+                { fontSize: 16, color: Color.appDefaultColor },
+              ]}
+            >
+              ₹250.0
+            </Text>
+          </View>
+
+          <Button placeholder={"Subscirbe"} />
+        </View>
       </View>
     </ScrollView>
   );
@@ -105,30 +160,21 @@ export default SubscriptionPlanScreen;
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    padding: 20,
+
     backgroundColor: COLORS.secondary,
   },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: 20,
-  },
-  headerTitle: {
-    fontSize: FONT_SIZES.medium,
-    color: COLORS.white,
-    fontWeight: "bold",
-  },
-  helpText: {
-    fontSize: FONT_SIZES.small,
-    color: COLORS.white,
-  },
+
   promoSection: {
-    backgroundColor: COLORS.primary,
-    borderRadius: 20,
+    backgroundColor: Color.appDefaultColor,
+    flexDirection: "row",
+
     padding: 20,
     alignItems: "center",
     marginBottom: 20,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    justifyContent: "center",
+    paddingVertical: 50,
   },
   promoTitle: {
     fontSize: 100,
@@ -136,13 +182,17 @@ const styles = StyleSheet.create({
     color: COLORS.white,
   },
   promoSubtitle: {
-    fontSize: FONT_SIZES.medium,
-    color: COLORS.white,
+    fontSize: 14,
+    color: "#fff",
+    fontWeight: "400",
+    lineHeight: 19.32,
   },
   planSelectionTitle: {
-    fontSize: FONT_SIZES.medium,
-    fontWeight: "bold",
+    fontSize: 15,
+    fontWeight: "500",
     color: COLORS.darkGray,
+    lineHeight: 22.5,
+    fontFamily: FontFamily.poppinsRegular,
     marginBottom: 20,
   },
   planCard: {
@@ -154,7 +204,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: COLORS.white,
+    borderColor: Color.borderColor,
   },
   selectedPlanCard: {
     borderColor: COLORS.primary,
@@ -167,26 +217,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   planEarnings: {
-    fontSize: FONT_SIZES.small,
-    color: COLORS.primary,
-    fontWeight: "bold",
+    fontSize: 16,
+    color: Color.appDefaultColor,
+    fontWeight: "500",
+    lineHeight: 24,
   },
-  planDay: {
-    fontSize: FONT_SIZES.small,
-    color: COLORS.darkGray,
-    marginLeft: 10,
-  },
-  planPrice: {
-    fontSize: FONT_SIZES.small,
-    color: COLORS.primary,
-    marginLeft: 10,
-    fontWeight: "bold",
-  },
-  planOriginalPrice: {
-    fontSize: FONT_SIZES.extraSmall,
-    color: COLORS.gray,
-    textDecorationLine: "line-through",
-  },
+
   radioSelected: {
     width: 20,
     height: 20,
@@ -202,24 +238,28 @@ const styles = StyleSheet.create({
     borderColor: COLORS.gray,
   },
   termsTitle: {
-    fontSize: FONT_SIZES.medium,
-    fontWeight: "bold",
+    fontSize: 15,
+    fontWeight: "500",
     color: COLORS.darkGray,
+    lineHeight: 22.5,
     marginBottom: 10,
   },
   termsText: {
-    fontSize: FONT_SIZES.extraSmall,
+    fontSize: 12,
     color: COLORS.gray,
     marginBottom: 20,
+    lineHeight: 18,
+    fontWeight: "400",
   },
   subscribeSection: {
-    alignItems: "center",
+    flex: 1,
   },
   payAmount: {
-    fontSize: FONT_SIZES.large,
-    fontWeight: "bold",
-    color: COLORS.primary,
-    marginBottom: 10,
+    fontSize: 15,
+    fontWeight: "400",
+    color: "#677093",
+
+    lineHeight: 22.5,
   },
   subscribeButton: {
     backgroundColor: COLORS.primary,
@@ -236,5 +276,19 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontSize: FONT_SIZES.medium,
     fontWeight: "bold",
+  },
+  planItems: {
+    borderRightWidth: 1,
+    flex: 1,
+    alignSelf: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    borderColor: "#E5E8F1",
+  },
+  planItemText: {
+    fontSize: 12,
+    lineHeight: 18,
+    fontWeight: "400",
+    color: Color.colorGray,
   },
 });

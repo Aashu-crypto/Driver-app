@@ -3,84 +3,83 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
-  TouchableOpacity,
   FlatList,
   Animated,
+  StatusBar,
+  Platform,
 } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import OnBoarding1 from "../../../assets/img/onBoarding1.svg";
 import OnBoarding2 from "../../../assets/img/OnBoarding2.svg";
 import OnBoarding3 from "../../../assets/img/onBoarding3.svg";
-import * as Svg from "react-native-svg";
-import { Color, height, width } from "../../../GlobalStyles";
+import { Color, FontFamily, height, width } from "../../../GlobalStyles";
 import Paginator from "../../components/Paginator";
-import { CommonActions } from "@react-navigation/native";
 import Button from "../../components/Button";
-import { Route } from "../../../routes";
 import { useNavigation } from "@react-navigation/native";
+import { Route } from "../../../routes";
+import { CommonActions } from "@react-navigation/native";
+
 const OnBoarding = () => {
   const navigation = useNavigation();
-  const onNext = () => {
-    navigation.dispatch(
-      CommonActions.navigate({
-        name: Route.NUMBERVERFICATION,
-      })
-    );
-  };
-  const handlePress = () => {};
   const slidesRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+
   const obj = [
     {
       title: "Register Vehicle",
-      description:
-        "Don't worry if you have trouble determining your goals, We can help you determine your goals and track your goals",
+      description: "We help you determine and track your goals efficiently.",
       svg: OnBoarding1,
     },
     {
       title: "Upload Documents",
-      description:
-        "Let’s keep burning, to achieve your goals, it hurts only temporarily if you give up now you will be in pain forever",
+      description: "Achieve your goals with ease and start tracking today!",
       svg: OnBoarding2,
     },
     {
       title: "Earn Money",
-      description:
-        "Let's start a healthy lifestyle with us, we can determine your diet every day. healthy eating is fun",
+      description: "Start a healthy lifestyle and earn through us.",
       svg: OnBoarding3,
     },
   ];
+
   const scrollX = useRef(new Animated.Value(0)).current;
-  console.log("x", scrollX);
 
   const viewableItemsChanged = useRef(({ viewableItems }) => {
-    console.log(viewableItems);
-
     setCurrentIndex(viewableItems[0].index);
   }).current;
 
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
 
-  const renderItem = ({ item }) => {
-    return (
-      <View style={{ flex: 1, width: width }}>
-        <View style={styles.lowerView}>
-          <Text style={styles.textTitle}>{item.title}</Text>
-          <Text style={styles.description}>{item.description}</Text>
-        </View>
-        <View style={{ alignItems: "center" }}>
-          <item.svg width={width * 0.9} height={height / 2} />
-        </View>
+  const renderItem = ({ item }) => (
+    <View style={[styles.slide, { width: width }]}>
+      <Text style={styles.textTitle}>{item.title}</Text>
+      <Text style={styles.description}>{item.description}</Text>
+      <View style={{ alignItems: "center" }}>
+        <item.svg width={width * 0.8} height={height / 2.5} />
       </View>
-    );
+    </View>
+  );
+
+  // Handle the "Next" button click
+  const onNext = () => {
+    if (currentIndex < obj.length - 1) {
+      // Scroll to the next index
+      slidesRef.current.scrollToIndex({ index: currentIndex + 1 });
+    } else {
+      // If it's the last slide, navigate to the next screen
+      navigation.dispatch(
+        CommonActions.navigate({
+          name: Route.NUMBERVERFICATION,
+        })
+      );
+    }
   };
-  useEffect(() => {
-    console.log(scrollX);
-  }, [scrollX]);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
+      <StatusBar
+        barStyle={Platform.OS === "android" ? "light-content" : "dark-content"}
+      />
       <FlatList
         data={obj}
         horizontal
@@ -96,19 +95,11 @@ const OnBoarding = () => {
         ref={slidesRef}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-          {
-            useNativeDriver: false,
-          }
+          { useNativeDriver: false }
         )}
       />
       <Paginator data={obj} scrollX={scrollX} />
-      <View
-        style={{
-          justifyContent: "center",
-          alignItems: "center",
-          marginTop: 30,
-        }}
-      >
+      <View style={styles.buttonContainer}>
         <Button placeholder={"Next"} onPress={onNext} />
       </View>
     </SafeAreaView>
@@ -118,31 +109,38 @@ const OnBoarding = () => {
 export default OnBoarding;
 
 const styles = StyleSheet.create({
-  lowerView: {
-    padding: 10,
-    margin: 20,
-    marginTop: 30,
+  container: {
+    flex: 1,
+    backgroundColor: Color.white,
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
-  nextBtn: {
-    position: "absolute",
-    bottom: 20,
-    right: 20,
+  slide: {
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    paddingHorizontal: 20,
   },
   textTitle: {
-    fontSize: 30,
-    fontFamily: "Poppins-Bold",
+    fontSize: Platform.OS === "android" ? 28 : 30,
+    fontFamily: FontFamily.poppins,
     color: Color.appDefaultColor,
     lineHeight: 45,
     textAlign: "center",
+    marginBottom: 10,
+    fontWeight: "500",
   },
   description: {
-    fontFamily: "Poppins-Regular",
+    fontFamily: FontFamily.poppinsRegular,
+    fontSize: Platform.OS === "android" ? 14 : 16,
+    color: Color.gray,
+    textAlign: "center",
     maxWidth: width * 0.8,
     lineHeight: 24,
-    textAlign: "center",
-    fontSize: 16,
-    color: Color.gray,
+    marginBottom: 20,
+  },
+  buttonContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: 30,
   },
 });

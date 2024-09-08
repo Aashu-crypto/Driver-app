@@ -173,26 +173,8 @@ export default function ClientLocation() {
             </View>
           </View>
           <Divider />
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-evenly" }}
-          >
-            <Image
-              style={styles.riderImage}
-              source={require("../../../assets/img/riderPic.png")}
-            />
-            <View>
-              <Text>Picking Up Ajay</Text>
-              <Text>Cash Ride</Text>
-            </View>
-            <View style={{ flexDirection: "row", gap: 10 }}>
-              <View style={styles.iconContainer}>
-                <MaterialIcons name="message" size={24} color="white" />
-              </View>
-              <View style={styles.iconContainer}>
-                <FontAwesome5 name="phone-alt" size={24} color="white" />
-              </View>
-            </View>
-          </View>
+          <Button placeholder={"Client Located"} />
+          <View style={{ marginBottom: 10 }} />
         </View>
       ) : (
         <View style={styles.bottomCard}>
@@ -303,6 +285,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     alignItems: "center",
     justifyContent: "center",
-    padding:5
+    padding: 5,
   },
 });

@@ -8,17 +8,15 @@ import {
   StatusBar,
 } from "react-native";
 import React from "react";
-import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
+import { Feather, EvilIcons } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
 import { Color } from "../../GlobalStyles";
 import { UserStatus } from "../Redux/Slice/UserStatusSlice";
-import Feather from "@expo/vector-icons/Feather";
-import EvilIcons from "@expo/vector-icons/EvilIcons";
-
+import { useNavigation } from "@react-navigation/native";
 const HomeScreenHeader = () => {
   const status = useSelector((state) => state.status.status);
   const dispatch = useDispatch();
-
+  const navigation = useNavigation();
   const handleToggleStatus = () => {
     dispatch(UserStatus(status === "Online" ? "Offline" : "Online"));
   };
@@ -36,7 +34,10 @@ const HomeScreenHeader = () => {
           },
         ]}
       >
-        <Feather name="menu" size={28} color="#9CABE2" />
+        {/* Menu button to open the drawer */}
+        <Pressable onPress={() => navigation.openDrawer()}>
+          <Feather name="menu" size={28} color="#9CABE2" />
+        </Pressable>
         <Pressable
           style={[
             styles.status,
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 10,
     paddingVertical: Platform.OS === "android" ? 10 : 10,
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 10,
+    paddingTop: Platform.OS === "android" ? 10 : 10,
   },
   status: {
     padding: 10,

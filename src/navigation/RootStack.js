@@ -19,7 +19,7 @@ const RootStack = () => {
     case Route.REGISTRATION_STACK:
       return <RegistrationStack />;
     case Route.HOME_STACK:
-      return <EarningStack />;
+      return <MyDrawer />;
 
     default:
       return <OnBoardingStack />;

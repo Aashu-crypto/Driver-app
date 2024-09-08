@@ -13,6 +13,7 @@ import {
 import HomeStack from "../stack/HomeStack";
 import { Route } from "../../../routes";
 import EarningStack from "../stack/EarningStack";
+import { Color } from "../../../GlobalStyles";
 
 // Screens
 function PerformanceScreen() {
@@ -53,9 +54,21 @@ function CustomDrawerContent(props) {
       </View>
       <View style={styles.drawerItemsContainer}>
         <DrawerItem
+          label="Home"
+          icon={() => (
+            <FontAwesome5 name="home" size={20} color={Color.appDefaultColor} />
+          )}
+          labelStyle={styles.drawerLabel}
+          onPress={() => props.navigation.navigate("Home")}
+        />
+        <DrawerItem
           label="Performance"
           icon={() => (
-            <FontAwesome5 name="chart-line" size={20} color="#0a74f3" />
+            <FontAwesome5
+              name="chart-line"
+              size={20}
+              color={Color.appDefaultColor}
+            />
           )}
           labelStyle={styles.drawerLabel}
           onPress={() => props.navigation.navigate("Performance")}
@@ -66,7 +79,7 @@ function CustomDrawerContent(props) {
             <MaterialIcons
               name="miscellaneous-services"
               size={20}
-              color="#0a74f3"
+              color={Color.appDefaultColor}
             />
           )}
           labelStyle={styles.drawerLabel}
@@ -75,7 +88,11 @@ function CustomDrawerContent(props) {
         <DrawerItem
           label="My Account"
           icon={() => (
-            <FontAwesome5 name="user-circle" size={20} color="#0a74f3" />
+            <FontAwesome5
+              name="user-circle"
+              size={20}
+              color={Color.appDefaultColor}
+            />
           )}
           labelStyle={styles.drawerLabel}
           onPress={() => props.navigation.navigate("MyAccount")}
@@ -83,21 +100,31 @@ function CustomDrawerContent(props) {
         <DrawerItem
           label="Inbox"
           icon={() => (
-            <Ionicons name="mail-outline" size={20} color="#0a74f3" />
+            <Ionicons
+              name="mail-outline"
+              size={20}
+              color={Color.appDefaultColor}
+            />
           )}
           labelStyle={styles.drawerLabel}
           onPress={() => props.navigation.navigate("Inbox")}
         />
         <DrawerItem
           label="Ride History"
-          icon={() => <FontAwesome5 name="car" size={20} color="#0a74f3" />}
+          icon={() => (
+            <FontAwesome5 name="car" size={20} color={Color.appDefaultColor} />
+          )}
           labelStyle={styles.drawerLabel}
           onPress={() => props.navigation.navigate("RideHistory")}
         />
         <DrawerItem
           label="Earnings"
           icon={() => (
-            <FontAwesome5 name="money-bill-wave" size={20} color="#0a74f3" />
+            <FontAwesome5
+              name="money-bill-wave"
+              size={20}
+              color={Color.appDefaultColor}
+            />
           )}
           labelStyle={styles.drawerLabel}
           onPress={() => props.navigation.navigate(Route.EARNING_STACK)}
@@ -105,21 +132,31 @@ function CustomDrawerContent(props) {
         <DrawerItem
           label="Schedule Pickup"
           icon={() => (
-            <Ionicons name="time-outline" size={20} color="#0a74f3" />
+            <Ionicons
+              name="time-outline"
+              size={20}
+              color={Color.appDefaultColor}
+            />
           )}
           labelStyle={styles.drawerLabel}
           onPress={() => props.navigation.navigate("SchedulePickup")}
         />
         <DrawerItem
           label="Invite Friends"
-          icon={() => <Feather name="user-plus" size={20} color="#0a74f3" />}
+          icon={() => (
+            <Feather name="user-plus" size={20} color={Color.appDefaultColor} />
+          )}
           labelStyle={styles.drawerLabel}
           onPress={() => props.navigation.navigate("InviteFriends")}
         />
         <DrawerItem
           label="Support Center"
           icon={() => (
-            <Entypo name="help-with-circle" size={20} color="#0a74f3" />
+            <Entypo
+              name="help-with-circle"
+              size={20}
+              color={Color.appDefaultColor}
+            />
           )}
           labelStyle={styles.drawerLabel}
           onPress={() => props.navigation.navigate("SupportCenter")}
@@ -127,7 +164,11 @@ function CustomDrawerContent(props) {
         <DrawerItem
           label="Settings"
           icon={() => (
-            <Ionicons name="settings-outline" size={20} color="#0a74f3" />
+            <Ionicons
+              name="settings-outline"
+              size={20}
+              color={Color.appDefaultColor}
+            />
           )}
           labelStyle={styles.drawerLabel}
           onPress={() => props.navigation.navigate("Settings")}
@@ -172,7 +213,7 @@ const styles = StyleSheet.create({
   profileContainer: {
     paddingVertical: 20,
     paddingHorizontal: 15,
-    backgroundColor: "#0a74f3",
+    backgroundColor: Color.appDefaultColor,
     flexDirection: "row",
     alignItems: "center",
   },

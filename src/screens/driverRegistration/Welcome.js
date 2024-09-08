@@ -7,11 +7,13 @@ import { Route } from "../../../routes";
 import HeaderComponent from "../../components/HeaderComponent";
 const Welcome = ({ navigation }) => {
   return (
-    <SafeAreaView style={{flex:1,backgroundColor:'#fff'}}>
-      <HeaderComponent title="Welcome Rakesh" />
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+      <HeaderComponent title="Welcome Rakesh!" />
       <Pressable
         style={styles.btn}
         onPress={() => {
+          console.log("Working");
+          
           navigation.navigate(Route.VEHICLETYPE);
         }}
       >
@@ -21,7 +23,9 @@ const Welcome = ({ navigation }) => {
       <Text style={[styles.btnText, { paddingLeft: 15, marginLeft: 5 }]}>
         Settings
       </Text>
-      <Pressable style={styles.btn}>
+      <Pressable style={styles.btn}  onPress={() => {
+          navigation.navigate(Route.PROFILESETTING);
+        }}>
         <Text style={styles.btnText}>Profile Settings</Text>
         <AntDesign name="right" size={20} color={Color.appDefaultColor} />
       </Pressable>

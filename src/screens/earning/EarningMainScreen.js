@@ -13,7 +13,6 @@ import EarningCard from "../../components/EarningCard";
 import Button from "../../components/Button";
 import { Color, width } from "../../../GlobalStyles";
 
-
 // Main EarningsScreen Component
 const EarningsScreen = ({ navigation }) => {
   const MENU_ITEMS = [
@@ -46,7 +45,9 @@ const EarningsScreen = ({ navigation }) => {
         />
       ),
       text: "Incentives",
-      onPress: () => {},
+      onPress: () => {
+        navigation.navigate(Route.INCENTIVES);
+      },
     },
     {
       icon: (
@@ -199,10 +200,10 @@ const styles = StyleSheet.create({
   },
   menuItemText: {
     fontSize: 15,
-    color:Color.gray,
+    color: Color.gray,
     flex: 1,
     marginLeft: 20,
-    lineHeight:22.5,
-    fontWeight:'500'
+    lineHeight: 22.5,
+    fontWeight: "500",
   },
 });

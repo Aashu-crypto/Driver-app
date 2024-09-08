@@ -25,7 +25,8 @@ export default function ApplicationSubmittedScreen() {
         onPress={() => dispatch(screen(Route.HOME_STACK))}
       >
         <Text style={styles.buttonText}>
-          Check Status Click to go to next screen
+          Check Status Click to go to next screen ~~text is only for testing
+          purpose
         </Text>
       </TouchableOpacity>
     </View>

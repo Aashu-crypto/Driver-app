@@ -19,17 +19,37 @@ import Checkbox from "expo-checkbox";
 import Button from "../../components/Button";
 import { Route } from "../../../routes";
 
+
 const VehicleSelfInspection = ({ navigation }) => {
   const data = [
-    { img: exteriorInspection, name: "Exterior Inspection" },
-    { img: interiorInspection, name: "Interior Inspection" },
-    { img: photoVerfication, name: "Photo verification" },
-    { img: videoVerfication, name: "Video verification" },
+    {
+      img: exteriorInspection,
+      name: "Exterior Inspection",
+      route: Route.EXTERIORINSPECTION,
+    },
+    {
+      img: interiorInspection,
+      name: "Interior Inspection",
+      route: Route.INTERIORININSPECTION,
+    },
+    {
+      img: photoVerfication,
+      name: "Photo verification",
+      route: Route.PHOTOVERIFICATION,
+    },
+    {
+      img: videoVerfication,
+      name: "Video verification",
+      route: Route.VIDEOVERIFICATION,
+    },
   ];
+
   const [isChecked, setChecked] = useState(false);
-  const renderItem = ({ item, navigation }) => {
+
+  // Corrected renderItem without passing `navigation` explicitly
+  const renderItem = ({ item }) => {
     return (
-      <View
+      <TouchableOpacity
         style={{
           borderWidth: 1,
           margin: 10,
@@ -41,6 +61,9 @@ const VehicleSelfInspection = ({ navigation }) => {
           borderColor: "green",
           borderRadius: 15,
         }}
+        onPress={() => {
+          navigation.navigate(item.route); // Use navigation from the outer component
+        }}
       >
         <Image
           source={item.img}
@@ -51,12 +74,12 @@ const VehicleSelfInspection = ({ navigation }) => {
             fontSize: 14,
             fontWeight: "400",
             lineHeight: 21,
-            color: Color.textGraycolor,
+            color: "#4A4A4A",
           }}
         >
           {item.name}
         </Text>
-      </View>
+      </TouchableOpacity>
     );
   };
 
@@ -82,7 +105,7 @@ const VehicleSelfInspection = ({ navigation }) => {
             <Checkbox value={isChecked} onValueChange={setChecked} />
             <Text style={styles.checkboxText}>
               I confirm that the details provided have received training as per
-              all the applicable government regulations
+              all the applicable government regulations.
             </Text>
           </View>
         </View>
@@ -97,7 +120,10 @@ const VehicleSelfInspection = ({ navigation }) => {
   );
 };
 
+
+
 export default VehicleSelfInspection;
+
 
 const styles = StyleSheet.create({
   agreementText: {
@@ -113,7 +139,7 @@ const styles = StyleSheet.create({
   checkboxContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 20,
+
   },
   checkboxText: {
     marginLeft: 10,

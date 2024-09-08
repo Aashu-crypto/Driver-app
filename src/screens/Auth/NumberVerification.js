@@ -24,14 +24,15 @@ export default function NumberVerfication({ navigation }) {
   const [phoneNumber, setPhoneNumber] = useState("");
 
   const handleContinue = () => {
-    if (phoneNumber.length === 10 && /^[0-9]+$/.test(phoneNumber)) {
-      navigation.navigate(Route.OTPVERFICATION);
-    } else {
-      Alert.alert(
-        "Invalid Phone Number",
-        "Please enter a valid 10-digit phone number."
-      );
-    }
+    // if (phoneNumber.length === 10 && /^[0-9]+$/.test(phoneNumber)) {
+    //
+    // } else {
+    //   Alert.alert(
+    //     "Invalid Phone Number",
+    //     "Please enter a valid 10-digit phone number."
+    //   );
+    // }
+    navigation.navigate(Route.OTPVERFICATION);
   };
 
   return (
@@ -81,6 +82,17 @@ export default function NumberVerfication({ navigation }) {
             value={phoneNumber}
             onChangeText={setPhoneNumber}
           />
+          <Text
+            style={{
+              color: Color.appDefaultColor,
+              fontSize: 12,
+              textAlign: "left",
+              fontWeight: "400",
+              fontFamily: FontFamily.poppinsRegular,
+            }}
+          >
+            Changed your number? Find your account
+          </Text>
           <TouchableOpacity
             style={styles.continueButton}
             onPress={handleContinue}
