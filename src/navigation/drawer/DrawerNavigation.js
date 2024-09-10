@@ -14,15 +14,9 @@ import HomeStack from "../stack/HomeStack";
 import { Route } from "../../../routes";
 import EarningStack from "../stack/EarningStack";
 import { Color } from "../../../GlobalStyles";
+import PerformanceStack from "../stack/PerformanceStack";
 
-// Screens
-function PerformanceScreen() {
-  return (
-    <View style={styles.screen}>
-      <Text>Performance Screen</Text>
-    </View>
-  );
-}
+
 
 // Add other screens similar to PerformanceScreen
 
@@ -71,7 +65,7 @@ function CustomDrawerContent(props) {
             />
           )}
           labelStyle={styles.drawerLabel}
-          onPress={() => props.navigation.navigate("Performance")}
+          onPress={() => props.navigation.navigate(Route.PERFORMANCE_STACK)}
         />
         <DrawerItem
           label="Services"
@@ -195,6 +189,7 @@ export default function App() {
     >
       <Drawer.Screen name="Home" component={HomeStack} />
       <Drawer.Screen name={Route.EARNING_STACK} component={EarningStack} />
+      <Drawer.Screen name={Route.PERFORMANCE_STACK} component={PerformanceStack} />
       {/* Add other screens here */}
     </Drawer.Navigator>
   );
