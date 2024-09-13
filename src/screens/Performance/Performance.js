@@ -1,47 +1,33 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
-import { Color } from '../../../GlobalStyles';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  Pressable,
+} from "react-native";
+import { AntDesign } from "@expo/vector-icons";
+import { Color, FontFamily } from "../../../GlobalStyles";
+import MultiColorProgressBar from "../../components/MultiColorProgressBar";
 
 export default function PerformanceScreen() {
-  const [activeTab, setActiveTab] = useState('Daily Rides');
-  const [activeDate, setActiveDate] = useState('7-12 Jun');
+  const [activeTab, setActiveTab] = useState("Daily Rides");
+  const [activeDate, setActiveDate] = useState("7-12 Jun");
   const [expanded, setExpanded] = useState(null); // to toggle FAQ
 
   const handleFAQToggle = (index) => {
     setExpanded(expanded === index ? null : index);
   };
 
-  const renderTabButton = (tabName) => (
-    <TouchableOpacity
-      style={[styles.tabButton, activeTab === tabName && styles.activeTabButton]}
-      onPress={() => setActiveTab(tabName)}
-    >
-      <Text style={activeTab === tabName ? styles.activeTabText : styles.tabText}>
-        {tabName}
-      </Text>
-    </TouchableOpacity>
-  );
-
-  const renderDateButton = (dateRange) => (
-    <TouchableOpacity
-      style={[styles.dateButton, activeDate === dateRange && styles.activeDateButton]}
-      onPress={() => setActiveDate(dateRange)}
-    >
-      <Text style={activeDate === dateRange ? styles.activeDateText : styles.dateText}>
-        {dateRange}
-      </Text>
-    </TouchableOpacity>
-  );
-
   const renderFAQ = (index, question) => (
     <TouchableOpacity onPress={() => handleFAQToggle(index)} key={index}>
       <View style={styles.faqItem}>
         <Text style={styles.faqText}>{question}</Text>
         <AntDesign
-          name={expanded === index ? 'up' : 'down'}
+          name={expanded === index ? "up" : "down"}
           size={18}
-          color="gray"
+          color={Color.appDefaultColor}
         />
       </View>
       {expanded === index && (
@@ -49,6 +35,7 @@ export default function PerformanceScreen() {
           Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         </Text>
       )}
+      <View style={{ borderWidth: 0.5 }} />
     </TouchableOpacity>
   );
 
@@ -62,29 +49,50 @@ export default function PerformanceScreen() {
       />
     </View>
   );
+  const [active, setActive] = useState(1);
+  const [activeWeek, setActiveWeek] = useState(0);
+  const [activeMonth, setActiveMonth] = useState(0);
 
   return (
     <ScrollView style={styles.container}>
       {/* Tab Navigation */}
       <View style={styles.tabContainer}>
-        {renderTabButton('Daily Rides')}
-        {renderTabButton('Rentals')}
-        {renderTabButton('Shared')}
-      </View>
-
-      {/* Date Range Selection */}
-      <View style={styles.dateContainer}>
-        {renderDateButton('2-6 Jun')}
-        {renderDateButton('7-12 Jun')}
-        {renderDateButton('12-16 Jun')}
+        {["Daily Rides", "Rentals", "Shared"].map((item, index) => (
+          <Pressable
+            key={index}
+            style={[
+              styles.tabButton,
+              {
+                backgroundColor:
+                  active === index ? Color.appDefaultColor : "transparent",
+              },
+            ]}
+            onPress={() => setActive(index)}
+          >
+            <Text
+              style={[
+                styles.tabText,
+                { color: active === index ? "white" : Color.gray },
+              ]}
+            >
+              {item}
+            </Text>
+          </Pressable>
+        ))}
       </View>
 
       {/* Acceptance Rate */}
       <View style={styles.metricContainer}>
-        <Text style={styles.metricLabel}>Acceptance rate</Text>
-        <Text style={styles.metricValue}>64%</Text>
-        {renderProgressBar(0.64, '#FF8A00')}
-        <Text style={styles.metricDetails}>65/98 accepted rides</Text>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <View>
+            <Text style={styles.metricLabel}>Acceptance rate</Text>
+            <Text style={styles.metricDetails}>65/98 accepted rides</Text>
+          </View>
+
+          <Text style={styles.metricValue}>64%</Text>
+        </View>
+        <MultiColorProgressBar progress={0.64} />
+
         <TouchableOpacity style={styles.actionButton}>
           <Text style={styles.actionText}>Start accepting more rides</Text>
         </TouchableOpacity>
@@ -92,10 +100,16 @@ export default function PerformanceScreen() {
 
       {/* Cancellation Rate */}
       <View style={styles.metricContainer}>
-        <Text style={styles.metricLabel}>Cancellation rate</Text>
-        <Text style={styles.metricValue}>34%</Text>
-        {renderProgressBar(0.34, '#FF4D4D')}
-        <Text style={styles.metricDetails}>21/65 rides cancelled</Text>
+        <View>
+          <View>
+            <Text style={styles.metricLabel}>Cancellation rate</Text>
+            <Text style={styles.metricDetails}>21/65 rides cancelled</Text>
+          </View>
+          <Text style={styles.metricValue}>82%</Text>
+        </View>
+
+        <MultiColorProgressBar progress={0.82} />
+
         <TouchableOpacity style={styles.actionButton}>
           <Text style={styles.actionText}>Stop cancelling so many rides</Text>
         </TouchableOpacity>
@@ -104,9 +118,11 @@ export default function PerformanceScreen() {
       {/* FAQ Section */}
       <View style={styles.faqContainer}>
         <Text style={styles.faqTitle}>FAQs</Text>
-        {['Lorem ipsum dolor sit amet...', 'Consectetur adipiscing elit...', 'Sed do eiusmod tempor...'].map((faq, index) =>
-          renderFAQ(index, faq)
-        )}
+        {[
+          "Lorem ipsum dolor sit amet...",
+          "Consectetur adipiscing elit...",
+          "Sed do eiusmod tempor...",
+        ].map((faq, index) => renderFAQ(index, faq))}
       </View>
     </ScrollView>
   );
@@ -115,13 +131,13 @@ export default function PerformanceScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F3F4F8',
+    backgroundColor: "#F3F4F8",
     paddingHorizontal: 16,
     paddingTop: 20,
   },
   tabContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
     marginBottom: 16,
   },
   tabButton: {
@@ -130,19 +146,19 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   activeTabButton: {
-    backgroundColor:  Color.appDefaultColor,
+    backgroundColor: Color.appDefaultColor,
   },
   tabText: {
     fontSize: 16,
-    color: 'gray',
+    color: "gray",
   },
   activeTabText: {
     fontSize: 16,
-    color: '#FFF',
+    color: "#FFF",
   },
   dateContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
     marginBottom: 20,
   },
   dateButton: {
@@ -150,91 +166,132 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#D3D3D3',
+    borderColor: "#D3D3D3",
   },
   activeDateButton: {
     backgroundColor: Color.appDefaultColor,
-    borderColor:  Color.appDefaultColor,
+    borderColor: Color.appDefaultColor,
   },
   dateText: {
     fontSize: 14,
-    color: 'gray',
+    color: "gray",
   },
   activeDateText: {
     fontSize: 14,
-    color: '#FFF',
+    color: "#FFF",
   },
   metricContainer: {
-    backgroundColor: '#FFF',
+    backgroundColor: "#FFF",
     padding: 16,
     borderRadius: 10,
     marginBottom: 20,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
   },
   metricLabel: {
-    fontSize: 16,
-    color: '#7B7B7B',
+    fontSize: 14,
+    color: Color.colorGray,
+    fontWeight: "500",
+    lineHeight: 21,
+    fontFamily: FontFamily.poppinsRegular,
+  },
+  metricDetails: {
+    fontSize: 12,
+    lineHeight: 18,
+    fontWeight: "400",
+    fontFamily: FontFamily.poppinsRegular,
   },
   metricValue: {
     fontSize: 32,
-    fontWeight: 'bold',
-    color: '#FF8A00',
-    textAlign: 'right',
+    fontWeight: "600",
+    color: "#F7A42E",
+    textAlign: "right",
+    lineHeight: 48,
+    fontFamily: FontFamily.poppinsRegular,
   },
-  progressBarBackground: {
-    height: 8,
-    backgroundColor: '#E0E0E0',
-    borderRadius: 5,
-    marginTop: 10,
-    marginBottom: 10,
-  },
-  progressBarFill: {
-    height: '100%',
-    borderRadius: 5,
-  },
-  metricDetails: {
-    fontSize: 14,
-    color: '#7B7B7B',
-  },
+
   actionButton: {
     marginTop: 10,
-    backgroundColor: '#FFE5CC',
-    paddingVertical: 10,
-    alignItems: 'center',
+    backgroundColor: "#FFE5CC",
+    paddingVertical: 15,
+    alignItems: "center",
     borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#FFE3C2",
   },
   actionText: {
-    color: '#FF8A00',
+    color: "#F7A42E",
+    fontSize: 14,
+    fontWeight: "500",
+    lineHeight: 21,
+    fontFamily: FontFamily.poppinsRegular,
   },
   faqContainer: {
     marginBottom: 40,
+    backgroundColor: "#fff",
+    padding: 15,
+    borderRadius: 10,
   },
   faqTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
+    fontSize: 14,
+    fontWeight: "500",
+    lineHeight: 21,
+    fontFamily: FontFamily.poppinsRegular,
+    color: "#677093",
   },
   faqItem: {
-    backgroundColor: '#FFF',
-    padding: 16,
+    backgroundColor: "#FFF",
+
     borderRadius: 10,
-    marginBottom: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    marginVertical: 20,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   faqText: {
-    fontSize: 16,
-    color: '#7B7B7B',
+    fontSize: 12,
+    fontWeight: "400",
+    lineHeight: 18,
+    fontFamily: FontFamily.poppinsRegular,
+    color: Color.colorGray,
   },
   faqAnswer: {
     padding: 16,
-    backgroundColor: '#F9F9F9',
+    backgroundColor: "#F9F9F9",
     borderRadius: 10,
-    color: '#7B7B7B',
+    color: "#7B7B7B",
     fontSize: 14,
+  },
+  tabContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginBottom: 20,
+    backgroundColor: Color.backGroundColor,
+    borderRadius: 20,
+    overflow: "hidden",
+  },
+  tabButton: {
+    flex: 1,
+    padding: 10,
+    alignItems: "center",
+    borderRadius: 20,
+  },
+  tabText: {
+    fontSize: 12,
+    lineHeight: 18,
+    fontWeight: "500",
+  },
+  progressBar: {
+    height: 10,
+    width: "100%",
+    backgroundColor: "#e0e0e0",
+    borderRadius: 5,
+    flexDirection: "row",
+    overflow: "hidden",
+  },
+  progressSegment: {
+    height: "100%",
   },
 });

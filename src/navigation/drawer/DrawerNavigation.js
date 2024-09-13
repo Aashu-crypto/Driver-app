@@ -15,8 +15,11 @@ import { Route } from "../../../routes";
 import EarningStack from "../stack/EarningStack";
 import { Color } from "../../../GlobalStyles";
 import PerformanceStack from "../stack/PerformanceStack";
-
-
+import Inbox from "../../screens/DrawerScreen/Inbox";
+import InboxScreen from "../../screens/DrawerScreen/Inbox";
+import MyAccountScreen from "../../screens/DrawerScreen/MyAccount";
+import AppSettingsScreen from "../../screens/DrawerScreen/AppSetting";
+import AccountStack from "../stack/AccountStack";
 
 // Add other screens similar to PerformanceScreen
 
@@ -89,7 +92,7 @@ function CustomDrawerContent(props) {
             />
           )}
           labelStyle={styles.drawerLabel}
-          onPress={() => props.navigation.navigate("MyAccount")}
+          onPress={() => props.navigation.navigate(Route.ACCOUNT_STACK)}
         />
         <DrawerItem
           label="Inbox"
@@ -101,7 +104,7 @@ function CustomDrawerContent(props) {
             />
           )}
           labelStyle={styles.drawerLabel}
-          onPress={() => props.navigation.navigate("Inbox")}
+          onPress={() => props.navigation.navigate(Route.INBOX)}
         />
         <DrawerItem
           label="Ride History"
@@ -189,8 +192,27 @@ export default function App() {
     >
       <Drawer.Screen name="Home" component={HomeStack} />
       <Drawer.Screen name={Route.EARNING_STACK} component={EarningStack} />
-      <Drawer.Screen name={Route.PERFORMANCE_STACK} component={PerformanceStack} />
-      {/* Add other screens here */}
+      <Drawer.Screen
+        name={Route.PERFORMANCE_STACK}
+        component={PerformanceStack}
+      />
+      <Drawer.Screen
+        name={Route.INBOX}
+        component={InboxScreen}
+        options={{
+          headerShown: true,
+          title: "Inbox",
+        }}
+      />
+      <Drawer.Screen
+        name={Route.MYACCOUNT}
+        component={MyAccountScreen}
+        options={{
+          headerShown: true,
+          title: "My Account",
+        }}
+      />
+      <Drawer.Screen name={Route.ACCOUNT_STACK} component={AccountStack} />
     </Drawer.Navigator>
   );
 }
@@ -242,5 +264,6 @@ const styles = StyleSheet.create({
   drawerLabel: {
     fontSize: 16,
     marginLeft: -16,
+    color: Color.colorDarkslategray,
   },
 });
