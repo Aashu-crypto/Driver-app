@@ -40,18 +40,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#F0F0F0",
   },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: Color.appDefaultColor,
-    paddingVertical: 20,
-    paddingHorizontal: 10,
-  },
-  headerText: {
-    color: "white",
-    fontSize: 18,
-    marginLeft: 10,
-  },
+
   scrollContainer: {
     paddingHorizontal: 16,
     paddingVertical: 20,
@@ -67,8 +56,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 5,
-    borderWidth:1,
-    borderColor:Color.borderColor
+    borderWidth: 1,
+    borderColor: Color.borderColor,
   },
   iconWrapper: {
     width: 30,
@@ -78,9 +67,9 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 15,
     marginLeft: 10,
-    fontWeight:'500',
-    fontFamily:FontFamily.poppinsRegular,
-    color:"#595F75"
+    fontWeight: "500",
+    fontFamily: FontFamily.poppinsRegular,
+    color: "#595F75",
   },
 });
 

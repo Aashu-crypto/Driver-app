@@ -1,5 +1,12 @@
 import * as React from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  Platform,
+} from "react-native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
@@ -13,15 +20,19 @@ import {
 import HomeStack from "../stack/HomeStack";
 import { Route } from "../../../routes";
 import EarningStack from "../stack/EarningStack";
-import { Color } from "../../../GlobalStyles";
-import PerformanceStack from "../stack/PerformanceStack";
+import { Color, FontFamily } from "../../../GlobalStyles";
+
 import Inbox from "../../screens/DrawerScreen/Inbox";
 import InboxScreen from "../../screens/DrawerScreen/Inbox";
 import MyAccountScreen from "../../screens/DrawerScreen/MyAccount";
 import AppSettingsScreen from "../../screens/DrawerScreen/AppSetting";
 import AccountStack from "../stack/AccountStack";
+import PerformanceScreen from "../../screens/DrawerScreen/Performance";
+import ScheduledRidesScreen from "../../screens/DrawerScreen/SchedulePickup";
+import EditProfile from "../../screens/DrawerScreen/EditUserProfile";
+import EditUserProfile from "../../screens/DrawerScreen/EditUserProfile";
 
-// Add other screens similar to PerformanceScreen
+// Add other screens  to PerformanceScreen
 
 const Drawer = createDrawerNavigator();
 
@@ -32,22 +43,30 @@ function CustomDrawerContent(props) {
       contentContainerStyle={styles.drawerContent}
     >
       <View style={styles.profileContainer}>
-        <Image
-          source={{ uri: "https://example.com/profile-pic.png" }}
-          style={styles.profilePic}
-          resizeMode="cover"
-        />
+        <View>
+          <Image
+            source={require("../../../assets/img/ProfilePhoto.png")}
+            style={styles.profilePic}
+            resizeMode="cover"
+          />
+          <View style={styles.ratingView}>
+            <Text style={styles.rating}>⭐ 4.75</Text>
+          </View>
+        </View>
+
         <View style={styles.profileDetails}>
           <Text style={styles.name}>Rakesh Kumar</Text>
-          <Text style={styles.rating}>⭐ 4.75</Text>
+
           <TouchableOpacity
             onPress={() => {
-              /* Handle profile edit navigation */
+              props.navigation.navigate(Route.EDITUSERPROFILE);
             }}
           >
             <Text style={styles.editProfile}>Edit profile</Text>
           </TouchableOpacity>
         </View>
+
+        <Feather name="arrow-right" size={24} color="white" />
       </View>
       <View style={styles.drawerItemsContainer}>
         <DrawerItem
@@ -68,7 +87,7 @@ function CustomDrawerContent(props) {
             />
           )}
           labelStyle={styles.drawerLabel}
-          onPress={() => props.navigation.navigate(Route.PERFORMANCE_STACK)}
+          onPress={() => props.navigation.navigate(Route.PERFORMANCE)}
         />
         <DrawerItem
           label="Services"
@@ -112,7 +131,7 @@ function CustomDrawerContent(props) {
             <FontAwesome5 name="car" size={20} color={Color.appDefaultColor} />
           )}
           labelStyle={styles.drawerLabel}
-          onPress={() => props.navigation.navigate("RideHistory")}
+          onPress={() => props.navigation.navigate(Route.SCHEDULEPICKUP)}
         />
         <DrawerItem
           label="Earnings"
@@ -136,7 +155,7 @@ function CustomDrawerContent(props) {
             />
           )}
           labelStyle={styles.drawerLabel}
-          onPress={() => props.navigation.navigate("SchedulePickup")}
+          onPress={() => props.navigation.navigate(Route.SCHEDULEPICKUP)}
         />
         <DrawerItem
           label="Invite Friends"
@@ -188,13 +207,29 @@ export default function App() {
           color: "#333333",
           fontSize: 16,
         },
+        headerTitleAlign: "left", // Align the title to the left
+        headerTintColor: Color.appDefaultColor, // Set header text color to blue
+        headerBackTitleVisible: Platform.OS === "ios" ? false : true, // Hide "Back" text on iOS
+        headerTitleStyle: {
+          fontSize: 16,
+          lineHeight: 24,
+          fontFamily: FontFamily.poppinsRegular,
+          fontWeight: "500",
+        },
+        headerStyle: {
+          backgroundColor: Color.backGroundColor,
+        },
       }}
     >
       <Drawer.Screen name="Home" component={HomeStack} />
       <Drawer.Screen name={Route.EARNING_STACK} component={EarningStack} />
       <Drawer.Screen
-        name={Route.PERFORMANCE_STACK}
-        component={PerformanceStack}
+        name={Route.PERFORMANCE}
+        component={PerformanceScreen}
+        options={{
+          headerShown: true,
+          title: "Performance",
+        }}
       />
       <Drawer.Screen
         name={Route.INBOX}
@@ -205,14 +240,23 @@ export default function App() {
         }}
       />
       <Drawer.Screen
-        name={Route.MYACCOUNT}
-        component={MyAccountScreen}
+        name={Route.SCHEDULEPICKUP}
+        component={ScheduledRidesScreen}
         options={{
           headerShown: true,
-          title: "My Account",
+          title: "Scheduled rides",
         }}
       />
       <Drawer.Screen name={Route.ACCOUNT_STACK} component={AccountStack} />
+      <Drawer.Screen
+        name={Route.EDITUSERPROFILE}
+        component={EditUserProfile}
+        options={{
+          headerShown: true,
+          title: "Edit Profile",
+          headerTitleAlign: "center",
+        }}
+      />
     </Drawer.Navigator>
   );
 }
@@ -233,6 +277,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.appDefaultColor,
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-around",
   },
   profilePic: {
     width: 60,
@@ -244,18 +289,36 @@ const styles = StyleSheet.create({
   },
   name: {
     color: "#FFFFFF",
-    fontSize: 18,
-    fontWeight: "bold",
+    fontSize: 15,
+    fontWeight: "500",
+    lineHeight: 22.5,
+    fontFamily: FontFamily.poppinsRegular,
+  },
+  ratingView: {
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+    position: "absolute",
+    bottom: -5,
+    left: 10,
+    borderRadius: 4,
+    padding: 2,
+    borderWidth: 1,
+    borderColor: Color.borderColor,
   },
   rating: {
-    color: "#FFFFFF",
-    fontSize: 14,
+    color: "#595F75",
+    fontSize: 9,
     marginTop: 4,
+    textAlignVertical: "center",
   },
   editProfile: {
     color: "#FFFFFF",
     marginTop: 6,
-    textDecorationLine: "underline",
+    fontSize: 14,
+    lineHeight: 21,
+    fontWeight: "400",
+    fontFamily: FontFamily.poppinsRegular,
   },
   drawerItemsContainer: {
     flex: 1,

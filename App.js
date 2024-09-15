@@ -8,6 +8,7 @@ import { store } from "./src/Redux/Store";
 import { useFonts } from "expo-font";
 // import AppLoading from "expo-app-loading"; // Import AppLoading
 import RootStack from "./src/navigation/RootStack";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 // SplashScreen.preventAutoHideAsync();
 export default function App() {
   const [loaded] = useFonts({

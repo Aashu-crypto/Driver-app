@@ -21,6 +21,7 @@ const menuItems = [
       <FontAwesome5 name="file-alt" size={24} color={Color.appDefaultColor} />
     ),
     title: "Documents",
+    route: Route.DOCUMENT,
   },
   {
     icon: (
@@ -35,6 +36,7 @@ const menuItems = [
   {
     icon: <Ionicons name="home" size={24} color={Color.appDefaultColor} />,
     title: "Saved Address",
+    route: Route.SAVEDADDRESS,
   },
   {
     icon: (
@@ -66,7 +68,14 @@ const MyAccountScreen = ({ navigation }) => {
           <TouchableOpacity
             style={styles.menuItem}
             key={index}
-            onPress={() => navigation.navigate(Route.APPSETTING)}
+            onPress={() => {
+              if (item.route) {
+                navigation.navigate(item.route);
+              }
+              else {
+                navigation.navigate(Route.SAVEDADDRESS)
+              }
+            }}
           >
             <View style={styles.iconTextContainer}>
               {item.icon}

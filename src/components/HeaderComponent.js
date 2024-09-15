@@ -16,11 +16,7 @@ const HeaderComponent = ({ title = "" }) => {
   return (
     <SafeAreaView
       style={{
-        flexDirection: "row",
-        padding: 15,
-        gap: 15,
-        alignItems: "center",
-        backgroundColor: "#fff",
+        height: 0,
       }}
     >
       <TouchableOpacity
