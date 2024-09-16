@@ -1,19 +1,19 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons"; // For icons
+import Stroke from "../../assets/img/Stroke";
 
-import Stroke from "../../assets/icons/Stroke.svg";
 const DestinationIcon = () => {
   return (
     <View>
       <View style={styles.locationContainerIcon}>
         <Ionicons name="location-sharp" size={16} color="green" />
       </View>
-      <View style={{ alignItems: "center" }}>
-        <Stroke />
+      <View style={{ alignItems: "center", justifyContent: "center" }}>
+        <Stroke height={20} width={20} />
       </View>
 
-      <View style={styles.locationContainer}>
+      <View style={styles.locationContainerIcon}>
         <Ionicons name="location-sharp" size={16} color="red" />
       </View>
     </View>
@@ -27,5 +27,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginVertical: 2,
+    marginLeft: 2,
   },
 });

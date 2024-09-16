@@ -6,10 +6,12 @@ import { Color, FontFamily, width } from "../../../GlobalStyles";
 import { useSelector } from "react-redux";
 import Button from "../../components/Button";
 import { Route } from "../../../routes";
+import SharedRide from "../../components/SharedRide";
 
 const HomeScreen = ({ navigation }) => {
   const status = useSelector((state) => state.status.status);
   const [findRide, setFindRide] = useState();
+  const [typeOfRide, setTypeOfRide] = useState("Shared");
   return (
     <SafeAreaView style={styles.container}>
       <HomeScreenHeader />
@@ -48,7 +50,7 @@ const HomeScreen = ({ navigation }) => {
           </Text>
         </View>
       )}
-      {status === "Online" && (
+      {status === "Online" && typeOfRide === "simple" && (
         <View style={styles.bottomCard}>
           <View style={styles.iconContainer}>
             <FontAwesome name="user" size={24} color="#4169e1" />
@@ -106,6 +108,7 @@ const HomeScreen = ({ navigation }) => {
           </View>
         </View>
       )}
+      {status === "Online" && typeOfRide === "Shared" && <SharedRide />}
     </SafeAreaView>
   );
 };

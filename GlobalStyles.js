@@ -27,4 +27,5 @@ export const Color = {
   backGroundColor: "#DCE5F3",
   textGraycolor: "#4A4A4A",
   colorGrayNormal: "#4C4E64",
+  transparentColor:"#6E72C133"
 };
