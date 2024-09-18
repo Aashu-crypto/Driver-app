@@ -14,7 +14,7 @@ const AccountStack = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: true ,headerTitleAlign: "left", // Align the title to the left
       headerTintColor: Color.appDefaultColor, // Set header text color to blue
-      headerBackTitleVisible: Platform.OS === "ios" ? false : true, // Hide "Back" text on iOS
+      headerBackTitleVisible:  false , // Hide "Back" text on iOS
       headerTitleStyle: {
         fontSize: 16,
         lineHeight: 24,

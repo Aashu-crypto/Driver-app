@@ -8,11 +8,11 @@ import {
   ScrollView,
   Pressable,
 } from "react-native";
-import { Ionicons, FontAwesome5 } from "@expo/vector-icons"; // For icons
-import { Color, FontFamily } from "../../../GlobalStyles";
-import Stroke from "../../../assets/icons/Stroke.svg";
+import { FontAwesome5 } from "@expo/vector-icons"; // For icons
+import { Color, FontFamily, width } from "../../../GlobalStyles";
 import DestinationIcon from "../../components/DestinationIcon";
 import Button from "../../components/Button";
+
 const ScheduledRidesScreen = ({ navigation }) => {
   const rides = [
     {
@@ -37,40 +37,42 @@ const ScheduledRidesScreen = ({ navigation }) => {
       dropLocation: "Neemuch RD. Gopalbari, Bari Sad",
     },
   ];
-  const [active, setActive] = useState(1);
+
+  const [activeTab, setActiveTab] = useState(0); // For tab management
+
   return (
     <SafeAreaView style={styles.container}>
-      {/* Tabs */}
-
-      {/* Date */}
-
-      {/* Ride Cards */}
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        {/* Tab Navigation */}
         <View style={styles.tabContainer}>
-          {["Available Pickups", "My pickups"].map((item, index) => (
+          {["Available Pickups", "My Pickups"].map((tab, index) => (
             <Pressable
               key={index}
               style={[
                 styles.tabButton,
                 {
                   backgroundColor:
-                    active === index ? Color.appDefaultColor : "transparent",
+                    activeTab === index ? Color.appDefaultColor : "transparent",
                 },
               ]}
-              onPress={() => setActive(index)}
+              onPress={() => setActiveTab(index)}
             >
               <Text
                 style={[
                   styles.tabText,
-                  { color: active === index ? "white" : Color.gray },
+                  { color: activeTab === index ? "white" : Color.gray },
                 ]}
               >
-                {item}
+                {tab}
               </Text>
             </Pressable>
           ))}
         </View>
+
+        {/* Date */}
         <Text style={styles.dateText}>26 July 2024</Text>
+
+        {/* Rides */}
         {rides.map((ride) => (
           <View key={ride.id} style={styles.rideCard}>
             <View style={styles.rideInfo}>
@@ -79,11 +81,11 @@ const ScheduledRidesScreen = ({ navigation }) => {
                 <Text style={styles.rideEstimate}>{ride.time}</Text>
               </View>
               <View>
-                <Text style={styles.estimateText}>Estimate fare</Text>
+                <Text style={styles.estimateText}>Estimated fare</Text>
                 <Text style={styles.rideFare}>{ride.fare}</Text>
               </View>
             </View>
-            <View style={{ flexDirection: "row" }}>
+            <View style={styles.rideLocations}>
               <DestinationIcon />
               <View>
                 <View style={styles.locationContainer}>
@@ -99,7 +101,7 @@ const ScheduledRidesScreen = ({ navigation }) => {
               </View>
             </View>
 
-            <Button placeholder={"View Details"} />
+            <Button placeholder={"View Details"} btnWidth={width * 0.8} />
           </View>
         ))}
       </ScrollView>
@@ -113,37 +115,33 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5F5F5",
     padding: 20,
   },
-  header: {
+  scrollViewContent: {},
+  tabContainer: {
     flexDirection: "row",
-    alignItems: "center",
-    padding: 16,
+    justifyContent: "space-between",
+    marginBottom: 20,
     backgroundColor: Color.backGroundColor,
+    borderRadius: 20,
+    overflow: "hidden",
   },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#FFFFFF",
-    marginLeft: 10,
+  tabButton: {
+    flex: 1,
+    paddingVertical: 10,
+    alignItems: "center",
+    borderRadius: 20,
   },
-
-  tabTextActive: {
-    color: "#FFFFFF",
-    fontWeight: "bold",
-  },
-  tabTextInactive: {
-    color: "#333333",
+  tabText: {
+    fontSize: 12,
+    fontWeight: "500",
+    lineHeight: 18,
   },
   dateText: {
     fontSize: 13,
     fontWeight: "400",
     color: "#595F75",
-    paddingLeft: 16,
     marginVertical: 16,
     fontFamily: FontFamily.poppinsRegular,
-    lineHeight:19.5
-  },
-  scrollViewContent: {
-    padding: 16,
+    lineHeight: 19.5,
   },
   rideCard: {
     backgroundColor: "#FFFFFF",
@@ -175,6 +173,13 @@ const styles = StyleSheet.create({
     lineHeight: 16,
     color: Color.appDefaultColor,
   },
+  estimateText: {
+    fontFamily: FontFamily.poppinsRegular,
+    fontWeight: "500",
+    fontSize: 13,
+    lineHeight: 20,
+    color: Color.colorGray,
+  },
   rideFare: {
     fontFamily: FontFamily.poppinsRegular,
     fontWeight: "500",
@@ -182,15 +187,14 @@ const styles = StyleSheet.create({
     lineHeight: 16,
     color: Color.appDefaultColor,
   },
+  rideLocations: {
+    flexDirection: "row",
+    marginBottom: 8,
+  },
   locationContainer: {
     flexDirection: "row",
     alignItems: "center",
     marginVertical: 4,
-  },
-  locationContainerIcon: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginVertical: 2,
   },
   locationText: {
     marginLeft: 8,
@@ -203,13 +207,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: Color.green,
-    padding: 2,
+    padding: 5,
     borderRadius: 8,
     marginTop: 8,
-    width: 100,
     justifyContent: "center",
-    position: "relative",
-    right: -20,
+    width: 100,
+    alignSelf: "flex-start",
+    marginLeft: 10,
   },
   cashRideText: {
     marginLeft: 5,
@@ -218,44 +222,6 @@ const styles = StyleSheet.create({
     fontSize: 10,
     lineHeight: 15,
     fontFamily: FontFamily.poppinsRegular,
-  },
-  detailsButton: {
-    backgroundColor: "#3D6DFF",
-    borderRadius: 10,
-    paddingVertical: 10,
-    marginTop: 16,
-    alignItems: "center",
-  },
-  detailsButtonText: {
-    color: "#FFFFFF",
-    fontWeight: "bold",
-  },
-  tabContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    marginBottom: 20,
-    backgroundColor: Color.backGroundColor,
-    borderRadius: 20,
-    overflow: "hidden",
-    marginHorizontal: 10,
-  },
-  tabButton: {
-    flex: 1,
-    padding: 10,
-    alignItems: "center",
-    borderRadius: 20,
-  },
-  tabText: {
-    fontSize: 12,
-    lineHeight: 18,
-    fontWeight: "500",
-  },
-  estimateText: {
-    fontFamily: FontFamily.poppinsRegular,
-    fontWeight: "500",
-    fontSize: 13,
-    lineHeight: 20,
-    color: Color.colorGray,
   },
 });
 

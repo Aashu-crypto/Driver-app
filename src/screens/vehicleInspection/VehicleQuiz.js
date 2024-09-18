@@ -9,36 +9,62 @@ import {
 } from "react-native";
 import Button from "../../components/Button";
 import { Route } from "../../../routes";
+import { Color } from "../../../GlobalStyles";
 
 export default function QuizScreen({ navigation }) {
-  const [selectedOptions, setSelectedOptions] = useState({});
-  const [progress, setProgress] = useState(0);
+  const [selectedOptions, setSelectedOptions] = useState({}); // Store selected options per question
 
+  // Define unique options for each question
   const questions = [
-    { id: 1, text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit?" },
-    { id: 2, text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit?" },
-    { id: 3, text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit?" },
+    {
+      id: 1,
+      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
+      options: [
+        { id: "1-1", text: "Option 1" },
+        { id: "1-2", text: "Option 2" },
+        { id: "1-3", text: "Option 3" },
+        { id: "1-4", text: "Option 4" },
+      ],
+    },
+    {
+      id: 2,
+      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
+      options: [
+        { id: "2-1", text: "Option 1" },
+        { id: "2-2", text: "Option 2" },
+        { id: "2-3", text: "Option 3" },
+        { id: "2-4", text: "Option 4" },
+      ],
+    },
+    {
+      id: 3,
+      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
+      options: [
+        { id: "3-1", text: "Option 1" },
+        { id: "3-2", text: "Option 2" },
+        { id: "3-3", text: "Option 3" },
+        { id: "3-4", text: "Option 4" },
+      ],
+    },
   ];
 
-  const options = ["Lorem ipsum", "Lorem ipsum", "Lorem ipsum", "Lorem ipsum"];
-
-  const handleOptionSelect = (questionId, option) => {
-    if (!selectedOptions[questionId]) {
-      setProgress(progress + 1 / questions.length); // Increase progress
-    }
-    setSelectedOptions((prevState) => ({ ...prevState, [questionId]: option }));
+  const handleOptionSelect = (questionId, optionId) => {
+    setSelectedOptions((prevState) => ({
+      ...prevState,
+      [questionId]: optionId, // Store selected option's id for each question
+    }));
   };
 
+  const allQuestionsAnswered = Object.keys(selectedOptions).length === questions.length;
+
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.safeContainer}>
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.header}>
           <Text style={styles.title}>Quiz</Text>
-          <Text style={styles.skip}>Skip</Text>
-        </View>
-
-        <View style={styles.progressBarContainer}>
-          <View style={[styles.progressBar, { width: `${progress * 100}%` }]} />
+          <TouchableOpacity onPress={() => navigation.navigate(Route.APPLICATIONSUBMITTED)}>
+            <Text style={styles.skip}>Skip</Text>
+          </TouchableOpacity>
         </View>
 
         {questions.map((question) => (
@@ -47,24 +73,22 @@ export default function QuizScreen({ navigation }) {
               {question.id}. {question.text}
             </Text>
             <View style={styles.optionsContainer}>
-              {options.map((option, index) => (
+              {question.options.map((option) => (
                 <TouchableOpacity
-                  key={index}
+                  key={option.id}
                   style={[
                     styles.optionButton,
-                    selectedOptions[question.id] === option &&
-                      styles.optionButtonSelected,
+                    selectedOptions[question.id] === option.id && styles.optionButtonSelected,
                   ]}
-                  onPress={() => handleOptionSelect(question.id, option)}
+                  onPress={() => handleOptionSelect(question.id, option.id)}
                 >
                   <Text
                     style={[
                       styles.optionText,
-                      selectedOptions[question.id] === option &&
-                        styles.optionTextSelected,
+                      selectedOptions[question.id] === option.id && styles.optionTextSelected,
                     ]}
                   >
-                    {option}
+                    {option.text}
                   </Text>
                 </TouchableOpacity>
               ))}
@@ -77,6 +101,7 @@ export default function QuizScreen({ navigation }) {
           onPress={() => {
             navigation.navigate(Route.APPLICATIONSUBMITTED);
           }}
+          disabled={!allQuestionsAnswered} // Disable button if not all questions are answered
         />
       </ScrollView>
     </SafeAreaView>
@@ -84,10 +109,14 @@ export default function QuizScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  safeContainer: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
   container: {
     flexGrow: 1,
     padding: 20,
-    backgroundColor: "#F0F4FA",
+    backgroundColor: "#fff",
   },
   header: {
     flexDirection: "row",
@@ -101,18 +130,7 @@ const styles = StyleSheet.create({
   },
   skip: {
     fontSize: 16,
-    color: "#1976D2",
-  },
-  progressBarContainer: {
-    height: 4,
-    backgroundColor: "#E0E0E0",
-    borderRadius: 2,
-    marginBottom: 20,
-  },
-  progressBar: {
-    height: "100%",
-    backgroundColor: "#1976D2",
-    borderRadius: 2,
+    color: Color.appDefaultColor,
   },
   questionContainer: {
     marginBottom: 20,
@@ -129,33 +147,22 @@ const styles = StyleSheet.create({
   optionButton: {
     backgroundColor: "#fff",
     borderWidth: 1,
-    borderColor: "#1976D2",
+    borderColor: Color.appDefaultColor,
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 15,
     marginBottom: 10,
-    width: "48%",
+    width: "48%", // Make sure two options fit per row
     alignItems: "center",
   },
   optionButtonSelected: {
-    backgroundColor: "#1976D2",
+    backgroundColor: Color.appDefaultColor,
   },
   optionText: {
-    color: "#1976D2",
+    color: Color.appDefaultColor,
     fontSize: 14,
   },
   optionTextSelected: {
     color: "#fff",
-  },
-  doneButton: {
-    backgroundColor: "#1976D2",
-    paddingVertical: 15,
-    borderRadius: 10,
-    alignItems: "center",
-  },
-  doneButtonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
   },
 });

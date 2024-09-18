@@ -119,18 +119,18 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 5,
     position: "absolute",
-    bottom: 10,
+    bottom: 0,
   },
   // Floating image on top of the bottom sheet
   imageWrapper: {
     position: "absolute",
-    top: -22,
+    top: -30,
     alignSelf: "center",
     zIndex: 1000,
     backgroundColor: "#fff",
-    height: 50,
-    width: 50,
-    borderRadius: 25,
+    height: 60,
+    width: 60,
+    borderRadius: 30,
     justifyContent: "center",
     alignItems: "center",
     elevation: 4,
@@ -146,10 +146,12 @@ const styles = StyleSheet.create({
   // Ride request header section
   header: {
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-between",
     marginTop: 30,
     width: width,
     alignItems: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 5,
   },
   rideDetailsText: {
     fontSize: 16,

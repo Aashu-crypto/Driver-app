@@ -31,7 +31,7 @@ const RegistrationStack = () => {
         headerShown: true,
         headerTitleAlign: "left", // Align the title to the left
         headerTintColor: Color.appDefaultColor, // Set header text color to blue
-        headerBackTitleVisible: Platform.OS === "ios" ? false : true, // Hide "Back" text on iOS
+        headerBackTitleVisible: false, // Hide "Back" text on iOS
         headerTitleStyle: {
           fontSize: 16,
           lineHeight: 24,
@@ -39,7 +39,7 @@ const RegistrationStack = () => {
           fontWeight: "500",
         },
         headerStyle:{
-          backgroundColor:Color.backGroundColor
+          backgroundColor:"#fff"
         }
       }}
       initialRouteName={Route.DRIVERREGISTRATION}
@@ -117,7 +117,7 @@ const RegistrationStack = () => {
       <Stack.Screen
         name={Route.APPLICATIONSUBMITTED}
         component={ApplicationSubmittedScreen}
-        options={{ title: "Application Submitted" }} // Title for the screen
+        options={{ title: "Application Submitted" ,headerShown:false}} // Title for the screen
       />
     </Stack.Navigator>
   );

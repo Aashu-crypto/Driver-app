@@ -157,7 +157,10 @@ export default function SharedRideLocation() {
       )}
       {clientLocated ? (
         <View style={styles.bottomCard}>
-          <Progress.Bar progress={0.3} width={width} />
+          <View style={{ alignSelf: "center" }}>
+            <Progress.Bar progress={0.3} width={width * 0.95} />
+          </View>
+
           <Text
             style={{
               fontSize: 16,
@@ -173,7 +176,7 @@ export default function SharedRideLocation() {
           </Text>
           <View style={styles.riderDetails}>
             <DestinationIcon />
-            <View>
+            <View style={{ marginLeft: 5 }}>
               <View style={styles.locationContainer}>
                 <Text style={styles.locationTitle}>
                   Pick Up (2 Km 5 min away)
@@ -242,6 +245,7 @@ export default function SharedRideLocation() {
               flexDirection: "row",
               justifyContent: "space-around",
               alignItems: "center",
+              marginVertical: 10,
             }}
           >
             <View style={styles.riderImageContainer}>
@@ -272,8 +276,8 @@ export default function SharedRideLocation() {
           <Pressable
             style={{
               borderWidth: 1,
-              borderColor: "#F45B5B",
-              width: "90%",
+              borderColor: Color.red,
+              width: "85%",
               alignSelf: "center",
               justifyContent: "center",
               alignItems: "center",
@@ -282,13 +286,11 @@ export default function SharedRideLocation() {
               marginTop: 10,
               marginBottom: 15,
             }}
-            onPress={() => {
-              navigation.navigate();
-            }}
+           
           >
             <Text
               style={{
-                color: "#F45B5B",
+                color: Color.red,
                 fontSize: 14,
                 lineHeight: 21,
                 fontWeight: "500",
@@ -358,7 +360,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     alignSelf: "center", // Center the bottom card horizontally
     bottom: 0,
-    backgroundColor: "#DCE5F3",
+    backgroundColor: "#fff",
   },
   name: {
     fontSize: 15,
@@ -436,7 +438,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flex: 1, // Ensures this view takes the remaining space in the row
     alignItems: "flex-start", // Aligns content vertically at the top
-    justifyContent: "center",
+    justifyContent: "flex-start",
+    paddingHorizontal: 20,
+    paddingTop: 10,
+    // backgroundColor:'#000'
   },
   riderImageContainer: {
     alignItems: "center", // Center image and name vertically within this container

@@ -40,7 +40,7 @@ function CustomDrawerContent(props) {
   return (
     <DrawerContentScrollView
       {...props}
-      contentContainerStyle={styles.drawerContent}
+      contentContainerStyle={[styles.drawerContent, { paddingTop: 10 }]}
     >
       <View style={styles.profileContainer}>
         <View>
@@ -209,7 +209,7 @@ export default function App() {
         },
         headerTitleAlign: "left", // Align the title to the left
         headerTintColor: Color.appDefaultColor, // Set header text color to blue
-        headerBackTitleVisible: Platform.OS === "ios" ? false : true, // Hide "Back" text on iOS
+        headerBackTitleVisible: false, // Hide "Back" text on iOS
         headerTitleStyle: {
           fontSize: 16,
           lineHeight: 24,

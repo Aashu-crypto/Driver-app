@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Image, SafeAreaView } from "react-native";
+import { View, Text, StyleSheet, Image, SafeAreaView, StatusBar } from "react-native";
 import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
 import HomeScreenHeader from "../../components/HomeScreenHeader";
 import { Color, FontFamily, width } from "../../../GlobalStyles";
@@ -14,6 +14,7 @@ const HomeScreen = ({ navigation }) => {
   const [typeOfRide, setTypeOfRide] = useState("Shared");
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar backgroundColor={Color.appDefaultColor} />
       <HomeScreenHeader />
 
       <View style={styles.cardsContainer}>
@@ -100,7 +101,7 @@ const HomeScreen = ({ navigation }) => {
               </View>
             </View>
           </View>
-          <View>
+          <View style={{ marginBottom: 15 }}>
             <Button
               placeholder={"Accept"}
               onPress={() => navigation.navigate(Route.CLIENTLOCATION)}
@@ -117,6 +118,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Color.backGroundColor,
+    
   },
 
   cardsContainer: {
@@ -180,11 +182,9 @@ const styles = StyleSheet.create({
   bottomCard: {
     width: width,
     minHeight: 100,
-
     backgroundColor: "white",
     borderTopRightRadius: 15,
     borderTopLeftRadius: 15,
-
     alignItems: "center",
     justifyContent: "center",
     shadowColor: "#000",
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     position: "absolute",
     alignSelf: "center", // Center the bottom card horizontally
-    bottom: 10,
+    bottom: 0,
     backgroundColor: "#fff",
   },
   iconContainer: {

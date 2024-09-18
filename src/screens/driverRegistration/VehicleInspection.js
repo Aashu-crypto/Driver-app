@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ScrollView,
   SafeAreaView,
+  FlatList,
 } from "react-native";
 import { Color } from "../../../GlobalStyles";
 import HeaderComponent from "../../components/HeaderComponent";
@@ -13,34 +14,40 @@ import Button from "../../components/Button";
 import { Route } from "../../../routes";
 
 const OptionSelector = ({ options, selectedOption, setSelectedOption }) => {
+  const renderItem = ({ item }) => (
+    <TouchableOpacity
+      key={item}
+      style={[
+        styles.optionButton,
+        selectedOption === item && styles.selectedOption,
+      ]}
+      onPress={() => setSelectedOption(item)}
+    >
+      <Text
+        style={[
+          styles.optionText,
+          selectedOption === item && styles.selectedOptionText,
+        ]}
+      >
+        {item}
+      </Text>
+    </TouchableOpacity>
+  );
+
   return (
-    <View style={styles.optionsContainer}>
-      {options.map((option) => (
-        <TouchableOpacity
-          key={option}
-          style={[
-            styles.optionButton,
-            selectedOption === option && styles.selectedOption,
-          ]}
-          onPress={() => setSelectedOption(option)}
-        >
-          <Text
-            style={[
-              styles.optionText,
-              selectedOption === option && styles.selectedOptionText,
-            ]}
-          >
-            {option}
-          </Text>
-        </TouchableOpacity>
-      ))}
-    </View>
+    <FlatList
+      data={options}
+      horizontal={true}
+      renderItem={renderItem}
+      keyExtractor={(item) => item}
+      contentContainerStyle={styles.optionsContainer}
+      showsHorizontalScrollIndicator={false}
+    />
   );
 };
 
 const Section = ({
   title,
-  subtitle,
   description,
   options,
   selectedOption,

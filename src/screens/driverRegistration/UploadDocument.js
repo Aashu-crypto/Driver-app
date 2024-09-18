@@ -7,7 +7,7 @@ import {
   Pressable,
   Modal,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
 } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import HeaderComponent from "../../components/HeaderComponent";
@@ -51,8 +51,9 @@ const UploadDocument = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-      <HeaderComponent title="Upload Documentation" />
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 10 }}>
+      <ScrollView
+        contentContainerStyle={{ paddingHorizontal: 10, paddingTop: 5 }}
+      >
         <Text style={styles.description}>
           Earnings are only a few steps away.
         </Text>
@@ -132,21 +133,21 @@ const UploadDocument = ({ navigation }) => {
           statusColor="gray"
           onPress={() => {}}
         />
+        <View style={styles.footer}>
+          <Pressable
+            style={{ alignItems: "center" }}
+            onPress={() => setModalVisible(true)} // Show modal when pressed
+          >
+            <Text style={styles.cancelText}>Cancel & Reset</Text>
+          </Pressable>
+          <Button
+            placeholder={"Next"}
+            onPress={() => navigation.navigate(Route.VEHICLESELFINSPECION)}
+          />
+        </View>
       </ScrollView>
 
       {/* Footer */}
-      <View style={styles.footer}>
-        <Pressable
-          style={{ alignItems: "center" }}
-          onPress={() => setModalVisible(true)} // Show modal when pressed
-        >
-          <Text style={styles.cancelText}>Cancel & Reset</Text>
-        </Pressable>
-        <Button
-          placeholder={"Next"}
-          onPress={() => navigation.navigate(Route.VEHICLESELFINSPECION)}
-        />
-      </View>
 
       {/* Confirmation Modal */}
       <Modal
@@ -199,10 +200,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   sectionTitle: {
-    color: "#4A4A4A",
-    fontSize: 16,
-    fontWeight: "400",
-    lineHeight: 24,
+    color: "#677093",
+    fontSize: 14,
+    fontWeight: "500",
+    lineHeight: 21,
     fontFamily: FontFamily.poppinsRegular,
     marginVertical: 10,
   },
@@ -245,16 +246,15 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.poppinsRegular,
   },
   footer: {
-    position: "absolute",
-    bottom: 10,
     alignSelf: "center",
     width: width * 0.9,
+    marginVertical:10
   },
   cancelText: {
     color: "red",
     fontSize: 16,
     fontWeight: "500",
-    marginBottom: 20,
+    lineHeight: 24,
   },
   modalBackground: {
     flex: 1,

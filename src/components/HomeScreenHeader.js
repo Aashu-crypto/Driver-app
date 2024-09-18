@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 0,
     backgroundColor: Platform.OS === "android" ? Color.appDefaultColor : "#fff",
+    marginTop:30
   },
   header: {
     flexDirection: "row",
