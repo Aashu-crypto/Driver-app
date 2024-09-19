@@ -34,6 +34,7 @@ export default function SharedRideLocation() {
   const [routeCoordinates, setRouteCoordinates] = useState([]);
   const [clientLocated, setClientLocated] = useState(true);
   const [secondsLeft, setSecondsLeft] = useState(300);
+  const [cancelPressed, setCancelPressed] = useState(false);
   const [isServiceEnabled, setIsServiceEnabled] = useState(false);
   const navigation = useNavigation();
   const toggleSwitch = () =>
@@ -156,57 +157,60 @@ export default function SharedRideLocation() {
         </MapView>
       )}
       {clientLocated ? (
-        <View style={styles.bottomCard}>
-          <View style={{ alignSelf: "center" }}>
-            <Progress.Bar progress={0.3} width={width * 0.95} />
-          </View>
+        cancelPressed ? (
+          <View style={styles.bottomCard}>
+            <View style={{ alignSelf: "center" }}>
+              <Progress.Bar progress={0.3} width={width * 0.95} />
+            </View>
 
-          <Text
-            style={{
-              fontSize: 16,
-              lineHeight: 24,
-              fontWeight: "500",
-              fontFamily: FontFamily.poppinsRegular,
-              color: "#677093",
-              textAlign: "center",
-              marginTop: 10,
-            }}
-          >
-            Picking up Ajay
-          </Text>
-          <View style={styles.riderDetails}>
-            <DestinationIcon />
-            <View style={{ marginLeft: 5 }}>
-              <View style={styles.locationContainer}>
-                <Text style={styles.locationTitle}>
-                  Pick Up (2 Km 5 min away)
-                </Text>
-                <Text style={styles.locationText}>
-                  Neemuch RD. Gopalbari, Bari Sad
-                </Text>
-              </View>
-              <View style={styles.locationContainer}>
-                <Text style={styles.dropTitle}>Drop 2</Text>
-                <Text style={styles.locationText}>
-                  N/107D, Khayala, Vishnu Garden, New Delhi
-                </Text>
+            <Text
+              style={{
+                fontSize: 16,
+                lineHeight: 24,
+                fontWeight: "500",
+                fontFamily: FontFamily.poppinsRegular,
+                color: "#677093",
+                textAlign: "center",
+                marginTop: 10,
+              }}
+            >
+              Picking up Ajay
+            </Text>
+
+            <View style={styles.riderDetails}>
+              <DestinationIcon />
+              <View style={{ marginLeft: 5 }}>
+                <View style={styles.locationContainer}>
+                  <Text style={styles.locationTitle}>
+                    Pick Up (2 Km 5 min away)
+                  </Text>
+                  <Text style={styles.locationText}>
+                    Neemuch RD. Gopalbari, Bari Sad
+                  </Text>
+                </View>
+                <View style={styles.locationContainer}>
+                  <Text style={styles.dropTitle}>Drop 2</Text>
+                  <Text style={styles.locationText}>
+                    N/107D, Khayala, Vishnu Garden, New Delhi
+                  </Text>
+                </View>
               </View>
             </View>
-          </View>
-          <View
-            style={{
-              width: "85%",
-              alignSelf: "center",
-              gap: 15,
-              backgroundColor: "#fff",
-              borderRadius: 10,
-              padding: 10,
-              marginVertical: 10,
-            }}
-          >
-            {data.map((item) => {
-              return (
+
+            <View
+              style={{
+                width: "85%",
+                alignSelf: "center",
+                gap: 15,
+                backgroundColor: "#fff",
+                borderRadius: 10,
+                padding: 10,
+                marginVertical: 10,
+              }}
+            >
+              {data.map((item) => (
                 <View
+                  key={item.id}
                   style={{
                     flexDirection: "row",
                     justifyContent: "space-between",
@@ -237,71 +241,121 @@ export default function SharedRideLocation() {
                     color={Color.appDefaultColor}
                   />
                 </View>
-              );
-            })}
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-around",
-              alignItems: "center",
-              marginVertical: 10,
-            }}
-          >
-            <View style={styles.riderImageContainer}>
-              <Image
-                source={require("../../../assets/img/riderPic.png")}
-                style={styles.riderImage}
-              />
-              <View style={styles.ratingView}>
-                <Text style={styles.rating}>⭐ 4.75</Text>
+              ))}
+            </View>
+
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-around",
+                alignItems: "center",
+                marginVertical: 10,
+              }}
+            >
+              <View style={styles.riderImageContainer}>
+                <Image
+                  source={require("../../../assets/img/riderPic.png")}
+                  style={styles.riderImage}
+                />
+                <View style={styles.ratingView}>
+                  <Text style={styles.rating}>⭐ 4.75</Text>
+                </View>
+                <View style={{ marginLeft: 15 }}>
+                  <Text style={styles.name}>Ajay Singh</Text>
+                  <Text style={styles.carType}>Sedan</Text>
+                </View>
               </View>
-              <View style={{ marginLeft: 15 }}>
-                <Text style={styles.name}>Ajay Singh</Text>
-                <Text style={styles.carType}>Sedan</Text>
+
+              <View style={{ flexDirection: "row", columnGap: 5 }}>
+                <Image
+                  source={require("../../../assets/img/call.png")}
+                  style={{ width: 35, height: 35 }}
+                />
+                <Image
+                  source={require("../../../assets/img/sms.png")}
+                  style={{ width: 35, height: 35 }}
+                />
               </View>
             </View>
 
-            <View style={{ flexDirection: "row", columnGap: 5 }}>
-              <Image
-                source={require("../../../assets/img/call.png")}
-                style={{ width: 35, height: 35 }}
-              />
-              <Image
-                source={require("../../../assets/img/sms.png")}
-                style={{ width: 35, height: 35 }}
-              />
-            </View>
+            <Pressable
+              style={{
+                borderWidth: 1,
+                borderColor: Color.red,
+                width: "85%",
+                alignSelf: "center",
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 9,
+                padding: 15,
+                marginTop: 10,
+                marginBottom: 15,
+              }}
+              onPress={() => {}}
+            >
+              <Text
+                style={{
+                  color: Color.red,
+                  fontSize: 14,
+                  lineHeight: 21,
+                  fontWeight: "500",
+                  fontFamily: FontFamily.poppinsRegular,
+                }}
+              >
+                Cancel Booking
+              </Text>
+            </Pressable>
+            <View style={{ marginBottom: 10 }} />
           </View>
-          <Pressable
-            style={{
-              borderWidth: 1,
-              borderColor: Color.red,
-              width: "85%",
-              alignSelf: "center",
-              justifyContent: "center",
-              alignItems: "center",
-              borderRadius: 9,
-              padding: 15,
-              marginTop: 10,
-              marginBottom: 15,
-            }}
-           
-          >
+        ) : (
+          <View style={styles.bottomCard}>
             <Text
               style={{
-                color: Color.red,
                 fontSize: 14,
+                fontWeight: "400",
                 lineHeight: 21,
-                fontWeight: "500",
+                color: "#677093",
                 fontFamily: FontFamily.poppinsRegular,
+                padding: 23,
               }}
             >
-              Cancel Booking
+              Do you wat to cancel this ride?
             </Text>
-          </Pressable>
-          <View style={{ marginBottom: 10 }} />
-        </View>
+            <Button
+              placeholder={"Continue Trip"}
+              onPress={() => {
+                setCancelPressed(false);
+              }}
+            />
+            <Pressable
+              style={{
+                borderWidth: 1,
+                borderColor: Color.red,
+                width: "85%",
+                alignSelf: "center",
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 9,
+                padding: 15,
+                marginTop: 10,
+                marginBottom: 15,
+              }}
+              onPress={() => {}}
+            >
+              <Text
+                style={{
+                  color: Color.red,
+                  fontSize: 14,
+                  lineHeight: 21,
+                  fontWeight: "500",
+                  fontFamily: FontFamily.poppinsRegular,
+                }}
+              >
+                Cancel Booking
+              </Text>
+            </Pressable>
+          </View>
+        )
       ) : (
         <View style={styles.bottomCard}>
           <View
