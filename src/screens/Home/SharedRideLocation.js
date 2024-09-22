@@ -25,6 +25,7 @@ import Button from "../../components/Button";
 import * as Progress from "react-native-progress";
 import DestinationIcon from "../../components/DestinationIcon";
 import { useNavigation } from "@react-navigation/native";
+import { Route } from "../../../routes";
 export default function SharedRideLocation() {
   const [location, setLocation] = useState(null);
   const [destination, setDestination] = useState({
@@ -157,7 +158,7 @@ export default function SharedRideLocation() {
         </MapView>
       )}
       {clientLocated ? (
-        cancelPressed ? (
+        !cancelPressed ? (
           <View style={styles.bottomCard}>
             <View style={{ alignSelf: "center" }}>
               <Progress.Bar progress={0.3} width={width * 0.95} />
@@ -271,10 +272,12 @@ export default function SharedRideLocation() {
                   source={require("../../../assets/img/call.png")}
                   style={{ width: 35, height: 35 }}
                 />
-                <Image
-                  source={require("../../../assets/img/sms.png")}
-                  style={{ width: 35, height: 35 }}
-                />
+                <Pressable onPress={()=>{navigation.navigate(Route.DRIVERCHATSCREEN)}}>
+                  <Image
+                    source={require("../../../assets/img/sms.png")}
+                    style={{ width: 35, height: 35 }}
+                  />
+                </Pressable>
               </View>
             </View>
 
@@ -291,7 +294,9 @@ export default function SharedRideLocation() {
                 marginTop: 10,
                 marginBottom: 15,
               }}
-              onPress={() => {}}
+              onPress={() => {
+                setCancelPressed(true);
+              }}
             >
               <Text
                 style={{
@@ -316,16 +321,20 @@ export default function SharedRideLocation() {
                 lineHeight: 21,
                 color: "#677093",
                 fontFamily: FontFamily.poppinsRegular,
-                padding: 23,
+                paddingLeft: 23,
+                paddingTop: 10,
               }}
             >
-              Do you wat to cancel this ride?
+              Do you want to cancel this ride?
             </Text>
             <Button
               placeholder={"Continue Trip"}
               onPress={() => {
+                console.log("Pressed");
+
                 setCancelPressed(false);
               }}
+              btnWidth={"85%"}
             />
             <Pressable
               style={{

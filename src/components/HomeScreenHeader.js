@@ -10,7 +10,7 @@ import {
 import React from "react";
 import { Feather, EvilIcons } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
-import { Color } from "../../GlobalStyles";
+import { Color, FontFamily } from "../../GlobalStyles";
 import { UserStatus } from "../Redux/Slice/UserStatusSlice";
 import { useNavigation } from "@react-navigation/native";
 const HomeScreenHeader = () => {
@@ -22,7 +22,7 @@ const HomeScreenHeader = () => {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={styles.safeArea}>
       <View
         style={[
           styles.header,
@@ -53,7 +53,7 @@ const HomeScreenHeader = () => {
         </Pressable>
         <EvilIcons name="search" size={28} color="white" />
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -61,17 +61,16 @@ export default HomeScreenHeader;
 
 const styles = StyleSheet.create({
   safeArea: {
-    flex: 0,
     backgroundColor: Platform.OS === "android" ? Color.appDefaultColor : "#fff",
-    marginTop: Platform.OS === "android" ? 20 : 0,
+    paddingTop: Platform.OS === "android" ? 20 : 0,
   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 10,
-    paddingVertical: Platform.OS === "android" ? 10 : 10,
-    paddingTop: Platform.OS === "android" ? 10 : 10,
+    paddingVertical: Platform.OS === "android" ? 15  : 10,
+    paddingTop: Platform.OS === "ios" && 45,
   },
   status: {
     padding: 10,
@@ -83,7 +82,10 @@ const styles = StyleSheet.create({
   },
   offlineText: {
     color: "white",
-    fontWeight: "600",
+    fontWeight: "400",
+    fontSize: 12,
+    lineHeight: 18,
+    fontFamily: FontFamily.poppinsRegular,
   },
   circle: {
     width: 20,

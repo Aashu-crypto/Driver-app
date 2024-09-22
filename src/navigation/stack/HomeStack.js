@@ -4,6 +4,7 @@ import { Route } from "../../../routes";
 import Home from "../../screens/Home/Home";
 import ClientLocation from "../../screens/Home/ClientLocation";
 import SharedRideLocation from "../../screens/Home/SharedRideLocation";
+import DriverChatScreen from "../../screens/Home/DriverChatScreen";
 
 const HomeStack = () => {
   const Stack = createStackNavigator();
@@ -17,6 +18,10 @@ const HomeStack = () => {
       <Stack.Screen
         name={Route.SHAREDRIDELOCATION}
         component={SharedRideLocation}
+      />
+      <Stack.Screen
+        name={Route.DRIVERCHATSCREEN}
+        component={DriverChatScreen}
       />
     </Stack.Navigator>
   );

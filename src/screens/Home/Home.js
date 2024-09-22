@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Image, SafeAreaView, StatusBar } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  SafeAreaView,
+  StatusBar,
+  ImageBackground,
+} from "react-native";
 import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
 import HomeScreenHeader from "../../components/HomeScreenHeader";
 import { Color, FontFamily, width } from "../../../GlobalStyles";
@@ -11,9 +19,9 @@ import SharedRide from "../../components/SharedRide";
 const HomeScreen = ({ navigation }) => {
   const status = useSelector((state) => state.status.status);
   const [findRide, setFindRide] = useState();
-  const [typeOfRide, setTypeOfRide] = useState("Shared");
+  const [typeOfRide, setTypeOfRide] = useState("simple");
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <StatusBar backgroundColor={Color.appDefaultColor} />
       <HomeScreenHeader />
 
@@ -40,10 +48,16 @@ const HomeScreen = ({ navigation }) => {
 
       {status === "Offline" && (
         <View style={styles.mainContent}>
-          <Image
-            source={require("../../../assets/img/phone.png")}
-            style={styles.mainImage}
-          />
+          <ImageBackground
+            source={require("../../../assets/img/phoneBackground.png")}
+            style={styles.mainImageBackground}
+          >
+            <Image
+              source={require("../../../assets/img/phone.png")}
+              style={styles.mainImage}
+            />
+          </ImageBackground>
+
           <Text style={styles.greeting}>Good Morning, Partner</Text>
           <Text style={styles.onDutyText}>
             Go <Text style={styles.onDutyHighlight}>ON DUTY</Text> to Start
@@ -110,7 +124,7 @@ const HomeScreen = ({ navigation }) => {
         </View>
       )}
       {status === "Online" && typeOfRide === "Shared" && <SharedRide />}
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -118,7 +132,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Color.backGroundColor,
-    
   },
 
   cardsContainer: {
@@ -167,17 +180,35 @@ const styles = StyleSheet.create({
     height: 130,
     marginBottom: 20,
   },
+  mainImageBackground: {
+    width: 160,
+    height: 128,
+    resizeMode: "contain",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   greeting: {
-    fontSize: 18,
-    color: "gray",
+    fontSize: 16,
+    color: "#878CA1",
+    fontFamily: FontFamily.poppinsRegular,
+    marginTop: 20,
+    fontWeight: "400",
+    lineHeight: 24,
   },
   onDutyText: {
-    fontSize: 18,
-    color: "gray",
+    fontSize: 17,
+    color: "#595F75",
+    fontFamily: FontFamily.poppinsRegular,
+
+    fontWeight: "500",
+    lineHeight: 25.5,
   },
   onDutyHighlight: {
-    color: "green",
-    fontWeight: "bold",
+    fontSize: 17,
+    color: Color.green,
+    fontFamily: FontFamily.poppinsRegular,
+    marginTop: 20,    fontWeight: "500",
+    lineHeight: 25.5,
   },
   bottomCard: {
     width: width,

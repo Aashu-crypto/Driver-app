@@ -7,6 +7,7 @@ import {
   Animated,
   StatusBar,
   Platform,
+  Pressable,
 } from "react-native";
 import React, { useRef, useState } from "react";
 import OnBoarding1 from "../../../assets/img/onBoarding1.svg";
@@ -18,12 +19,14 @@ import Button from "../../components/Button";
 import { useNavigation } from "@react-navigation/native";
 import { Route } from "../../../routes";
 import { CommonActions } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
+import i18next from "i18next";
 
 const OnBoarding = () => {
   const navigation = useNavigation();
   const slidesRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-
+  const { t } = useTranslation();
   const obj = [
     {
       title: "Register Vehicle",
@@ -99,8 +102,11 @@ const OnBoarding = () => {
         )}
       />
       <Paginator data={obj} scrollX={scrollX} />
+      <Pressable onPress={()=>{i18next.changeLanguage('hi')}}>
+        <Text>Change to Hindi</Text>
+      </Pressable>
       <View style={styles.buttonContainer}>
-        <Button placeholder={"Next"} onPress={onNext} />
+        <Button placeholder={t("next")} onPress={onNext} />
       </View>
     </SafeAreaView>
   );

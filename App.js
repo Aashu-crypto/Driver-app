@@ -7,7 +7,7 @@ import { store } from "./src/Redux/Store";
 import { useFonts } from "expo-font";
 import RootStack from "./src/navigation/RootStack";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-
+import './i18n'
 export default function App() {
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("./assets/fonts/Poppins-Bold.ttf"),
