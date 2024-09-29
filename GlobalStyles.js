@@ -21,7 +21,7 @@ export const Color = {
   colorDarkgray: "#9b9b9b",
   colorDarkslategray: "#363636",
   colorGray_100: "#848484",
-  colorSilver: "#c4c4c4",
+ 
   colorGray: "#828282",
   appDefaultColor: "#1C4BF4",
   secondaryColor: "#102C8E",

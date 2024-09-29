@@ -16,8 +16,9 @@ import {
 import OptionSlice from "./Slice/OptionSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import articleIdSlice from "./Slice/ArticleIdSlice";
 import UserStatusSlice from "./Slice/UserStatusSlice";
+import DriverProfile from "./Slice/DriverProfile";
+
 const rootReducer = combineReducers({
   screen: screenSlice,
   status: UserStatusSlice,
@@ -25,13 +26,13 @@ const rootReducer = combineReducers({
   doc: docSlice,
   option: OptionSlice,
   profile: profileSlice,
-  articleId: articleIdSlice,
+  driver: DriverProfile,
 });
 
 const persistConfig = {
   key: "root",
   storage: AsyncStorage,
-  blacklist: ["screen", "index",  "article"],
+  blacklist: ["screen", "index"],
 };
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

@@ -8,11 +8,11 @@ import {
   SafeAreaView,
   FlatList,
 } from "react-native";
-import { Color } from "../../../GlobalStyles";
+import { Color, FontFamily } from "../../../GlobalStyles";
 import HeaderComponent from "../../components/HeaderComponent";
 import Button from "../../components/Button";
 import { Route } from "../../../routes";
-
+import { LinearGradient } from "expo-linear-gradient";
 const OptionSelector = ({ options, selectedOption, setSelectedOption }) => {
   const renderItem = ({ item }) => (
     <TouchableOpacity
@@ -169,14 +169,20 @@ export default function VehicleInspectionScreen({ navigation }) {
           selectedOption={spareTireCondition}
           setSelectedOption={setSpareTireCondition}
         />
-
-        <Button
+<View style={{marginBottom:20}}>
+<Button
           placeholder={"Next"}
           onPress={() => {
             navigation.navigate(Route.UPLOADDOCUMENT);
           }}
         />
+</View>
+       
       </ScrollView>
+      <LinearGradient
+        colors={['transparent', 'rgba(255,255,255,0.8)', '#fff']}
+        style={styles.bottomFade}
+      />
     </SafeAreaView>
   );
 }
@@ -195,25 +201,34 @@ const styles = StyleSheet.create({
   },
   sectionHeader: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: "500",
+    fontFamily: FontFamily.poppinsRegular,
     marginVertical: 10,
-    color: Color.appDefaultColor,
+    color: "#677093",
+    lineHeight: 24,
   },
   subHeader: {
-    fontSize: 16,
-    marginVertical: 5,
+    fontSize: 14,
+
+    color: Color.gray,
+    lineHeight: 21,
+    fontWeight: "500",
+    fontFamily: FontFamily.poppinsRegular,
   },
   description: {
-    fontSize: 14,
-    color: "#555",
+    fontSize: 12,
+    color: "#858DAB",
     marginBottom: 10,
+    fontWeight: "500",
+    fontFamily: FontFamily.poppinsRegular,
+    lineHeight: 18,
   },
   optionsContainer: {
     flexDirection: "row",
     marginBottom: 20,
   },
   optionButton: {
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: Color.appDefaultColor,
     borderRadius: 20,
     paddingVertical: 10,
@@ -239,5 +254,12 @@ const styles = StyleSheet.create({
   nextButtonText: {
     color: "#fff",
     fontSize: 18,
+  },
+  bottomFade: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: 30,
   },
 });

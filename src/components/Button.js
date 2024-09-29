@@ -2,8 +2,9 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { Color, width } from "../../GlobalStyles";
-
+import { useTranslation } from "react-i18next";
 const Button = ({ placeholder, onPress, btnWidth }) => {
+  const t = useTranslation();
   return (
     <Pressable
       style={{

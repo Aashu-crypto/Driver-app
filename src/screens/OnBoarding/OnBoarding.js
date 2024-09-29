@@ -1,3 +1,4 @@
+import React, { useRef, useState } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -7,48 +8,50 @@ import {
   Animated,
   StatusBar,
   Platform,
-  Pressable,
 } from "react-native";
-import React, { useRef, useState } from "react";
 import OnBoarding1 from "../../../assets/img/onBoarding1.svg";
 import OnBoarding2 from "../../../assets/img/OnBoarding2.svg";
 import OnBoarding3 from "../../../assets/img/onBoarding3.svg";
 import { Color, FontFamily, height, width } from "../../../GlobalStyles";
 import Paginator from "../../components/Paginator";
+import { Dropdown } from "react-native-element-dropdown";
 import Button from "../../components/Button";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, CommonActions } from "@react-navigation/native";
 import { Route } from "../../../routes";
-import { CommonActions } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 import i18next from "i18next";
+import Entypo from "@expo/vector-icons/Entypo";
 
 const OnBoarding = () => {
   const navigation = useNavigation();
   const slidesRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const { t } = useTranslation();
-  const obj = [
+
+  const slidesData = [
     {
-      title: "Register Vehicle",
-      description: "We help you determine and track your goals efficiently.",
+      title: t("onboarding.register_vehicle"),
+      description: t("onboarding.register_vehicle_desc"),
       svg: OnBoarding1,
     },
     {
-      title: "Upload Documents",
-      description: "Achieve your goals with ease and start tracking today!",
+      title: t("onboarding.upload_documents"),
+      description: t("onboarding.upload_documents_desc"),
       svg: OnBoarding2,
     },
     {
-      title: "Earn Money",
-      description: "Start a healthy lifestyle and earn through us.",
+      title: t("onboarding.earn_money"),
+      description: t("onboarding.earn_money_desc"),
       svg: OnBoarding3,
     },
   ];
 
+  const [dropdownValue, setDropdownValue] = useState(null);
+  const [isDropdownFocused, setIsDropdownFocused] = useState(false);
   const scrollX = useRef(new Animated.Value(0)).current;
 
   const viewableItemsChanged = useRef(({ viewableItems }) => {
-    setCurrentIndex(viewableItems[0].index);
+    setCurrentIndex(viewableItems[0]?.index ?? 0);
   }).current;
 
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
@@ -63,13 +66,15 @@ const OnBoarding = () => {
     </View>
   );
 
-  // Handle the "Next" button click
+  const languageData = [
+    { label: "English", value: "en" },
+    { label: "हिंदी", value: "hi" },
+  ];
+
   const onNext = () => {
-    if (currentIndex < obj.length - 1) {
-      // Scroll to the next index
+    if (currentIndex < slidesData.length - 1) {
       slidesRef.current.scrollToIndex({ index: currentIndex + 1 });
     } else {
-      // If it's the last slide, navigate to the next screen
       navigation.dispatch(
         CommonActions.navigate({
           name: Route.NUMBERVERFICATION,
@@ -80,11 +85,35 @@ const OnBoarding = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar
-        barStyle={Platform.OS === "android" ? "light-content" : "dark-content"}
+      <StatusBar barStyle="dark-content" />
+      <Dropdown
+        style={[
+          styles.dropdown,
+          isDropdownFocused && { borderColor: Color.appDefaultColor },
+        ]}
+        placeholderStyle={styles.placeholderStyle}
+        selectedTextStyle={styles.selectedTextStyle}
+        iconStyle={styles.iconStyle}
+        itemTextStyle={{ fontSize: 8 }}
+        data={languageData}
+        maxHeight={200}
+        labelField="label"
+        valueField="value"
+        placeholder={!isDropdownFocused ? "Select Language" : "..."}
+        value={dropdownValue}
+        onFocus={() => setIsDropdownFocused(true)}
+        onBlur={() => setIsDropdownFocused(false)}
+        onChange={(item) => {
+          setDropdownValue(item.value);
+          i18next.changeLanguage(item.value);
+          setIsDropdownFocused(false);
+        }}
+        renderLeftIcon={() => (
+          <Entypo name="language" size={10} color={Color.appDefaultColor} />
+        )}
       />
       <FlatList
-        data={obj}
+        data={slidesData}
         horizontal
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
@@ -101,10 +130,7 @@ const OnBoarding = () => {
           { useNativeDriver: false }
         )}
       />
-      <Paginator data={obj} scrollX={scrollX} />
-      <Pressable onPress={()=>{i18next.changeLanguage('hi')}}>
-        <Text>Change to Hindi</Text>
-      </Pressable>
+      <Paginator data={slidesData} scrollX={scrollX} />
       <View style={styles.buttonContainer}>
         <Button placeholder={t("next")} onPress={onNext} />
       </View>
@@ -127,7 +153,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   textTitle: {
-    fontSize: Platform.OS === "android" ? 28 : 30,
+    fontSize: 28,
     fontFamily: FontFamily.poppins,
     color: Color.appDefaultColor,
     lineHeight: 45,
@@ -137,7 +163,7 @@ const styles = StyleSheet.create({
   },
   description: {
     fontFamily: FontFamily.poppinsRegular,
-    fontSize: Platform.OS === "android" ? 14 : 16,
+    fontSize: 14,
     color: Color.gray,
     textAlign: "center",
     maxWidth: width * 0.8,
@@ -148,5 +174,29 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginVertical: 30,
+  },
+  dropdown: {
+    height: 25,
+    borderColor: "gray",
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    width: width / 4.5,
+    alignSelf: "flex-end",
+    marginRight: 20,
+    marginTop: 5,
+  },
+  placeholderStyle: {
+    fontSize: 8,
+    alignSelf: "center",
+    marginLeft: 5,
+  },
+  selectedTextStyle: {
+    fontSize: 8,
+    marginLeft: 5,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
   },
 });

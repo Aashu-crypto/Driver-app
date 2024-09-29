@@ -7,10 +7,12 @@ import Button from "../../components/Button";
 import { Route } from "../../../routes";
 import HeaderComponent from "../../components/HeaderComponent";
 import { Picker } from "@react-native-picker/picker";
+import { TextInput } from "react-native-paper";
 
 const VehicleType = ({ navigation }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
-
+  const [text, setText] = React.useState("");
+  const [vehicleNumber, setVehicleNumber] = useState("");
   // Dummy data for vehicle categories
   const carTypes = [
     { label: "SEDAN", value: "sedan" },
@@ -22,7 +24,6 @@ const VehicleType = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-      <HeaderComponent title={"Add your vehicle to continue"} />
       <View
         style={{
           width: width * 0.9,
@@ -42,16 +43,29 @@ const VehicleType = ({ navigation }) => {
             style={styles.picker}
           >
             {carTypes.map((type) => (
-              <Picker.Item key={type.value} label={type.label} value={type.value} />
+              <Picker.Item
+                key={type.value}
+                label={type.label}
+                value={type.value}
+              />
             ))}
           </Picker>
         </View>
 
         <Text style={[styles.btnText]}>Vehicle number</Text>
-        <Pressable style={styles.btn}>
-          <Text style={styles.btnText}>Vehicle number</Text>
-          <AntDesign name="right" size={20} color={Color.appDefaultColor} />
-        </Pressable>
+        <TextInput
+          style={styles.hiddenInput}
+          value={vehicleNumber}
+          outlineColor={Color.borderColor}
+          activeOutlineColor={Color.appDefaultColor}
+          onChangeText={(text) => setVehicleNumber(text)}
+          mode="outlined"
+          theme={{
+            roundness: 10, // Set borderRadius
+          }}
+          right={<TextInput.Icon icon="alert-circle-outline" color="gray" />}
+        />
+
         <Button
           placeholder="Continue"
           onPress={() => {
@@ -91,6 +105,11 @@ const styles = StyleSheet.create({
   },
   picker: {
     height: 50,
-    width: '100%',
+    width: "100%",
+  },
+  hiddenInput: {
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    borderColor: Color.borderColor,
   },
 });

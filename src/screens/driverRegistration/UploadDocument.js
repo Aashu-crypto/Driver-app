@@ -15,7 +15,7 @@ import { Color, FontFamily, width } from "../../../GlobalStyles";
 import ImageIcon from "../../../assets/img/imageIcon.svg"; // Your SVG image icon
 import Button from "../../components/Button";
 import { Route } from "../../../routes";
-
+import { LinearGradient } from "expo-linear-gradient";
 const UploadDocument = ({ navigation }) => {
   const [isModalVisible, setModalVisible] = useState(false); // Modal state
 
@@ -146,7 +146,10 @@ const UploadDocument = ({ navigation }) => {
           />
         </View>
       </ScrollView>
-
+      <LinearGradient
+        colors={['transparent', 'rgba(255,255,255,0.8)', '#fff']}
+        style={styles.bottomFade}
+      />
       {/* Footer */}
 
       {/* Confirmation Modal */}
@@ -304,6 +307,13 @@ const styles = StyleSheet.create({
   modalButtonPrimaryText: {
     color: "#fff",
     fontWeight: "500",
+  },
+  bottomFade: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: 30,
   },
 });
 
