@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Keyboard, Pressable, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -29,6 +29,7 @@ const VehicleType = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View
         style={{
           width: width * 0.9,
@@ -85,6 +86,7 @@ const VehicleType = ({ navigation }) => {
           }}
         />
       </View>
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 };

@@ -1,0 +1,1 @@
+export const backend_Host ="http://192.168.29.59:8000/api"

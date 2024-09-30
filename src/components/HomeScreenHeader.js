@@ -13,31 +13,72 @@ import { useSelector, useDispatch } from "react-redux";
 import { Color, FontFamily } from "../../GlobalStyles";
 import { UserStatus } from "../Redux/Slice/UserStatusSlice";
 import { useNavigation } from "@react-navigation/native";
-import Animated, { useAnimatedStyle, useSharedValue } from "react-native-reanimated";
+import Animated, {
+  interpolateColor,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+  interpolate,
+} from "react-native-reanimated";
 
 const HomeScreenHeader = () => {
   const status = useSelector((state) => state.status.status);
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const handleToggleStatus = () => {
-    dispatch(UserStatus(status === "Online" ? "Offline" : "Online"));
-  };
+
+  const isOn = useSharedValue(status === "Online");
   const height = useSharedValue(0);
   const width = useSharedValue(0);
-  const trackAnimatedStyle = useAnimatedStyle(() => {
-    const color = interpolateColor(
-      value.value,
-      [0, 1],
-      [trackColors.off, trackColors.on]
-    );
-    const colorValue = withTiming(color, { duration });
 
+  // Handle the press to toggle the switch
+  const handlePress = () => {
+    isOn.value = !isOn.value;
+    dispatch(UserStatus(status === "Online" ? "Offline" : "Online"));
+  };
+
+  // Track animation style - controls the track's background color
+  const trackAnimatedStyle = useAnimatedStyle(() => {
+    // Interpolate between red and green based on isOn.value
+   
+
+    const color = interpolateColor(isOn.value, [0, 1], ["red", "green"]);
+    const colorValue = withTiming(color, { duration: 400 });
     return {
       backgroundColor: colorValue,
       borderRadius: height.value / 2,
     };
   });
 
+  // Thumb animation style - controls the position of the thumb
+  const thumbStyle = useAnimatedStyle(() => {
+    // Interpolate the translateX value to move the thumb
+
+    
+    const moveValue = interpolate(
+      Number(isOn.value),
+      [0, 1],
+      [0, width.value - height.value]
+    );
+    const translateValue = withTiming(moveValue, { duration: 400 });
+
+    return {
+      transform: [{ translateX: translateValue }],
+      borderRadius: height.value / 2,
+    };
+  });
+  const switchStyles = StyleSheet.create({
+    track: {
+      alignItems: 'flex-start',
+      width: 100,
+      height: 40,
+      padding: 5,
+    },
+    thumb: {
+      height: '100%',
+      aspectRatio: 1,
+      backgroundColor: 'white',
+    },
+  });
   return (
     <View style={styles.safeArea}>
       <View
@@ -55,26 +96,32 @@ const HomeScreenHeader = () => {
         <Pressable onPress={() => navigation.openDrawer()}>
           <Feather name="menu" size={28} color="#9CABE2" />
         </Pressable>
-        <Pressable>
-          <View style={{ width: 100, height: 30, backgroundColor: "black" }}>
+
+        {/* Animated Toggle Switch */}
+        <Pressable onPress={handlePress}>
+          <Animated.View
+            style={[{ width: 120, height: 40, padding: 5 }, trackAnimatedStyle]}
+            onLayout={(e) => {
+              height.value = e.nativeEvent.layout.height;
+              width.value = e.nativeEvent.layout.width;
+            }}
+          >
             <Animated.View
-              style={{ height: 30, backgroundColor: "#FFFF", width: 30 }}
+              style={[
+                {
+                  height: 30,
+                  width: 30,
+                  backgroundColor: "#FFFF",
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+                thumbStyle,
+              ]}
             />
-          </View>
+            <Text style={styles.statusText}>{status}</Text>
+          </Animated.View>
         </Pressable>
-        {/* <Pressable
-          style={[
-            styles.status,
-            {
-              backgroundColor: status === "Offline" ? "#FF5252" : "#23B94D",
-            },
-          ]}
-          onPress={handleToggleStatus}
-        >
-          {status === "Offline" && <View style={styles.circle} />}
-          <Text style={styles.offlineText}>{status}</Text>
-          {status === "Online" && <View style={styles.circle} />}
-        </Pressable> */}
+
         <EvilIcons name="search" size={28} color="white" />
       </View>
     </View>
@@ -96,25 +143,14 @@ const styles = StyleSheet.create({
     paddingVertical: Platform.OS === "android" ? 15 : 10,
     paddingTop: Platform.OS === "ios" && 45,
   },
-  status: {
-    padding: 10,
-    borderRadius: 20,
-    flexDirection: "row",
-    width: 93,
-    gap: 10,
-    alignItems: "center",
-  },
-  offlineText: {
+  statusText: {
+    position: "absolute", // Position the text within the switch
+    left: "54%", // Center the text horizontally
+    top: "64%", // Center the text vertically
+    transform: [{ translateX: -20 }, { translateY: -10 }], // Adjust the text position
     color: "white",
-    fontWeight: "400",
-    fontSize: 12,
-    lineHeight: 18,
+    fontWeight: "500",
+    fontSize: 13,
     fontFamily: FontFamily.poppinsRegular,
-  },
-  circle: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    backgroundColor: "white",
   },
 });

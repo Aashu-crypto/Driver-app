@@ -1,25 +1,67 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
   StyleSheet,
   Image,
-  SafeAreaView,
   StatusBar,
   ImageBackground,
 } from "react-native";
-import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import HomeScreenHeader from "../../components/HomeScreenHeader";
 import { Color, FontFamily, width } from "../../../GlobalStyles";
 import { useSelector } from "react-redux";
-import Button from "../../components/Button";
-import { Route } from "../../../routes";
-import SharedRide from "../../components/SharedRide";
+import { backend_Host } from "../../../config";
+import Svg, { Circle } from "react-native-svg";
+import Animated, {
+  Easing,
+  useSharedValue,
+  useAnimatedStyle,
+  withRepeat,
+  withTiming,
+} from "react-native-reanimated";
+import SimpleRideLocation from "./SimpleRideLocation";
+import SharedRide from "./SharedRide";
 
 const HomeScreen = ({ navigation }) => {
   const status = useSelector((state) => state.status.status);
-  const [findRide, setFindRide] = useState();
-  const [typeOfRide, setTypeOfRide] = useState("simple");
+
+  const [findRide, setFindRide] = useState(false);
+  const [typeOfRide, setTypeOfRide] = useState("Shared");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const rotation = useSharedValue(0);
+  useEffect(() => {
+    rotation.value = withRepeat(
+      withTiming(360, { duration: 1000, easing: Easing.linear }),
+      -1
+    );
+  }, []);
+
+  const animatedStyles = useAnimatedStyle(() => ({
+    transform: [{ rotate: `${rotation.value}deg` }],
+  }));
+
+  useEffect(() => {
+    const fetchRideAvailability = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`${backend_Host}/ride-available`);
+        const data = await response.json();
+        setFindRide(data);
+      } catch (error) {
+        setError("Failed to fetch ride availability");
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    setTimeout(() => {
+      fetchRideAvailability();
+    }, 6000);
+  }, []);
+
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={Color.appDefaultColor} />
@@ -57,7 +99,6 @@ const HomeScreen = ({ navigation }) => {
               style={styles.mainImage}
             />
           </ImageBackground>
-
           <Text style={styles.greeting}>Good Morning, Partner</Text>
           <Text style={styles.onDutyText}>
             Go <Text style={styles.onDutyHighlight}>ON DUTY</Text> to Start
@@ -65,65 +106,43 @@ const HomeScreen = ({ navigation }) => {
           </Text>
         </View>
       )}
-      {status === "Online" && typeOfRide === "simple" && (
+
+      {status === "Online" && !findRide && (
         <View style={styles.bottomCard}>
-          <View style={styles.iconContainer}>
-            <FontAwesome name="user" size={24} color="#4169e1" />
-          </View>
-          {/* <Text style={styles.findingText}>Finding rider....</Text> */}
-
-          <View style={styles.paymentContainer}>
-            <Text style={styles.paymentText}>Cash Payment</Text>
-          </View>
-          <Text style={styles.amountText}>₹250</Text>
-          <Text style={styles.rideDetailsText}>Sedan · 2 km · 5 mins away</Text>
-
-          {/* Ride Info */}
-          <View style={styles.rideInfoContainer}>
-            <View style={styles.rideDetail}>
-              <View style={styles.locationIconContainer}>
-                <FontAwesome name="map-marker" size={20} color="green" />
-              </View>
-              <View style={styles.rideTextContainer}>
-                <Text style={styles.rideLocation}>Janakpuri, New Delhi</Text>
-                <Text style={styles.rideAddress}>
-                  K-20, Bhalaswa Janakpuri, Janakpuri, New Delhi, 110033, India
-                </Text>
-              </View>
-            </View>
-
-            <View style={[styles.rideDetail, { marginLeft: 15 }]}>
-              <View style={styles.locationIconContainer}>
-                <MaterialIcons name="access-time" size={20} color="#4169e1" />
-              </View>
-              <View style={styles.rideTextContainer}>
-                <Text style={styles.rideDetails}>
-                  25 mins Trip · 7.5 Km Distance
-                </Text>
-              </View>
-            </View>
-
-            <View style={styles.rideDetail}>
-              <View style={styles.locationIconContainer}>
-                <FontAwesome name="map-marker" size={20} color="red" />
-              </View>
-              <View style={styles.rideTextContainer}>
-                <Text style={styles.rideLocation}>Rohini, New Delhi</Text>
-                <Text style={styles.rideAddress}>
-                  Government Sarvodaya Vidyalaya, Sector 8E, Rohni, New Delhi
-                </Text>
-              </View>
+          <View style={styles.iconContainerLoader}>
+            <Animated.View style={[styles.loader, animatedStyles]}>
+              <Svg height="70" width="70" viewBox="0 0 140 140">
+                <Circle
+                  cx="70"
+                  cy="70"
+                  r="56"
+                  stroke="#4169e1"
+                  strokeWidth="5"
+                  fill="none"
+                  strokeDasharray="140,80"
+                />
+              </Svg>
+            </Animated.View>
+            <View style={styles.iconWrapperCentered}>
+              <FontAwesome
+                name="user"
+                size={24}
+                color={Color.appDefaultColor}
+              />
             </View>
           </View>
-          <View style={{ marginBottom: 15 }}>
-            <Button
-              placeholder={"Accept"}
-              onPress={() => navigation.navigate(Route.CLIENTLOCATION)}
-            />
+          <View style={{ marginTop: 10 }}>
+            <Text style={styles.findingText}>Finding customers...</Text>
           </View>
         </View>
       )}
-      {status === "Online" && typeOfRide === "Shared" && <SharedRide />}
+
+      {status === "Online" && typeOfRide === "simple" && findRide && (
+        <SimpleRideLocation />
+      )}
+      {status === "Online" && typeOfRide === "Shared" && findRide && (
+    <SharedRide/>
+      )}
     </View>
   );
 };
@@ -133,7 +152,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Color.backGroundColor,
   },
-
   cardsContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
@@ -199,7 +217,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: "#595F75",
     fontFamily: FontFamily.poppinsRegular,
-
     fontWeight: "500",
     lineHeight: 25.5,
   },
@@ -207,13 +224,13 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: Color.green,
     fontFamily: FontFamily.poppinsRegular,
-    marginTop: 20,    fontWeight: "500",
+    marginTop: 20,
+    fontWeight: "500",
     lineHeight: 25.5,
   },
   bottomCard: {
     width: width,
     minHeight: 100,
-    backgroundColor: "white",
     borderTopRightRadius: 15,
     borderTopLeftRadius: 15,
     alignItems: "center",
@@ -224,11 +241,11 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 5,
     position: "absolute",
-    alignSelf: "center", // Center the bottom card horizontally
+    alignSelf: "center",
     bottom: 0,
     backgroundColor: "#fff",
   },
-  iconContainer: {
+  iconContainerLoader: {
     position: "absolute",
     top: -28,
     width: 60,
@@ -238,69 +255,24 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderColor: "#4169e1",
-    borderWidth: 2,
+    padding: 5,
   },
-  findingText: {
-    marginTop: 20,
-    fontSize: 16,
-    color: "#4169e1",
-  },
-  paymentContainer: {
-    backgroundColor: "green",
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 20,
-    marginTop: 35,
-  },
-  paymentText: {
-    color: "white",
-    fontSize: 14,
-    fontFamily: FontFamily.poppinsRegular,
-  },
-  amountText: {
-    fontSize: 32,
-    fontWeight: "bold",
-    color: "#4169e1",
-    marginTop: 10,
-  },
-  rideDetailsText: {
-    fontSize: 16,
-    color: "#8f8f8f",
-    marginTop: 5,
-    marginBottom: 20,
-  },
-  rideInfoContainer: {
-    width: "95%",
-    backgroundColor: "#f0f4f8",
-    borderRadius: 10,
-    padding: 15,
-    marginBottom: 20,
-  },
-  rideDetail: {
-    flexDirection: "row",
-    marginBottom: 10,
-  },
-  locationIconContainer: {
+  iconWrapperCentered: {
+    position: "absolute",
     width: 30,
+    height: 30,
     justifyContent: "center",
     alignItems: "center",
   },
-  rideTextContainer: {
-    flex: 1,
-    marginRight: 15,
+  loader: {
+    position: "absolute",
+    zIndex: -1,
   },
-  rideLocation: {
-    fontSize: 13,
-    color: "#4169e1",
-    fontFamily: FontFamily.poppinsRegular,
-  },
-  rideAddress: {
-    fontSize: 11,
-    color: "#8f8f8f",
-  },
-  rideDetails: {
-    fontSize: 12,
-    color: Color.colorDarkslategray,
+  findingText: {
+    color: Color.appDefaultColor,
+    fontSize: 16,
+    lineHeight: 24,
+    fontWeight: "500",
     fontFamily: FontFamily.poppinsRegular,
   },
 });

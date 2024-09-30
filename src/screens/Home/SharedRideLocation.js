@@ -2,10 +2,8 @@ import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
-  Dimensions,
   Text,
   Image,
-  Switch,
   Pressable,
 } from "react-native";
 import MapView, { Polyline, Marker } from "react-native-maps";

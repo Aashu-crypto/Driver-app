@@ -1,18 +1,18 @@
 import { StyleSheet, Text, View, Image, ScrollView } from "react-native";
 import React, { useCallback, useMemo, useRef } from "react";
-import BottomSheet from "@gorhom/bottom-sheet";
-import { Color, FontFamily, width } from "../../GlobalStyles";
-import DestinationIcon from "./DestinationIcon";
-import Button from "./Button";
+
+import { Color,FontFamily,width,height } from "../../../GlobalStyles";
+import DestinationIcon from "../../components/DestinationIcon";
+import Button from "../../components/Button";
 import { useNavigation } from "@react-navigation/native";
-import { Route } from "../../routes";
+import { Route } from "../../../routes";
 // Reusable Component for Riders' Information
 const RiderInfo = ({ name, pickupText, pickupLocation, dropLocation }) => {
   return (
     <View style={styles.riderContainer}>
       <View style={styles.riderImageContainer}>
         <Image
-          source={require("../../assets/img/riderPic.png")}
+          source={require("../../../assets/img/riderPic.png")}
           style={styles.riderImage}
         />
         <View style={styles.ratingView}>
@@ -22,7 +22,7 @@ const RiderInfo = ({ name, pickupText, pickupLocation, dropLocation }) => {
       </View>
 
       <View style={styles.riderDetails}>
-        <DestinationIcon />
+        <DestinationIcon height={25} />
         <View>
           <View style={styles.locationContainer}>
             <Text style={styles.locationTitle}>{pickupText}</Text>
@@ -68,7 +68,7 @@ const SharedRide = () => {
     <View style={styles.bottomCard}>
       <View style={styles.imageWrapper}>
         <Image
-          source={require("../../assets/img/BottomSheetCar.png")}
+          source={require("../../../assets/img/BottomSheetCar.png")}
           style={styles.carImage}
         />
       </View>

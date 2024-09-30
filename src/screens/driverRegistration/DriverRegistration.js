@@ -65,7 +65,7 @@ const DriverRegistration = ({ navigation }) => {
     // console.log(requestData);
 
     // try {
-    //   // Replace the URL with your API endpoint
+    //  
     //   const response = await axios.post(
     //     "http://192.168.29.59:8000/api/driver/register",
     //     requestData
