@@ -17,7 +17,7 @@ import { Color } from "../../../GlobalStyles";
 import Checkbox from "expo-checkbox";
 import Button from "../../components/Button";
 import { Route } from "../../../routes";
-
+import { LinearGradient } from "expo-linear-gradient";
 const VehicleSelfInspection = ({ navigation }) => {
   const data = [
     {
@@ -85,6 +85,10 @@ const VehicleSelfInspection = ({ navigation }) => {
           />
         </View>
       </ScrollView>
+      <LinearGradient
+        colors={["transparent", "rgba(255,255,255,0.8)", "#fff"]}
+        style={styles.bottomFade}
+      />
     </SafeAreaView>
   );
 };
@@ -144,6 +148,13 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     paddingHorizontal: 20,
-  marginBottom:10
+    marginBottom: 10,
+  },
+  bottomFade: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: 30,
   },
 });

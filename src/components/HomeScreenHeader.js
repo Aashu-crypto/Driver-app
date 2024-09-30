@@ -13,6 +13,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { Color, FontFamily } from "../../GlobalStyles";
 import { UserStatus } from "../Redux/Slice/UserStatusSlice";
 import { useNavigation } from "@react-navigation/native";
+import Animated, { useAnimatedStyle, useSharedValue } from "react-native-reanimated";
+
 const HomeScreenHeader = () => {
   const status = useSelector((state) => state.status.status);
   const dispatch = useDispatch();
@@ -20,6 +22,21 @@ const HomeScreenHeader = () => {
   const handleToggleStatus = () => {
     dispatch(UserStatus(status === "Online" ? "Offline" : "Online"));
   };
+  const height = useSharedValue(0);
+  const width = useSharedValue(0);
+  const trackAnimatedStyle = useAnimatedStyle(() => {
+    const color = interpolateColor(
+      value.value,
+      [0, 1],
+      [trackColors.off, trackColors.on]
+    );
+    const colorValue = withTiming(color, { duration });
+
+    return {
+      backgroundColor: colorValue,
+      borderRadius: height.value / 2,
+    };
+  });
 
   return (
     <View style={styles.safeArea}>
@@ -38,7 +55,14 @@ const HomeScreenHeader = () => {
         <Pressable onPress={() => navigation.openDrawer()}>
           <Feather name="menu" size={28} color="#9CABE2" />
         </Pressable>
-        <Pressable
+        <Pressable>
+          <View style={{ width: 100, height: 30, backgroundColor: "black" }}>
+            <Animated.View
+              style={{ height: 30, backgroundColor: "#FFFF", width: 30 }}
+            />
+          </View>
+        </Pressable>
+        {/* <Pressable
           style={[
             styles.status,
             {
@@ -50,7 +74,7 @@ const HomeScreenHeader = () => {
           {status === "Offline" && <View style={styles.circle} />}
           <Text style={styles.offlineText}>{status}</Text>
           {status === "Online" && <View style={styles.circle} />}
-        </Pressable>
+        </Pressable> */}
         <EvilIcons name="search" size={28} color="white" />
       </View>
     </View>
@@ -69,7 +93,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 10,
-    paddingVertical: Platform.OS === "android" ? 15  : 10,
+    paddingVertical: Platform.OS === "android" ? 15 : 10,
     paddingTop: Platform.OS === "ios" && 45,
   },
   status: {

@@ -1,7 +1,7 @@
 import {
   View,
   Text,
-  TextInput,
+  
   Image,
   SafeAreaView,
   StyleSheet,
@@ -14,7 +14,7 @@ import React, { useState } from "react";
 import { Color, FontFamily, height, width } from "../../../GlobalStyles";
 import Checkbox from "expo-checkbox";
 import Button from "../../components/Button";
-
+import { TextInput } from "react-native-paper";
 import { useTranslation } from "react-i18next";
 import axios from "axios"; // Import axios
 import { Route } from "../../../routes";
@@ -107,18 +107,30 @@ const DriverRegistration = ({ navigation }) => {
                 <TextInput
                   style={styles.nameInput}
                   placeholder={t("firstName")}
+                  outlineColor="#EEEEEE"
+                  activeOutlineColor={Color.appDefaultColor}
+                  mode="outlined"
                   value={formData.firstName}
                   placeholderTextColor={"#B9AAAA"}
                   onChangeText={(text) => handleChange("firstName", text)}
                   accessibilityLabel={t("firstName")}
+                  theme={{
+                    roundness: 10, // Set borderRadius
+                  }}
                 />
                 <TextInput
                   style={styles.nameInput}
                   placeholder={t("lastName")}
                   value={formData.lastName}
+                  outlineColor="#EEEEEE"
+                  activeOutlineColor={Color.appDefaultColor}
+                  mode="outlined"
                   placeholderTextColor={"#B9AAAA"}
                   onChangeText={(text) => handleChange("lastName", text)}
                   accessibilityLabel={t("lastName")}
+                  theme={{
+                    roundness: 10, // Set borderRadius
+                  }}
                 />
               </View>
               <Text style={styles.label}>{t("email")}</Text>
@@ -127,9 +139,15 @@ const DriverRegistration = ({ navigation }) => {
                 placeholder={t("enterEmail")}
                 value={formData.email}
                 placeholderTextColor={"#B9AAAA"}
+                outlineColor="#EEEEEE"
+                activeOutlineColor={Color.appDefaultColor}
+                mode="outlined"
                 onChangeText={(text) => handleChange("email", text)}
                 keyboardType="email-address"
                 accessibilityLabel={t("enterEmail")}
+                theme={{
+                  roundness: 10, // Set borderRadius
+                }}
               />
               <Text style={styles.label}>{t("city")}</Text>
               <TextInput
@@ -137,17 +155,29 @@ const DriverRegistration = ({ navigation }) => {
                 placeholder={t("cityToEarn")}
                 value={formData.city}
                 placeholderTextColor={"#B9AAAA"}
+                outlineColor="#EEEEEE"
+                activeOutlineColor={Color.appDefaultColor}
+                mode="outlined"
                 onChangeText={(text) => handleChange("city", text)}
                 accessibilityLabel={t("cityToEarn")}
+                theme={{
+                  roundness: 10, // Set borderRadius
+                }}
               />
               <Text style={styles.label}>{t("referralCode")}</Text>
               <TextInput
                 style={styles.input}
                 placeholder={t("optionalReferralCode")}
                 value={formData.referralCode}
+                outlineColor="#EEEEEE"
+                activeOutlineColor={Color.appDefaultColor}
+                mode="outlined"
                 placeholderTextColor={"#B9AAAA"}
                 onChangeText={(text) => handleChange("referralCode", text)}
                 accessibilityLabel={t("optionalReferralCode")}
+                theme={{
+                  roundness: 10, // Set borderRadius
+                }}
               />
             </View>
 

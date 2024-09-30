@@ -140,14 +140,16 @@ const UploadDocument = ({ navigation }) => {
           >
             <Text style={styles.cancelText}>Cancel & Reset</Text>
           </Pressable>
-          <Button
-            placeholder={"Next"}
-            onPress={() => navigation.navigate(Route.VEHICLESELFINSPECION)}
-          />
+          <View style={{marginBottom:20}}>
+            <Button
+              placeholder={"Next"}
+              onPress={() => navigation.navigate(Route.VEHICLESELFINSPECION)}
+            />
+          </View>
         </View>
       </ScrollView>
       <LinearGradient
-        colors={['transparent', 'rgba(255,255,255,0.8)', '#fff']}
+        colors={["transparent", "rgba(255,255,255,0.8)", "#fff"]}
         style={styles.bottomFade}
       />
       {/* Footer */}
@@ -251,7 +253,7 @@ const styles = StyleSheet.create({
   footer: {
     alignSelf: "center",
     width: width * 0.9,
-    marginVertical:10
+    marginVertical: 10,
   },
   cancelText: {
     color: "red",
@@ -309,7 +311,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   bottomFade: {
-    position: 'absolute',
+    position: "absolute",
     left: 0,
     right: 0,
     bottom: 0,
