@@ -12,6 +12,7 @@ const Button = ({ placeholder, onPress, btnWidth }) => {
         alignItems: "center",
         width: btnWidth || width * 0.9, // Use btnWidth if provided, otherwise default to 90% of screen width
         alignSelf: "center",
+        marginBottom:10
       }}
       onPress={onPress}
     >
@@ -38,7 +39,7 @@ const styles = StyleSheet.create({
   button: {
     padding: 15,
     alignItems: "center",
-    borderRadius: 5,
+    borderRadius: 8,
     width: "100%",
     alignSelf: "center",
     marginTop: 20,

@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Dimensions, Text, Image } from "react-native";
+import { StyleSheet, View, Text, Image, Pressable } from "react-native";
 import MapView, { Polyline, Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import axios from "axios";
 import { Color, FontFamily, height, width } from "../../../GlobalStyles";
 import Feather from "@expo/vector-icons/Feather";
 import Divider from "../../components/Divider";
-import { MaterialIcons, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import Button from "../../components/Button";
 import * as Progress from "react-native-progress";
+import PhotoWithRating from "../../components/PhotoWithRating";
+import { FontAwesome5 } from "@expo/vector-icons";
+import Slider from "../../components/Slider";
 export default function ClientLocation() {
   const [location, setLocation] = useState(null);
   const [destination, setDestination] = useState({
@@ -17,7 +20,7 @@ export default function ClientLocation() {
   });
   const [routeCoordinates, setRouteCoordinates] = useState([]);
   const [clientLocated, setClientLocated] = useState(true);
-  const [secondsLeft, setSecondsLeft] = useState(300);
+
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -28,8 +31,6 @@ export default function ClientLocation() {
 
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location.coords);
-      console.log("My location", location.coords);
-
       fetchRoute(location.coords, destination);
     })();
   }, []);
@@ -37,35 +38,17 @@ export default function ClientLocation() {
   const fetchRoute = async (startLoc, destinationLoc) => {
     try {
       const response = await axios.get(
-        `https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc.latitude},${startLoc.longitude}&destination=${destinationLoc.latitude},${destinationLoc.longitude}&key=AIzaSyAM0lkfWt1VuqHglZFjtlU_d7hV3cOKcl8`
+        `https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc.latitude},${startLoc.longitude}&destination=${destinationLoc.latitude},${destinationLoc.longitude}&key=YOUR_API_KEY`
       );
-
-      console.log("API Response:", response.data);
 
       if (response.data.routes.length) {
         const points = decodePolyline(
           response.data.routes[0].overview_polyline.points
         );
-
-        console.log("Decoded Points:", points);
-
-        // Check if any of the points have undefined or null values
-        const validPoints = points.filter(
-          (point) =>
-            point.latitude !== undefined && point.longitude !== undefined
-        );
-
-        if (validPoints.length !== points.length) {
-          console.warn("Some points were invalid and have been filtered out.");
-        }
-
-        setRouteCoordinates(validPoints);
+        setRouteCoordinates(points);
       } else {
-        console.log("No routes found");
-        alert("No route found between these locations.");
       }
     } catch (error) {
-      console.error("Error fetching route:", error.message);
       alert("Error fetching route. Please try again.");
     }
   };
@@ -131,78 +114,79 @@ export default function ClientLocation() {
       )}
       {clientLocated ? (
         <View style={styles.bottomCard}>
-          <Progress.Bar progress={0.3} width={width} />
-          <View style={{ flexDirection: "row", padding: 10 }}>
-            <View
-              style={{
-                alignSelf: "center",
-                fontSize: 16,
+          <View style={{ alignItems: "center" }}>
+            <Progress.Bar
+              progress={0.3}
+              width={width * 0.95}
+              color={Color.appDefaultColor}
+            />
+          </View>
 
-                flex: 1,
-              }}
-            >
-              <Text
-                style={{
-                  alignSelf: "center",
-                  fontSize: 16,
-                }}
-              >
-                Waiting for rider
-              </Text>
-              <Text
-                style={{
-                  alignSelf: "center",
-                  fontSize: 16,
-                  borderWidth: 1,
-                  paddingHorizontal: 15,
-                  borderRadius: 10,
-                  paddingVertical: 2,
-                  marginTop: 1,
-                }}
-              >
-                4:34
-              </Text>
+          <View style={styles.clientLocatedContainer}>
+            <View style={styles.waitingContainer}>
+              <Text style={styles.waitingText}>Waiting for rider</Text>
+              <Text style={styles.timerText}>4:34</Text>
             </View>
-
-            <View
-              style={{
-                alignItems: "flex-end",
-              }}
-            >
+            <View style={styles.menuIconContainer}>
               <Feather name="menu" size={28} color="#9CABE2" />
             </View>
           </View>
           <Divider />
-          <Button placeholder={"Client Located"} />
-          <View style={{ marginBottom: 10 }} />
+          <View style={styles.riderInfoContainer}>
+            <View style={styles.riderImageContainer}>
+              <PhotoWithRating />
+              <View style={styles.riderDetails}>
+                <Text style={styles.name}>Picking up Ajay</Text>
+                <View style={styles.cashRide}>
+                  <FontAwesome5
+                    name="money-bill-wave"
+                    size={16}
+                    color="white"
+                  />
+                  <Text style={styles.cashRideText}>Cash Ride</Text>
+                </View>
+              </View>
+            </View>
+            <View style={styles.actionButtonsContainer}>
+              <Image
+                source={require("../../../assets/img/call.png")}
+                style={styles.actionButtonIcon}
+              />
+              <Pressable
+                onPress={() => {
+                  navigation.navigate(Route.DRIVERCHATSCREEN);
+                }}
+              >
+                <Image
+                  source={require("../../../assets/img/sms.png")}
+                  style={styles.actionButtonIcon}
+                />
+              </Pressable>
+            </View>
+          </View>
+          <Slider/>
+         
         </View>
       ) : (
         <View style={styles.bottomCard}>
-          <View
-            style={{
-              flex: 1,
-              flexDirection: "row",
-              justifyContent: "space-between",
-              width: width,
-              padding: 15,
-            }}
-          >
+          <View style={styles.header}>
             <Text style={styles.name}>Pickup Ajay Singh</Text>
-            <Feather name="menu" size={28} color="#9CABE2" />
+            <View style={styles.menuIconContainer}>
+              <Feather name="menu" size={28} color={Color.borderColor} />
+            </View>
           </View>
           <Divider />
           <View style={styles.rideDetail}>
             <View style={styles.locationIconContainer}>
-              <FontAwesome name="map-marker" size={20} color="green" />
+              <FontAwesome name="map-marker" size={18} color={Color.green} />
             </View>
             <View style={styles.rideTextContainer}>
               <Text style={styles.rideAddress}>
-                K-20, Bhalswa Janakpuri, Janakpuri, New delhi, 110033, IndiaD.
-                Gopalbari, Bari Sad
+                K-20, Bhalswa Janakpuri, Janakpuri, New delhi, 110033, India
               </Text>
             </View>
           </View>
-          <Button placeholder={"Client Located"} />
+          <Button placeholder={"Client Located"} btnWidth={width * 0.85} />
         </View>
       )}
     </View>
@@ -212,7 +196,6 @@ export default function ClientLocation() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
     alignItems: "center",
   },
   map: {
@@ -222,31 +205,90 @@ const styles = StyleSheet.create({
   bottomCard: {
     width: width,
     minHeight: 100,
-
     backgroundColor: "white",
     borderTopRightRadius: 15,
     borderTopLeftRadius: 15,
-
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
     elevation: 5,
     position: "absolute",
-    alignSelf: "center", // Center the bottom card horizontally
+    alignSelf: "center",
     bottom: 0,
-    backgroundColor: "#fff",
+  },
+  clientLocatedContainer: {
+    flexDirection: "row",
+    padding: 10,
+  },
+  waitingContainer: {
+    alignSelf: "center",
+    fontSize: 16,
+    flex: 1,
+  },
+  waitingText: {
+    alignSelf: "center",
+    fontSize: 14,
+    lineHeight: 21,
+    fontWeight: "400",
+    fontFamily: FontFamily.poppinsRegular,
+  },
+  timerText: {
+    alignSelf: "center",
+    fontSize: 16,
+    borderWidth: 1,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    paddingVertical: 4,
+    marginTop: 4,
+    borderColor: Color.appDefaultColor,
+    color: Color.appDefaultColor,
+  },
+  menuIconContainer: {},
+  riderInfoContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    marginVertical: 10,
+  },
+  riderImageContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginRight: 15,
+  },
+  riderDetails: {
+    marginLeft: 15,
   },
   name: {
     fontSize: 15,
     fontWeight: "500",
-    lineHeight: 22.5,
+    lineHeight: 18,
     fontFamily: FontFamily.poppinsRegular,
-    color: Color.colorGrayNormal,
+    color: Color.colorGray,
+  },
+  carType: {
+    fontSize: 13,
+    lineHeight: 19.5,
+    fontWeight: "400",
+    fontFamily: FontFamily.poppinsRegular,
+    color: "#656565",
+  },
+  actionButtonsContainer: {
+    flexDirection: "row",
+    columnGap: 10,
+  },
+  actionButtonIcon: {
+    width: 35,
+    height: 35,
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: width,
+    padding: 15,
   },
   rideDetail: {
     flexDirection: "row",
-
     padding: 10,
   },
   locationIconContainer: {
@@ -258,33 +300,27 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: 15,
   },
-  rideLocation: {
-    fontSize: 13,
-    color: "#4.169e1",
-    fontFamily: FontFamily.poppinsRegular,
-  },
   rideAddress: {
     fontSize: 11,
-    color: "#8f8f8f",
+    color: Color.colorGray,
   },
-  rideDetails: {
-    fontSize: 12,
-    color: Color.colorDarkslategray,
-    fontFamily: FontFamily.poppinsRegular,
-  },
-  riderImage: {
-    height: 60,
-    width: 60,
-    borderRadius: 30,
-    margin: 10,
-  },
-  iconContainer: {
-    backgroundColor: Color.appDefaultColor,
-    height: 40,
-    width: 40,
-    borderRadius: 20,
+  cashRide: {
+    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: Color.green,
     padding: 5,
+    borderRadius: 8,
+    marginTop: 8,
+    justifyContent: "center",
+    width: 100,
+    alignSelf: "flex-start",
+  },
+  cashRideText: {
+    marginLeft: 5,
+    color: "#FFFFFF",
+    fontWeight: "400",
+    fontSize: 10,
+    lineHeight: 15,
+    fontFamily: FontFamily.poppinsRegular,
   },
 });

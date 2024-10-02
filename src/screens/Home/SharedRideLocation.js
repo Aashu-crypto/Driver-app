@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  StyleSheet,
-  View,
-  Text,
-  Image,
-  Pressable,
-} from "react-native";
+import { StyleSheet, View, Text, Image, Pressable } from "react-native";
 import MapView, { Polyline, Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import axios from "axios";
@@ -24,6 +18,9 @@ import * as Progress from "react-native-progress";
 import DestinationIcon from "../../components/DestinationIcon";
 import { useNavigation } from "@react-navigation/native";
 import { Route } from "../../../routes";
+import { LinearGradient } from "expo-linear-gradient";
+import { ProgressBar } from "react-native-paper";
+import PhotoWithRating from "../../components/PhotoWithRating";
 export default function SharedRideLocation() {
   const [location, setLocation] = useState(null);
   const [destination, setDestination] = useState({
@@ -158,157 +155,157 @@ export default function SharedRideLocation() {
       {clientLocated ? (
         !cancelPressed ? (
           <View style={styles.bottomCard}>
-            <View style={{ alignSelf: "center" }}>
-              <Progress.Bar progress={0.3} width={width * 0.95} />
-            </View>
-
-            <Text
-              style={{
-                fontSize: 16,
-                lineHeight: 24,
-                fontWeight: "500",
-                fontFamily: FontFamily.poppinsRegular,
-                color: "#677093",
-                textAlign: "center",
-                marginTop: 10,
-              }}
-            >
-              Picking up Ajay
-            </Text>
-
-            <View style={styles.riderDetails}>
-              <DestinationIcon />
-              <View style={{ marginLeft: 5 }}>
-                <View style={styles.locationContainer}>
-                  <Text style={styles.locationTitle}>
-                    Pick Up (2 Km 5 min away)
-                  </Text>
-                  <Text style={styles.locationText}>
-                    Neemuch RD. Gopalbari, Bari Sad
-                  </Text>
-                </View>
-                <View style={styles.locationContainer}>
-                  <Text style={styles.dropTitle}>Drop 2</Text>
-                  <Text style={styles.locationText}>
-                    N/107D, Khayala, Vishnu Garden, New Delhi
-                  </Text>
-                </View>
-              </View>
-            </View>
-
-            <View
-              style={{
-                width: "85%",
-                alignSelf: "center",
-                gap: 15,
-                backgroundColor: "#fff",
-                borderRadius: 10,
-                padding: 10,
-                marginVertical: 10,
-              }}
-            >
-              {data.map((item) => (
-                <View
-                  key={item.id}
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <View style={{ flexDirection: "row", gap: 10 }}>
-                    <MaterialIcons
-                      name={item.icon}
-                      color={Color.appDefaultColor}
-                      size={24}
-                    />
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        lineHeight: 18,
-                        fontWeight: "400",
-                        fontFamily: FontFamily.poppinsRegular,
-                      }}
-                    >
-                      {item.title}
-                    </Text>
-                  </View>
-
-                  <AntDesign
-                    name="right"
-                    size={20}
-                    color={Color.appDefaultColor}
-                  />
-                </View>
-              ))}
-            </View>
-
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-around",
-                alignItems: "center",
-                marginVertical: 10,
-              }}
-            >
-              <View style={styles.riderImageContainer}>
-                <Image
-                  source={require("../../../assets/img/riderPic.png")}
-                  style={styles.riderImage}
-                />
-                <View style={styles.ratingView}>
-                  <Text style={styles.rating}>⭐ 4.75</Text>
-                </View>
-                <View style={{ marginLeft: 15 }}>
-                  <Text style={styles.name}>Ajay Singh</Text>
-                  <Text style={styles.carType}>Sedan</Text>
-                </View>
+            <LinearGradient colors={["transparent", "#C6CEED"]}>
+              <View style={{ alignSelf: "center" }}>
+                <Progress.Bar progress={0.3} width={width * 0.95} />
               </View>
 
-              <View style={{ flexDirection: "row", columnGap: 5 }}>
-                <Image
-                  source={require("../../../assets/img/call.png")}
-                  style={{ width: 35, height: 35 }}
-                />
-                <Pressable onPress={()=>{navigation.navigate(Route.DRIVERCHATSCREEN)}}>
-                  <Image
-                    source={require("../../../assets/img/sms.png")}
-                    style={{ width: 35, height: 35 }}
-                  />
-                </Pressable>
-              </View>
-            </View>
-
-            <Pressable
-              style={{
-                borderWidth: 1,
-                borderColor: Color.red,
-                width: "85%",
-                alignSelf: "center",
-                justifyContent: "center",
-                alignItems: "center",
-                borderRadius: 9,
-                padding: 15,
-                marginTop: 10,
-                marginBottom: 15,
-              }}
-              onPress={() => {
-                setCancelPressed(true);
-              }}
-            >
               <Text
                 style={{
-                  color: Color.red,
-                  fontSize: 14,
-                  lineHeight: 21,
+                  fontSize: 16,
+                  lineHeight: 24,
                   fontWeight: "500",
                   fontFamily: FontFamily.poppinsRegular,
+                  color: "#677093",
+                  textAlign: "center",
+                  marginTop: 10,
                 }}
               >
-                Cancel Booking
+                Picking up Ajay
               </Text>
-            </Pressable>
-            <View style={{ marginBottom: 10 }} />
+
+              <View style={styles.riderDetails}>
+                <DestinationIcon height={25} />
+                <View style={{ marginLeft: 5 }}>
+                  <View style={styles.locationContainer}>
+                    <Text style={styles.locationTitle}>
+                      Pick Up (2 Km 5 min away)
+                    </Text>
+                    <Text style={styles.locationText}>
+                      Neemuch RD. Gopalbari, Bari Sad
+                    </Text>
+                  </View>
+                  <View style={styles.locationContainer}>
+                    <Text style={styles.locationTitle}>Drop 2</Text>
+                    <Text style={styles.locationText}>
+                      N/107D, Khayala, Vishnu Garden, New Delhi
+                    </Text>
+                  </View>
+                </View>
+              </View>
+
+              <View
+                style={{
+                  width: "85%",
+                  alignSelf: "center",
+                  gap: 15,
+                  backgroundColor: "#fff",
+                  borderRadius: 10,
+                  padding: 10,
+                  marginVertical: 10,
+                }}
+              >
+                {data.map((item) => (
+                  <View
+                    key={item.id}
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <View style={{ flexDirection: "row", gap: 10 }}>
+                      <MaterialIcons
+                        name={item.icon}
+                        color={Color.appDefaultColor}
+                        size={24}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          lineHeight: 18,
+                          fontWeight: "400",
+                          fontFamily: FontFamily.poppinsRegular,
+                        }}
+                      >
+                        {item.title}
+                      </Text>
+                    </View>
+
+                    <AntDesign
+                      name="right"
+                      size={20}
+                      color={Color.appDefaultColor}
+                    />
+                  </View>
+                ))}
+              </View>
+
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-around",
+                  alignItems: "center",
+                  marginVertical: 10,
+                }}
+              >
+                <View style={styles.riderImageContainer}>
+                 <PhotoWithRating img={"riderPic.png"}/> 
+                  <View style={{ marginLeft: 15 }}>
+                    <Text style={styles.name}>Ajay Singh</Text>
+                    <Text style={styles.carType}>Sedan</Text>
+                  </View>
+                </View>
+
+                <View style={{ flexDirection: "row", columnGap: 10 }}>
+                  <Image
+                    source={require("../../../assets/img/call.png")}
+                    style={{ width: 35, height: 35 }}
+                  />
+                  <Pressable
+                    onPress={() => {
+                      navigation.navigate(Route.DRIVERCHATSCREEN);
+                    }}
+                  >
+                    <Image
+                      source={require("../../../assets/img/sms.png")}
+                      style={{ width: 35, height: 35 }}
+                    />
+                  </Pressable>
+                </View>
+              </View>
+
+              <Pressable
+                style={{
+                  borderWidth: 1,
+                  borderColor: Color.red,
+                  width: "85%",
+                  alignSelf: "center",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderRadius: 9,
+                  padding: 15,
+                  marginTop: 10,
+                  marginBottom: 15,
+                }}
+                onPress={() => {
+                  setCancelPressed(true);
+                }}
+              >
+                <Text
+                  style={{
+                    color: Color.red,
+                    fontSize: 14,
+                    lineHeight: 21,
+                    fontWeight: "500",
+                    fontFamily: FontFamily.poppinsRegular,
+                  }}
+                >
+                  Cancel Booking
+                </Text>
+              </Pressable>
+              <View style={{ marginBottom: 10 }} />
+            </LinearGradient>
           </View>
         ) : (
           <View style={styles.bottomCard}>
@@ -458,12 +455,7 @@ const styles = StyleSheet.create({
     color: Color.colorDarkslategray,
     fontFamily: FontFamily.poppinsRegular,
   },
-  riderImage: {
-    height: 60,
-    width: 60,
-    borderRadius: 30,
-    margin: 10,
-  },
+ 
   iconContainer: {
     backgroundColor: Color.appDefaultColor,
     height: 40,
@@ -515,25 +507,7 @@ const styles = StyleSheet.create({
     borderRadius: 25, // Rounded image (circular)
     marginBottom: 5, // Adds space between image and name
   },
-  ratingView: {
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-    position: "absolute",
-    bottom: -5,
-    left: 5,
-    borderRadius: 4,
-    padding: 2,
-    borderWidth: 1,
-    borderColor: Color.borderColor,
-    zIndex: 10,
-  },
-  rating: {
-    color: "#595F75",
-    fontSize: 9,
-    marginTop: 4,
-    textAlignVertical: "center",
-  },
+ 
   carType: {
     fontSize: 13,
     lineHeight: 19.5,

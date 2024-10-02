@@ -16,17 +16,13 @@ export const Color = {
   green: "#209447",
   borderColor: "#C3C2FF",
   red:"#F45B5B",
-
   colorGainsboro: "#e3e3e3",
   colorDarkgray: "#9b9b9b",
   colorDarkslategray: "#363636",
-  colorGray_100: "#848484",
- 
   colorGray: "#828282",
   appDefaultColor: "#1C4BF4",
   secondaryColor: "#102C8E",
   backGroundColor: "#DCE5F3",
   textGraycolor: "#4A4A4A",
-  colorGrayNormal: "#4C4E64",
   transparentColor:"#6E72C133"
 };

@@ -27,7 +27,7 @@ const HomeScreen = ({ navigation }) => {
   const status = useSelector((state) => state.status.status);
 
   const [findRide, setFindRide] = useState(false);
-  const [typeOfRide, setTypeOfRide] = useState("Shared");
+  const [typeOfRide, setTypeOfRide] = useState("simple");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 

@@ -6,7 +6,9 @@ import Button from "../../components/Button";
 import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
 import Entypo from "@expo/vector-icons/Entypo";
 import DestinationIcon from "../../components/DestinationIcon";
-const SimpleRideLocation = ({ navigation }) => {
+import { useNavigation } from "@react-navigation/native";
+const SimpleRideLocation = () => {
+  const navigation = useNavigation()
   return (
     <View style={styles.bottomCard}>
       <View style={styles.iconContainer}>
@@ -32,7 +34,7 @@ const SimpleRideLocation = ({ navigation }) => {
           </View>
         </View> */}
         <View>
-            <DestinationIcon height={50}/>
+            <DestinationIcon height={60}/>
         </View>
         <View>
           <View style={styles.rideTextContainer}>
@@ -187,6 +189,7 @@ const styles = StyleSheet.create({
     color: Color.colorGray,
     lineHeight: 16.5,
     fontWeight: "400",
+    width:"90%"
   },
   rideDetails: {
     fontSize: 12,

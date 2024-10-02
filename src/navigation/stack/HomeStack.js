@@ -11,7 +11,7 @@ const HomeStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false }}
-      initialRouteName={Route.HOME}
+      initialRouteName={Route.CLIENTLOCATION}
     >
       <Stack.Screen name={Route.HOME} component={Home} />
       <Stack.Screen name={Route.CLIENTLOCATION} component={ClientLocation} />
