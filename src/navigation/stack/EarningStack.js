@@ -20,6 +20,9 @@ const EarningStack = () => {
       screenOptions={{
         headerShown: true,
         headerBackTitleVisible: false, // Hides the back button text
+       headerStyle:{
+        backgroundColor:Color.backGroundColor
+       },
         headerTitleStyle: {
           fontFamily: FontFamily.poppinsRegular, // Set font family to Poppins
           fontSize: 16,          // Set font size to 16px
@@ -28,6 +31,7 @@ const EarningStack = () => {
           textAlign: "left",
           color:Color.appDefaultColor      // Align text to the left
         },
+      
       }}
     >
       <Stack.Screen

@@ -21,6 +21,7 @@ import { Route } from "../../../routes";
 import { LinearGradient } from "expo-linear-gradient";
 import { ProgressBar } from "react-native-paper";
 import PhotoWithRating from "../../components/PhotoWithRating";
+import Safety from "../../components/Safety";
 export default function SharedRideLocation() {
   const [location, setLocation] = useState(null);
   const [destination, setDestination] = useState({
@@ -78,7 +79,7 @@ export default function SharedRideLocation() {
         setRouteCoordinates(validPoints);
       } else {
         console.log("No routes found");
-        alert("No route found between these locations.");
+        // alert("No route found between these locations.");
       }
     } catch (error) {
       console.error("Error fetching route:", error.message);
@@ -133,6 +134,8 @@ export default function SharedRideLocation() {
   ];
   return (
     <View style={styles.container}>
+     
+     <Safety/>
       {location && (
         <MapView
           style={styles.map}
@@ -171,7 +174,7 @@ export default function SharedRideLocation() {
                   marginTop: 10,
                 }}
               >
-                Picking up Ajay
+                Picking up Ajay Ji
               </Text>
 
               <View style={styles.riderDetails}>
@@ -397,11 +400,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
 
-    alignItems: "center",
+   
   },
   map: {
     width: width,
-    height: height,
+    height:height-150,
+    minHeight:height-200,
+    maxHeight:height
+  
+    
   },
   bottomCard: {
     width: width,

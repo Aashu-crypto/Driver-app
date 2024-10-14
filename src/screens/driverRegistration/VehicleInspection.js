@@ -7,12 +7,14 @@ import {
   ScrollView,
   SafeAreaView,
   FlatList,
+  Platform,
 } from "react-native";
 import { Color, FontFamily } from "../../../GlobalStyles";
 import HeaderComponent from "../../components/HeaderComponent";
 import Button from "../../components/Button";
 import { Route } from "../../../routes";
 import { LinearGradient } from "expo-linear-gradient";
+import BottomGradient from "../../components/BottomGradient";
 const OptionSelector = ({ options, selectedOption, setSelectedOption }) => {
   const renderItem = ({ item }) => (
     <TouchableOpacity
@@ -179,10 +181,7 @@ export default function VehicleInspectionScreen({ navigation }) {
 </View>
        
       </ScrollView>
-      <LinearGradient
-        colors={['transparent', 'rgba(255,255,255,0.8)', '#fff']}
-        style={styles.bottomFade}
-      />
+<BottomGradient/>
     </SafeAreaView>
   );
 }
@@ -261,5 +260,19 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     height: 30,
+  },
+  bottomFadeIOS: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: 60, // Increased height for iOS gradient to make it more visible
+  },
+  bottomFadeAndroid: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: 30, // You can adjust the height if needed
   },
 });

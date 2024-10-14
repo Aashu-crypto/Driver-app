@@ -17,6 +17,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Color, FontFamily } from "../../../GlobalStyles";
 import { Route } from "../../../routes";
+import { Button } from "react-native-zaptric-ui";
 
 const { width, height } = Dimensions.get("window");
 
@@ -93,12 +94,10 @@ export default function NumberVerfication({ navigation }) {
           >
             Changed your number? Find your account
           </Text>
-          <TouchableOpacity
-            style={styles.continueButton}
-            onPress={handleContinue}
-          >
-            <Text style={styles.continueButtonText}>Continue</Text>
-          </TouchableOpacity>
+        
+            <Button onPress={handleContinue} btnWidth={width*0.9} title={"Continue"}/>
+          
+         
         </View>
       </SafeAreaView>
     </TouchableNativeFeedback>

@@ -3,13 +3,14 @@ import React, { useState } from "react";
 import { SafeAreaView } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Color, width } from "../../../GlobalStyles";
-import Button from "../../components/Button";
+
 import { Route } from "../../../routes";
 import HeaderComponent from "../../components/HeaderComponent";
 import { Picker } from "@react-native-picker/picker";
 import { TextInput } from "react-native-paper";
 import { Dropdown } from "react-native-element-dropdown";
 import Entypo from "@expo/vector-icons/Entypo";
+import { Button } from "react-native-zaptric-ui";
 
 const VehicleType = ({ navigation }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -78,13 +79,10 @@ const VehicleType = ({ navigation }) => {
           }}
           right={<TextInput.Icon icon="alert-circle-outline" color="gray" />}
         />
-
-        <Button
-          placeholder="Continue"
-          onPress={() => {
+<Button  onPress={() => {
             navigation.navigate(Route.VEHICLEINSPECION);
-          }}
-        />
+          }} title="Continue" btnWidth={width*0.9}/>
+   
       </View>
       </TouchableWithoutFeedback>
     </SafeAreaView>

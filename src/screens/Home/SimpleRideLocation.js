@@ -2,11 +2,12 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { Route } from "../../../routes";
 import { Color, FontFamily, width } from "../../../GlobalStyles";
-import Button from "../../components/Button";
+
 import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
 import Entypo from "@expo/vector-icons/Entypo";
 import DestinationIcon from "../../components/DestinationIcon";
 import { useNavigation } from "@react-navigation/native";
+import { Button } from "react-native-zaptric-ui";
 const SimpleRideLocation = () => {
   const navigation = useNavigation()
   return (
@@ -85,9 +86,12 @@ const SimpleRideLocation = () => {
 
       <View style={{ marginBottom: 15 }}>
         <Button
-          placeholder={"Accept"}
+        title={"Accept"}
+          
           onPress={() => navigation.navigate(Route.CLIENTLOCATION)}
+          btnWidth={width*0.9}
         />
+        
       </View>
     </View>
   );

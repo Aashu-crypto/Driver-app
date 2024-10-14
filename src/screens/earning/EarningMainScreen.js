@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { FontAwesome, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 import { Route } from "../../../routes";
-import EarningCard from "../../components/EarningCard";
+import EarningCard from "../../components/Earningcard";
 import Button from "../../components/Button";
 import { Color, width } from "../../../GlobalStyles";
 

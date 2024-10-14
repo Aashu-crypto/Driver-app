@@ -3,9 +3,10 @@ import React, { useCallback, useMemo, useRef } from "react";
 
 import { Color,FontFamily,width,height } from "../../../GlobalStyles";
 import DestinationIcon from "../../components/DestinationIcon";
-import Button from "../../components/Button";
+
 import { useNavigation } from "@react-navigation/native";
 import { Route } from "../../../routes";
+import { Button } from "react-native-zaptric-ui";
 // Reusable Component for Riders' Information
 const RiderInfo = ({ name, pickupText, pickupLocation, dropLocation }) => {
   return (
@@ -94,8 +95,9 @@ const SharedRide = () => {
       {/* Accept Button */}
       <View style={styles.acceptButtonContainer}>
         <Button
-          placeholder={"Accept"}
+          placeHolder={"Accept"}
           onPress={() => navigation.navigate(Route.SHAREDRIDELOCATION)}
+          btnWidth={width*0.9}
         />
       </View>
     </View>

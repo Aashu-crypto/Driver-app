@@ -15,12 +15,13 @@ import OnBoarding3 from "../../../assets/img/onBoarding3.svg";
 import { Color, FontFamily, height, width } from "../../../GlobalStyles";
 import Paginator from "../../components/Paginator";
 import { Dropdown } from "react-native-element-dropdown";
-import Button from "../../components/Button";
+// import Button from "../../components/Button";
 import { useNavigation, CommonActions } from "@react-navigation/native";
 import { Route } from "../../../routes";
 import { useTranslation } from "react-i18next";
 import i18next from "i18next";
 import Entypo from "@expo/vector-icons/Entypo";
+import { Button } from "react-native-zaptric-ui";
 
 const OnBoarding = () => {
   const navigation = useNavigation();
@@ -132,7 +133,7 @@ const OnBoarding = () => {
       />
       <Paginator data={slidesData} scrollX={scrollX} />
       <View style={styles.buttonContainer}>
-        <Button placeholder={t("next")} onPress={onNext} />
+        <Button title={t("next")} onPress={onNext} btnWidth={width*0.9}/>
       </View>
     </SafeAreaView>
   );

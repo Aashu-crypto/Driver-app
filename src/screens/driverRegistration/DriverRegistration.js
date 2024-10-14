@@ -13,11 +13,12 @@ import {
 import React, { useState } from "react";
 import { Color, FontFamily, height, width } from "../../../GlobalStyles";
 import Checkbox from "expo-checkbox";
-import Button from "../../components/Button";
+
 import { TextInput } from "react-native-paper";
 import { useTranslation } from "react-i18next";
 import axios from "axios"; // Import axios
 import { Route } from "../../../routes";
+import { Button } from "react-native-zaptric-ui";
 
 const DriverRegistration = ({ navigation }) => {
   const { t } = useTranslation();
@@ -191,12 +192,13 @@ const DriverRegistration = ({ navigation }) => {
                 }}
               />
               <Text style={styles.checkboxLabel}>{t("agreeToTerms")}</Text>
-            </View>
+            </View> 
 
             <Button
-              placeholder={loading ? t("loading") : t("continue")}
+              title={loading ? t("loading") : t("continue")}
               onPress={handleSubmit}
               disabled={loading}
+              btnWidth={width*0.9}
             />
           </View>
         </ScrollView>
@@ -285,7 +287,7 @@ const styles = StyleSheet.create({
   },
   checkboxLabel: {
     marginLeft: 10,
-    fontSize: 14,
+    fontSize: 12,
     color: Color.appDefaultColor,
   },
 });

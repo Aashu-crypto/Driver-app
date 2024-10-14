@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { BarChart } from "react-native-chart-kit";
-import EarningCard from "../../components/EarningCard";
+import EarningCard from "../../components/Earningcard";
 import { Color, FontFamily, width } from "../../../GlobalStyles";
 
 const data = {

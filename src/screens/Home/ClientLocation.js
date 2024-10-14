@@ -7,12 +7,15 @@ import { Color, FontFamily, height, width } from "../../../GlobalStyles";
 import Feather from "@expo/vector-icons/Feather";
 import Divider from "../../components/Divider";
 import { FontAwesome } from "@expo/vector-icons";
-import Button from "../../components/Button";
+
 import * as Progress from "react-native-progress";
 import PhotoWithRating from "../../components/PhotoWithRating";
 import { FontAwesome5 } from "@expo/vector-icons";
-import Slider from "../../components/Slider";
-export default function ClientLocation() {
+import { Button, Slider } from "react-native-zaptric-ui";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import { Route } from "../../../routes";
+import Safety from "../../components/Safety";
+export default function ClientLocation({navigation}) {
   const [location, setLocation] = useState(null);
   const [destination, setDestination] = useState({
     latitude: 31.634,
@@ -93,6 +96,7 @@ export default function ClientLocation() {
 
   return (
     <View style={styles.container}>
+      <Safety/>
       {location && (
         <MapView
           style={styles.map}
@@ -164,7 +168,15 @@ export default function ClientLocation() {
               </Pressable>
             </View>
           </View>
-          <Slider/>
+<View style={{alignItems:'center',marginBottom:10}}>
+          <Slider icon={ <AntDesign
+              name="doubleright"
+              size={24}
+              color={Color.appDefaultColor}
+             
+            />} placeHolder='Slide to Start Ride' btnWidth={width*0.8} onEnd={()=>{navigation.navigate(Route.OTPSTARTRIDE)
+            }}/>
+            </View>
          
         </View>
       ) : (
@@ -186,7 +198,10 @@ export default function ClientLocation() {
               </Text>
             </View>
           </View>
-          <Button placeholder={"Client Located"} btnWidth={width * 0.85} />
+          <View style={{alignSelf:'center'}}>
+          <Button placeHolder={"Client Located"} btnWidth={width * 0.85} />
+          </View>
+          
         </View>
       )}
     </View>
@@ -200,7 +215,10 @@ const styles = StyleSheet.create({
   },
   map: {
     width: width,
-    height: height,
+    height:height-150,
+    minHeight:height-200
+  
+    
   },
   bottomCard: {
     width: width,

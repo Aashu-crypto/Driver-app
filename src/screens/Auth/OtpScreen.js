@@ -18,13 +18,14 @@ import Car from "../../../assets/img/car.svg";
 import { Route } from "../../../routes";
 import { useDispatch } from "react-redux";
 import { screen } from "../../Redux/Slice/screenNameSlice";
+import { Button } from "react-native-zaptric-ui";
 const { width, height } = Dimensions.get("window");
 
 export default function OTPVerificationScreen({ navigation }) {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-  const inputRefs = useRef([]);
+  
   const dispatch = useDispatch();
-
+  const inputRefs = useRef([]);
   const handleOtpChange = (value, index) => {
     if (/^[0-9]$/.test(value)) {
       const newOtp = [...otp];
@@ -80,12 +81,8 @@ export default function OTPVerificationScreen({ navigation }) {
               />
             ))}
           </View>
-          <TouchableOpacity
-            style={styles.verifyButton}
-            onPress={handleVerifyOtp}
-          >
-            <Text style={styles.verifyButtonText}>Verify OTP</Text>
-          </TouchableOpacity>
+        
+          <Button title="Verify OTP" btnWidth={width*0.8} onPress={handleVerifyOtp}/>
           <Text style={styles.resendText}>
             Didn’t receive OTP yet?{" "}
             <Text style={styles.resendLink}>Resend OTP</Text>
@@ -184,5 +181,6 @@ const styles = StyleSheet.create({
   },
   resendLink: {
     color: "#1C4BF4",
+    
   },
 });

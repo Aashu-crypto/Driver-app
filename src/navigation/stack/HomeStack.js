@@ -7,13 +7,14 @@ import SharedRideLocation from "../../screens/Home/SharedRideLocation";
 import DriverChatScreen from "../../screens/Home/DriverChatScreen";
 import OtpStartRide from "../../screens/Home/OtpStartRide";
 import { Color, FontFamily } from "../../../GlobalStyles";
+import SafetyScreen from "../../screens/Home/SafetyScreen";
 
 const HomeStack = () => {
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false }}
-      initialRouteName={Route.CLIENTLOCATION}
+      initialRouteName={Route.HOME}
     >
       <Stack.Screen name={Route.HOME} component={Home} />
       <Stack.Screen name={Route.CLIENTLOCATION} component={ClientLocation} />
@@ -40,6 +41,24 @@ const HomeStack = () => {
             textAlign: "left",
             color: Color.appDefaultColor, // Align text to the left
           },
+        }}
+      />
+      <Stack.Screen
+        name={Route.SAFETYSCREEN}
+        component={SafetyScreen}
+        options={{
+          headerShown: true,
+          headerBackTitleVisible: false, // Hides the back button text
+          title:'Safety',
+          headerTitleStyle: {
+            fontFamily: FontFamily.poppinsRegular, // Set font family to Poppins
+            fontSize: 16, // Set font size to 16px
+            fontWeight: "400", // Set font weight to 400
+            lineHeight: 24, // Set line height to 24px
+            textAlign: "left",
+            color: Color.appDefaultColor, // Align text to the left
+          },
+          
         }}
       />
     </Stack.Navigator>
