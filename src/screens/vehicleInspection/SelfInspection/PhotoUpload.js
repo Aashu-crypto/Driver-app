@@ -1,114 +1,98 @@
+import { StyleSheet, Text, TouchableOpacity, View, Image, Alert } from "react-native";
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
- 
-  SafeAreaView,
-} from "react-native";
-import HeaderComponent from "../../../components/HeaderComponent";
-import Button from "../../../components/Button";
+import { Color, height, width } from "../../../../GlobalStyles";
+import { Ionicons } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
 
 const PhotoUploadScreen = () => {
-  const [selectedImage, setSelectedImage] = useState(1); // To track the selected image
+  const [image, setImage] = useState(null);
 
-  const imageOptions = [
-    {
-      id: 1,
-      label: "Front",
-      imageUrl: require("../../../../assets/img/front.png"),
-    },
-    {
-      id: 2,
-      label: "Left",
-      imageUrl: require("../../../../assets/img/left.png"),
-    },
-    {
-      id: 3,
-      label: "Right",
-      imageUrl: require("../../../../assets/img/right.png"),
-    },
-    {
-      id: 4,
-      label: "Back",
-      imageUrl: require("../../../../assets/img/back.png"),
-    },
-  ];
+  const openCamera = async () => {
+    // Ask for camera permissions
+    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+    
+    if (permissionResult.granted === false) {
+      Alert.alert("Camera Access Denied", "You need to allow camera access to take a photo.");
+      return;
+    }
 
-  const handleSelectImage = (id) => {
-    setSelectedImage(id);
+    // Open the camera
+    const result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <HeaderComponent title="Photo Uploads" />
-      <View style={styles.imageGrid}>
-        {imageOptions.map((option) => (
-          <TouchableOpacity
-            key={option.id}
-            activeOpacity={0.7}
-            onPress={() => handleSelectImage(option.id)}
-            style={[
-              styles.imageContainer,
-              selectedImage === option.id && styles.selectedImage,
-            ]}
-          >
-            <Image source={option.imageUrl} style={styles.image} />
-            <Text style={styles.label}>{option.label}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-     <Button placeholder={"Next"}/>
-    </SafeAreaView>
+    <View style={styles.container}>
+      <TouchableOpacity style={styles.uploadBox} onPress={openCamera}>
+        {image ? (
+          <Image source={{ uri: image }} style={styles.uploadedImage} />
+        ) : (
+          <>
+            <Ionicons
+              name="camera-outline"
+              size={32}
+              color={Color.appDefaultColor}
+            />
+            <Text style={styles.uploadText}>Upload Interior Photo</Text>
+          </>
+        )}
+      </TouchableOpacity>
+      {image && (
+        <TouchableOpacity style={styles.submitButton} onPress={() => Alert.alert("Photo uploaded successfully!")}>
+          <Text style={styles.submitButtonText}>Submit Photo</Text>
+        </TouchableOpacity>
+      )}
+    </View>
   );
 };
+
+export default PhotoUploadScreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F3F6FF",
+    backgroundColor: Color.AlmostWhiteBackGround,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
-  header: {
-    fontSize: 20,
-    color: "#000",
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-  imageGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-    marginTop: 20,
-    paddingHorizontal:10
-  },
-  imageContainer: {
-    width: "45%",
-    height: 150,
-    marginBottom: 20,
-    borderRadius: 10,
+  uploadBox: {
+    height: height / 4.5,
+    backgroundColor: Color.backGroundColor,
+    borderRadius: 8,
+    borderColor: Color.borderColor,
+    borderWidth: 1.5,
     justifyContent: "center",
     alignItems: "center",
-    borderWidth: 2,
-    borderColor: "transparent",
-    elevation:3,
-    backgroundColor:'#fff'
+    marginBottom: 16,
+    width: width * 0.8,
+    borderStyle: "dashed",
   },
-  selectedImage: {
-    borderColor: "#11C564",
-    borderWidth: 2,
-  },
-  image: {
-    width: 80,
-    height: 80,
-    resizeMode: "contain",
-  },
-  label: {
-    marginTop: 10,
+  uploadText: {
+    marginTop: 8,
+    color: Color.textColor,
     fontSize: 16,
-    color: "#000",
   },
+  uploadedImage: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 8,
+  },
+  submitButton: {
+    backgroundColor: Color.appDefaultColor,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+  },
+  submitButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+  }
 });
-
-export default PhotoUploadScreen;

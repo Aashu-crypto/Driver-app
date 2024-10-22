@@ -111,7 +111,7 @@ export default function QuizScreen({ navigation }) {
 const styles = StyleSheet.create({
   safeContainer: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: Color.backGroundColor,
   },
   container: {
     flexGrow: 1,

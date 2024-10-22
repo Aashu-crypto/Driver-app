@@ -14,6 +14,7 @@ export const FontFamily = {
 export const Color = {
   gray: "#7D86A9",
   green: "#209447",
+  lightGreen:'#E5FFE5',
   borderColor: "#C3C2FF",
   red:"#F45B5B",
   colorGainsboro: "#e3e3e3",
@@ -23,6 +24,7 @@ export const Color = {
   appDefaultColor: "#1C4BF4",
   secondaryColor: "#102C8E",
   backGroundColor: "#DCE5F3",
+  AlmostWhiteBackGround:"#FEFEFF",
   textGraycolor: "#4A4A4A",
   transparentColor:"#6E72C133"
 };

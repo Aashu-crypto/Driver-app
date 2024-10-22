@@ -1,17 +1,46 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
   SafeAreaView,
+  Alert,
+  Video,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import HeaderComponent from "../../../components/HeaderComponent";
 import { LinearGradient } from "expo-linear-gradient";
 import { Color } from "../../../../GlobalStyles";
 import Button from "../../../components/Button";
+import * as ImagePicker from "expo-image-picker";
+
 const VideoVerificationScreen = () => {
+  const [video, setVideo] = useState(null);
+
+  const recordVideo = async () => {
+    // Request permission for camera and microphone
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== "granted") {
+      Alert.alert(
+        "Permission Denied",
+        "Sorry, we need camera and microphone permissions to make this work!"
+      );
+      return;
+    }
+
+    // Launch camera for video recording
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      setVideo(result.uri); // Set the video URI to state
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <HeaderComponent title="Video Verification" />
@@ -35,7 +64,16 @@ const VideoVerificationScreen = () => {
         />
       </View>
 
-     <Button placeholder={"Record Video"}/>
+      <Button placeholder={"Record Video"}/>
+
+      {video && (
+        <View style={styles.videoContainer}>
+          <Text style={styles.videoText}>Video Recorded Successfully!</Text>
+          {/* Add the video player preview here */}
+          {/* Replace this with your video player if needed */}
+          <Button placeholder={"Record Video"}/>
+        </View>
+      )}
     </SafeAreaView>
   );
 };
@@ -120,6 +158,26 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     marginLeft: 10,
+  },
+  videoContainer: {
+    marginTop: 20,
+    alignItems: "center",
+  },
+  videoText: {
+    fontSize: 16,
+    color: "#000",
+    marginBottom: 10,
+  },
+  submitButton: {
+    backgroundColor: Color.appDefaultColor,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+  },
+  submitButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
 

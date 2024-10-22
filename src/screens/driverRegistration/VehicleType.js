@@ -1,4 +1,4 @@
-import { Keyboard, Pressable, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
+import { Alert, Keyboard, Pressable, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -11,14 +11,15 @@ import { TextInput } from "react-native-paper";
 import { Dropdown } from "react-native-element-dropdown";
 import Entypo from "@expo/vector-icons/Entypo";
 import { Button } from "react-native-zaptric-ui";
-
+import { useDispatch } from "react-redux";
+import { vehicleInfo } from "../../Redux/Slice/VehicleRegistrationSlice";
 const VehicleType = ({ navigation }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [text, setText] = React.useState("");
   const [vehicleNumber, setVehicleNumber] = useState("");
   const [dropdownValue, setDropdownValue] = useState(null);
   const [isDropdownFocused, setIsDropdownFocused] = useState(false);
-
+const dispatch = useDispatch()
   // Dummy data for vehicle categories
   const carTypes = [
     { label: "SEDAN", value: "sedan" },
@@ -27,9 +28,22 @@ const VehicleType = ({ navigation }) => {
     { label: "COUPE", value: "coupe" },
     { label: "CONVERTIBLE", value: "convertible" },
   ];
+  const onNext=() => {
+    if (selectedCategory && vehicleNumber) {
+      dispatch(vehicleInfo({
+        vehicleType: selectedCategory.value,
+        vehicleNumber
+      }));
+      navigation.navigate(Route.VEHICLEINSPECION);
+    }
+    else{
+      Alert.alert("Add all the fields")
+    }
+
+  }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: Color.AlmostWhiteBackGround }}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View
         style={{
@@ -79,9 +93,7 @@ const VehicleType = ({ navigation }) => {
           }}
           right={<TextInput.Icon icon="alert-circle-outline" color="gray" />}
         />
-<Button  onPress={() => {
-            navigation.navigate(Route.VEHICLEINSPECION);
-          }} title="Continue" btnWidth={width*0.9}/>
+<Button  onPress={onNext} title="Continue" btnWidth={width*0.9}/>
    
       </View>
       </TouchableWithoutFeedback>

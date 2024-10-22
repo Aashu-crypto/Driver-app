@@ -22,9 +22,16 @@ import ProfileSetting from "../../screens/driverRegistration/ProfileSetting";
 import EditProfile from "../../screens/driverRegistration/EditProfile";
 import ChooseLanguageScreen from "../../screens/driverRegistration/SetLanguage";
 import { Color, FontFamily } from "../../../GlobalStyles";
-
+import { useSelector } from "react-redux";
+import AadhaarcardScreen from "../../screens/driverRegistration/AadhaarcardScreen";
+import TrainingAndInduction from "../../screens/vehicleInspection/TrainingAndInduction";
 const RegistrationStack = () => {
   const Stack = createStackNavigator();
+  const driver = useSelector((state) => state.driver.data);
+  const vehicle = useSelector((state) => state.vehicle.data);
+  console.log("Driver", driver);
+  console.log("Vehicle", vehicle);
+
   return (
     <Stack.Navigator
       screenOptions={{
@@ -38,11 +45,20 @@ const RegistrationStack = () => {
           fontFamily: FontFamily.poppinsRegular,
           fontWeight: "500",
         },
-        headerStyle:{
-          backgroundColor:"#fff"
-        }
+        headerStyle: {
+          backgroundColor: Color.AlmostWhiteBackGround,
+        },
       }}
-      initialRouteName={Route.DRIVERREGISTRATION}
+     
+        initialRouteName={
+          driver.id 
+            ? (vehicle.id 
+                ? Route.UPLOADDOCUMENT 
+                : Route.WELCOME
+              ) 
+            : Route.DRIVERREGISTRATION
+        }
+      
     >
       <Stack.Screen
         name={Route.DRIVERREGISTRATION}
@@ -55,6 +71,11 @@ const RegistrationStack = () => {
         options={{ title: "Welcome" }} // Title for the screen
       />
       <Stack.Screen
+        name={Route.TRAININGANDINDUCTION}
+        component={TrainingAndInduction}
+        options={{ title: "Training and Induction" }} // Title for the screen
+      />
+      <Stack.Screen
         name={Route.PROFILESETTING}
         component={ProfileSetting}
         options={{ title: "Profile Setting" }} // Title for the screen
@@ -63,6 +84,11 @@ const RegistrationStack = () => {
         name={Route.EDITPROFILE}
         component={EditProfile}
         options={{ title: "Edit Profile" }} // Title for the screen
+      />
+      <Stack.Screen
+        name={Route.AADHAARCARD}
+        component={AadhaarcardScreen}
+        options={{ title: "Upload Aadhaar Card" }}
       />
       <Stack.Screen
         name={Route.SETLANGUAGE}
@@ -117,7 +143,7 @@ const RegistrationStack = () => {
       <Stack.Screen
         name={Route.APPLICATIONSUBMITTED}
         component={ApplicationSubmittedScreen}
-        options={{ title: "Application Submitted" ,headerShown:false}} // Title for the screen
+        options={{ title: "Application Submitted", headerShown: false }} // Title for the screen
       />
     </Stack.Navigator>
   );

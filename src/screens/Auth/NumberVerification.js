@@ -94,8 +94,10 @@ export default function NumberVerfication({ navigation }) {
           >
             Changed your number? Find your account
           </Text>
-        
-            <Button onPress={handleContinue} btnWidth={width*0.9} title={"Continue"}/>
+        <View style={styles.btnPosition}>
+        <Button onPress={handleContinue} btnWidth={width*0.9} title={"Continue"}/>
+        </View>
+           
           
          
         </View>
@@ -228,4 +230,8 @@ const styles = StyleSheet.create({
   appleButtonText: {
     color: "#ffffff",
   },
+  btnPosition:{
+    position:'absolute',
+    bottom:10
+  }
 });

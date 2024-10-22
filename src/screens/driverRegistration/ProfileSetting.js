@@ -7,14 +7,18 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { Color } from "../../../GlobalStyles";
+import { Color, width } from "../../../GlobalStyles";
 import HeaderComponent from "../../components/HeaderComponent";
 import { Route } from "../../../routes";
 
 // Reusable Profile Option Component
 const ProfileOption = ({ iconComponent: Icon, iconName, text, onPress }) => {
   return (
-    <TouchableOpacity style={styles.option} onPress={onPress}>
+    <TouchableOpacity
+      style={styles.option}
+      onPress={onPress}
+      activeOpacity={0.7}
+    >
       <Icon name={iconName} size={24} color={Color.appDefaultColor} />
       <Text style={styles.optionText}>{text}</Text>
       <AntDesign name="right" size={18} color={Color.appDefaultColor} />
@@ -70,9 +74,11 @@ const ProfileSetting = () => {
       />
 
       {/* Logout Button */}
-      <TouchableOpacity style={styles.logoutButton}>
-        <Text style={styles.logoutText}>Logout</Text>
-      </TouchableOpacity>
+      <View style={styles.logOutBtn}>
+        <TouchableOpacity style={styles.logoutButton}>
+          <Text style={styles.logoutText}>Logout</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -92,9 +98,11 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 1 },
-    elevation: 2,
+    elevation: 1,
     width: "90%",
     alignSelf: "center",
+    borderWidth: 1,
+    borderColor: Color.borderColor,
   },
   optionText: {
     flex: 1,
@@ -114,6 +122,12 @@ const styles = StyleSheet.create({
   logoutText: {
     color: "red",
     fontSize: 16,
+  },
+  logOutBtn: {
+    position: "absolute",
+    bottom: 10,
+    width: width * 0.9,
+    alignSelf: "center",
   },
 });
 

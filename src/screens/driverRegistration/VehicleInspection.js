@@ -7,15 +7,35 @@ import {
   ScrollView,
   SafeAreaView,
   FlatList,
-  Platform,
 } from "react-native";
-import { Color, FontFamily } from "../../../GlobalStyles";
+import { Color, FontFamily, width } from "../../../GlobalStyles";
 import HeaderComponent from "../../components/HeaderComponent";
-import Button from "../../components/Button";
+
 import { Route } from "../../../routes";
-import { LinearGradient } from "expo-linear-gradient";
 import BottomGradient from "../../components/BottomGradient";
-const OptionSelector = ({ options, selectedOption, setSelectedOption }) => {
+import { useSelector, useDispatch } from "react-redux";
+import { vehicleInfo } from "../../Redux/Slice/VehicleRegistrationSlice";
+import { Button } from "react-native-zaptric-ui";
+import { backend_Host } from "../../../config";
+import axios from "axios";
+// Mapping enums to user-friendly text
+const ratingLabels = {
+  EXCELLENT: "Excellent",
+  VERY_GOOD: "Very Good",
+  GOOD: "Good",
+};
+
+const optionLabels = {
+  YES: "Yes",
+  NO: "No",
+};
+
+const OptionSelector = ({
+  options,
+  selectedOption,
+  setSelectedOption,
+  labelMap,
+}) => {
   const renderItem = ({ item }) => (
     <TouchableOpacity
       key={item}
@@ -31,7 +51,7 @@ const OptionSelector = ({ options, selectedOption, setSelectedOption }) => {
           selectedOption === item && styles.selectedOptionText,
         ]}
       >
-        {item}
+        {labelMap[item] || item} {/* Display user-friendly label */}
       </Text>
     </TouchableOpacity>
   );
@@ -54,6 +74,7 @@ const Section = ({
   options,
   selectedOption,
   setSelectedOption,
+  labelMap,
 }) => {
   return (
     <View style={styles.sectionContainer}>
@@ -63,33 +84,110 @@ const Section = ({
         options={options}
         selectedOption={selectedOption}
         setSelectedOption={setSelectedOption}
+        labelMap={labelMap}
       />
     </View>
   );
 };
 
 export default function VehicleInspectionScreen({ navigation }) {
-  const [vehicleBodyCondition, setVehicleBodyCondition] = useState("Very Good");
-  const [headlightsWorking, setHeadlightsWorking] = useState("No");
-  const [tailLightsWorking, setTailLightsWorking] = useState("No");
-  const [indicatorsWorking, setIndicatorsWorking] = useState("No");
-  const [windowsCondition, setWindowsCondition] = useState("Very Good");
-  const [windowsFunctionality, setWindowsFunctionality] = useState("No");
-  const [wipersWorking, setWipersWorking] = useState("No");
-  const [treadDepth, setTreadDepth] = useState("7-2mm");
-  const [tirePressure, setTirePressure] = useState("No");
-  const [spareTireCondition, setSpareTireCondition] = useState("Very Good");
+  const [vehicleBodyCondition, setVehicleBodyCondition] = useState(null);
+  const [headlightsWorking, setHeadlightsWorking] = useState(null);
+  const [tailLightsWorking, setTailLightsWorking] = useState(null);
+  const [indicatorsWorking, setIndicatorsWorking] = useState(null);
+  const [windowsCondition, setWindowsCondition] = useState(null);
+  const [windowsFunctionality, setWindowsFunctionality] = useState(null);
+  const [wipersWorking, setWipersWorking] = useState(null);
+  const [treadDepth, setTreadDepth] = useState(null);
+  const [tirePressure, setTirePressure] = useState(null);
+  const [spareTireCondition, setSpareTireCondition] = useState(null);
+
+  const dispatch = useDispatch();
+  const vehicle = useSelector((state) => state.vehicle.data);
+  const driver = useSelector((state) => state.driver.data);
+  console.log(driver);
+
+  console.log("vehicle info", vehicle);
+
+  // Check if all fields are selected before enabling the button
+  const isFormComplete = [
+    vehicleBodyCondition,
+    headlightsWorking,
+    tailLightsWorking,
+    indicatorsWorking,
+    windowsCondition,
+    windowsFunctionality,
+    wipersWorking,
+    treadDepth,
+    tirePressure,
+    spareTireCondition,
+  ].every(Boolean); // Ensure all fields have values
+
+  const onNext = async () => {
+    if (isFormComplete) {
+      // Step 1: Collect and dispatch vehicle info to the Redux store
+      const vehicleData = {
+        condition: vehicleBodyCondition,
+        headLights: headlightsWorking,
+        tailLights: tailLightsWorking,
+        indicators: indicatorsWorking,
+        windowCondition: windowsCondition,
+        windowFunctionality: windowsFunctionality,
+        wiperCondition: wipersWorking,
+        tireTreadDepth: treadDepth,
+        tirePressure: tirePressure,
+        spareTireCondition: spareTireCondition,
+        vehicleType: vehicle.vehicleType,
+        vehicleNumber: vehicle.vehicleNumber,
+      };
+
+      // Dispatch to Redux store
+     
+
+      try {
+        // Step 2: Make API call with the full vehicle data
+        const response = await axios.post(
+          `${backend_Host}/vehicle/registration/${driver.id}`, // Adjust the URL as per your backend requirements
+          vehicleData
+        );
+
+        // Step 3: Check for successful response
+        if (response.status === 200) {
+          // Navigate to the next screen if the API call was successful
+          dispatch(vehicleInfo(response.data));
+          navigation.navigate(Route.UPLOADDOCUMENT);
+        } else {
+          Alert.alert(
+            "Error",
+            "Something went wrong with vehicle registration."
+          );
+        }
+      } catch (error) {
+        // Handle API error
+        console.error("Vehicle registration failed:", error);
+        Alert.alert(
+          "Error",
+          "Failed to register the vehicle. Please try again."
+        );
+      }
+    } else {
+      // Handle incomplete form case
+      Alert.alert("Error", "Please complete the form before proceeding.");
+    }
+  };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: Color.backGroundColor }}>
       <HeaderComponent title={"Vehicle Self-Inspection via App"} />
       <ScrollView style={styles.container}>
+        <View style={{marginTop:10}}/>
         <Section
           title="1. Condition"
           description="Check for dents, scratches, or any damage."
-          options={["Excellent", "Very Good", "Good"]}
+          options={["EXCELLENT", "VERY_GOOD", "GOOD"]}
           selectedOption={vehicleBodyCondition}
           setSelectedOption={setVehicleBodyCondition}
+          labelMap={ratingLabels}
         />
 
         <Text style={styles.sectionHeader}>Tell us about Lights?</Text>
@@ -97,25 +195,28 @@ export default function VehicleInspectionScreen({ navigation }) {
         <Section
           title="1. Are Headlights working properly"
           description="Verify both low and high beams are functional."
-          options={["Yes", "No"]}
+          options={["YES", "NO"]}
           selectedOption={headlightsWorking}
           setSelectedOption={setHeadlightsWorking}
+          labelMap={optionLabels}
         />
 
         <Section
           title="2. Are Tail Lights working properly"
           description="Check that tail lights, brake lights, and reverse lights are working."
-          options={["Yes", "No"]}
+          options={["YES", "NO"]}
           selectedOption={tailLightsWorking}
           setSelectedOption={setTailLightsWorking}
+          labelMap={optionLabels}
         />
 
         <Section
           title="3. Are Indicators working properly"
           description="Ensure all turn signals and hazard lights are operational."
-          options={["Yes", "No"]}
+          options={["YES", "NO"]}
           selectedOption={indicatorsWorking}
           setSelectedOption={setIndicatorsWorking}
+          labelMap={optionLabels}
         />
 
         <Text style={styles.sectionHeader}>
@@ -125,25 +226,28 @@ export default function VehicleInspectionScreen({ navigation }) {
         <Section
           title="1. Condition"
           description="Inspect for cracks or chips"
-          options={["Excellent", "Very Good", "Good"]}
+          options={["EXCELLENT", "VERY_GOOD", "GOOD"]}
           selectedOption={windowsCondition}
           setSelectedOption={setWindowsCondition}
+          labelMap={ratingLabels}
         />
 
         <Section
           title="2. Functionality"
           description="Ensure windows roll up and down smoothly"
-          options={["Yes", "No"]}
+          options={["YES", "NO"]}
           selectedOption={windowsFunctionality}
           setSelectedOption={setWindowsFunctionality}
+          labelMap={optionLabels}
         />
 
         <Section
           title="3. Wipers are working?"
           description="Test windshield wipers for proper operation and check washer fluid levels"
-          options={["Yes", "No"]}
+          options={["YES", "NO"]}
           selectedOption={wipersWorking}
           setSelectedOption={setWipersWorking}
+          labelMap={optionLabels}
         />
 
         <Text style={styles.sectionHeader}>Tires</Text>
@@ -154,34 +258,36 @@ export default function VehicleInspectionScreen({ navigation }) {
           options={["8-9mm", "7-2mm", "1.6mm"]}
           selectedOption={treadDepth}
           setSelectedOption={setTreadDepth}
+          labelMap={{ "8-9mm": "8-9mm", "7-2mm": "7-2mm", "1.6mm": "1.6mm" }} // no need to map these as they are already readable
         />
 
         <Section
           title="2. Pressure"
           description="Check tire pressure and inflate to the recommended level"
-          options={["Yes", "No"]}
+          options={["YES", "NO"]}
           selectedOption={tirePressure}
           setSelectedOption={setTirePressure}
+          labelMap={optionLabels}
         />
 
         <Section
           title="3. Spare Tire condition?"
           description="Verify the spare tire is in good condition and properly inflated"
-          options={["Excellent", "Very Good", "Good"]}
+          options={["EXCELLENT", "VERY_GOOD", "GOOD"]}
           selectedOption={spareTireCondition}
           setSelectedOption={setSpareTireCondition}
+          labelMap={ratingLabels}
         />
-<View style={{marginBottom:20}}>
-<Button
-          placeholder={"Next"}
-          onPress={() => {
-            navigation.navigate(Route.UPLOADDOCUMENT);
-          }}
-        />
-</View>
-       
+        <View style={{ marginBottom: 20 }}>
+          <Button
+            placeholder={"Next"}
+            onPress={onNext}
+            disabled={!isFormComplete} // Disable button if form is not complete
+            btnWidth={width * 0.9}
+          />
+        </View>
       </ScrollView>
-<BottomGradient/>
+      <BottomGradient />
     </SafeAreaView>
   );
 }
@@ -190,13 +296,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 20,
-    backgroundColor: "#fff",
+    backgroundColor: Color.backGroundColor,
   },
-  header: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: Color.appDefaultColor,
-    marginBottom: 20,
+  sectionContainer: {
+    backgroundColor: "#f0ede6",
+    borderRadius: 15,
+    padding: 10,
+    marginBottom:8
   },
   sectionHeader: {
     fontSize: 18,
@@ -208,7 +314,6 @@ const styles = StyleSheet.create({
   },
   subHeader: {
     fontSize: 14,
-
     color: Color.gray,
     lineHeight: 21,
     fontWeight: "500",
@@ -243,36 +348,5 @@ const styles = StyleSheet.create({
   },
   selectedOptionText: {
     color: "#fff",
-  },
-  nextButton: {
-    backgroundColor: Color.appDefaultColor,
-    padding: 15,
-    borderRadius: 10,
-    alignItems: "center",
-  },
-  nextButtonText: {
-    color: "#fff",
-    fontSize: 18,
-  },
-  bottomFade: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    height: 30,
-  },
-  bottomFadeIOS: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    bottom: 0,
-    height: 60, // Increased height for iOS gradient to make it more visible
-  },
-  bottomFadeAndroid: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    bottom: 0,
-    height: 30, // You can adjust the height if needed
   },
 });

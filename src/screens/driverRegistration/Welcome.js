@@ -7,7 +7,7 @@ import { Route } from "../../../routes";
 import HeaderComponent from "../../components/HeaderComponent";
 const Welcome = ({ navigation }) => {
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: Color.AlmostWhiteBackGround }}>
       <HeaderComponent title="Welcome Rakesh!" />
       <Pressable
         style={styles.btn}
@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
     margin: 10,
     borderRadius: 10,
     borderColor: "#C3C2FF",
+    backgroundColor:"#fff"
   },
   btnText: {
     color: Color.textGraycolor,

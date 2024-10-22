@@ -20,40 +20,49 @@ import { Route } from "../../../routes";
 import { LinearGradient } from "expo-linear-gradient";
 const VehicleSelfInspection = ({ navigation }) => {
   const data = [
-    {
+    {id:1,
       img: exteriorInspection,
       name: "Exterior Inspection",
       route: Route.EXTERIORINSPECTION,
+      value:'EXTERIOR'
     },
     {
+      id:2,
       img: interiorInspection,
       name: "Interior Inspection",
       route: Route.INTERIORININSPECTION,
+      value:'INTERIOR'
     },
     {
+      id:3,
       img: photoVerification,
       name: "Photo Verification",
       route: Route.PHOTOVERIFICATION,
+      value:'LIVE_PHOTO'
     },
-    {
+    {id:4,
       img: videoVerification,
       name: "Video Verification",
-      route: Route.VIDEOVERIFICATION,
+      route: Route.VIDEOVERIFICATION,value:'LIVE_PHOTO'
     },
   ];
 
   const [isChecked, setChecked] = useState(false);
-
+const [selectedId,setSelecteId]=useState()
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        <HeaderComponent title="Vehicle Self-Inspection via App" />
+      
         <View style={{ flex: 1 }}>
           {data.map((item) => (
             <TouchableOpacity
               key={item.name}
               style={styles.inspectionItem}
-              onPress={() => navigation.navigate(item.route)}
+              onPress={() => {
+                navigation.navigate(item.route,{
+                  value:item.value
+                })}}
+              activeOpacity={0.7}
             >
               <Image source={item.img} style={styles.inspectionImage} />
               <Text style={styles.inspectionText}>{item.name}</Text>
@@ -79,7 +88,7 @@ const VehicleSelfInspection = ({ navigation }) => {
           <Button
             placeholder={"Next"}
             onPress={() => {
-              navigation.navigate(Route.VEHICLEQUIZ);
+              navigation.navigate(Route.TRAININGANDINDUCTION);
             }}
             disabled={!isChecked} // Disable button if checkbox is not checked
           />
@@ -98,7 +107,7 @@ export default VehicleSelfInspection;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: Color.AlmostWhiteBackGround,
   },
   inspectionItem: {
     borderWidth: 1,
@@ -106,9 +115,11 @@ const styles = StyleSheet.create({
     padding: 8,
     flexDirection: "row",
     alignItems: "center",
-    borderColor: "green",
+    borderColor: Color.appDefaultColor,
     borderRadius: 15,
     marginHorizontal: 20,
+    backgroundColor:'#fff',
+    elevation:2
   },
   inspectionImage: {
     width: 100,

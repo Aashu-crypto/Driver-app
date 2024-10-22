@@ -1,7 +1,6 @@
 import {
   View,
   Text,
-  
   Image,
   SafeAreaView,
   StyleSheet,
@@ -10,7 +9,7 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Color, FontFamily, height, width } from "../../../GlobalStyles";
 import Checkbox from "expo-checkbox";
 
@@ -19,9 +18,16 @@ import { useTranslation } from "react-i18next";
 import axios from "axios"; // Import axios
 import { Route } from "../../../routes";
 import { Button } from "react-native-zaptric-ui";
+import { backend_Host } from "../../../config";
+import { useDispatch, useSelector } from "react-redux";
+import { driverProfile } from "../../Redux/Slice/DriverProfile";
 
 const DriverRegistration = ({ navigation }) => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const profile = useSelector((state) => state.driver.data);
+  console.log(profile);
+  
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -33,59 +39,61 @@ const DriverRegistration = ({ navigation }) => {
 
   const [loading, setLoading] = useState(false);
 
+  // Use useEffect to navigate when the profile is updated
+  useEffect(() => {
+    if (profile?.id) {
+      navigation.navigate(Route.WELCOME);
+    }
+  }, [profile, navigation]);
+
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit =  () => {
-    navigation.navigate(Route.WELCOME);
-    // Validate the required fields
-    // if (
-    //   !formData.firstName ||
-    //   !formData.lastName ||
-    //   !formData.email ||
-    //   !formData.city ||
-    //   !formData.agreeToTerms
-    // ) {
-    //   Alert.alert("Error", t("allFieldsRequired"));
-    //   return;
-    // }
+  const handleSubmit = async () => {
+    // Check required fields
+    if (
+      !formData.firstName ||
+      !formData.lastName ||
+      !formData.email ||
+      !formData.city ||
+      !formData.agreeToTerms
+    ) {
+      Alert.alert("Error", t("allFieldsRequired"));
+      return;
+    }
 
-    // setLoading(true);
-    // console.log(formData);
+    setLoading(true);
 
-    // const requestData = {
-    //   first_name: formData.firstName,
-    //   last_name: formData.lastName,
-    //   phone_with_code: "+1123443543567890",
-    //   phone_number: "12345674543890",
-    //   email: formData.email,
-    //   password: "securepassword123",
-    //   // city: formData.city,
-    // };
-    // console.log(requestData);
+    // Prepare the request data
+    const requestData = {
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      email: formData.email,  // Ensure you send email if required by your backend
+      city: formData.city,
+      termsAccepted: true,
+      // referralCode: formData.referralCode || null,  // Handle optional referralCode
+    };
 
-    // try {
-    //  
-    //   const response = await axios.post(
-    //     "http://192.168.29.59:8000/api/driver/register",
-    //     requestData
-    //   );
+    try {
+      // Make the API request using axios
+      const response = await axios.post(
+        `${backend_Host}/driver/registration`,
+        requestData
+      );
+      const data = response.data;
+      dispatch(driverProfile(data));
 
-    //   if (response.status === 200 && response.data.status === 1) {
-    //     Alert.alert("Success", t("registrationSuccess"));
-    //     navigation.navigate(Route.WELCOME);
-    //   } else {
-    //     Alert.alert("Error", response.data.message || t("somethingWentWrong"));
-    //   }
-    // } catch (error) {
-    //   Alert.alert(
-    //     "Error",
-    //     error.response?.data?.message || t("somethingWentWrong")
-    //   );
-    // } finally {
-    //   setLoading(false);
-    // }
+      // Check if registration was successful
+      Alert.alert("Success", t("registrationSuccess"));
+    } catch (error) {
+      // Handle network or server errors
+      const errorMessage =
+        error.response?.data?.message || t("somethingWentWrong");
+      Alert.alert("Error", errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -93,9 +101,10 @@ const DriverRegistration = ({ navigation }) => {
       onPress={() => {
         Keyboard.dismiss();
       }}
+      style={{ flex: 1 }}
     >
       <SafeAreaView style={styles.container}>
-        <ScrollView>
+        <ScrollView style={{ flex: 1 }}>
           <Image
             source={require("../../../assets/img/JoyfullYoung.png")}
             style={styles.image}
@@ -192,16 +201,17 @@ const DriverRegistration = ({ navigation }) => {
                 }}
               />
               <Text style={styles.checkboxLabel}>{t("agreeToTerms")}</Text>
-            </View> 
-
-            <Button
-              title={loading ? t("loading") : t("continue")}
-              onPress={handleSubmit}
-              disabled={loading}
-              btnWidth={width*0.9}
-            />
+            </View>
           </View>
         </ScrollView>
+        <View style={styles.btnPosition}>
+          <Button
+            title={loading ? t("loading") : t("continue")}
+            onPress={handleSubmit}
+            disabled={loading}
+            btnWidth={width * 0.9}
+          />
+        </View>
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );
@@ -289,5 +299,12 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontSize: 12,
     color: Color.appDefaultColor,
+  },
+  btnPosition: {
+    position: "absolute",
+    bottom: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
   },
 });
