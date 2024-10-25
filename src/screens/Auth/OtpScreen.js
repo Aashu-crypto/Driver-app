@@ -20,10 +20,10 @@ import { useDispatch } from "react-redux";
 import { screen } from "../../Redux/Slice/screenNameSlice";
 import { Button } from "react-native-zaptric-ui";
 const { width, height } = Dimensions.get("window");
-
+import { useSelector } from "react-redux";
 export default function OTPVerificationScreen({ navigation }) {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-  
+  const number = useSelector(state=>state.number.number)
   const dispatch = useDispatch();
   const inputRefs = useRef([]);
   const handleOtpChange = (value, index) => {
@@ -39,7 +39,7 @@ export default function OTPVerificationScreen({ navigation }) {
   };
 
   const handleVerifyOtp = () => {
-    if (otp.join("").length === 6) {
+    if (otp.join("")=='123456') {
       // Navigate to the next screen (e.g., Home screen)
       dispatch(screen(Route.REGISTRATION_STACK));
     } else {
@@ -53,12 +53,7 @@ export default function OTPVerificationScreen({ navigation }) {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.innerContainer}
       >
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Icon name="arrow-left" size={24} color="#000" />
-        </TouchableOpacity>
+       
         <View style={{ marginBottom: 10 }}>
           <Car />
         </View>
@@ -66,7 +61,7 @@ export default function OTPVerificationScreen({ navigation }) {
         <View style={styles.elevatedContainer}>
           <Text style={styles.title}>Enter OTP</Text>
           <Text style={styles.subtitle}>
-            Sent to <Text style={{ color: "#4A4A4A" }}>+91-6578888888</Text>
+            Sent to <Text style={{ color: "#4A4A4A" }}>+91-{number}</Text>
           </Text>
           <View style={styles.otpContainer}>
             {otp.map((digit, index) => (

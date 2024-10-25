@@ -5,10 +5,13 @@ import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { Button } from "react-native-zaptric-ui";
 import { backend_Host } from "../../../config";
-const AdhaarcardScreen = () => {
+import { useSelector } from "react-redux";
+const AdhaarcardScreen = ({route}) => {
   const [frontImage, setFrontImage] = useState(null);
   const [backImage, setBackImage] = useState(null);
-
+const documentId = route.params.id
+console.log("docuemntId",documentId);
+const driver =useSelector(state=>state.driver.data)
   // Function to pick an image from gallery or camera
   const pickImage = async (side) => {
     // Request permission to access media library and camera
@@ -46,8 +49,8 @@ const AdhaarcardScreen = () => {
     const formData = new FormData();
 
     // Append the document data (driverId and documentId)
-    formData.append("driverId", 1);
-    formData.append("documentId", 1);
+    formData.append("driverId",driver.id);
+    formData.append("documentId",documentId);
 
     // Append the image (file) to the formData
     if (frontImage) {
@@ -61,7 +64,7 @@ const AdhaarcardScreen = () => {
 
     try {
       const response = await fetch(
-        `${backend_Host}/driver/1/driver-document-upload/2`,
+        `${backend_Host}/driver/${driver.id}/driver-document-upload/${documentId}`,
         {
           method: "PUT",
           body: formData, // The body should be FormData

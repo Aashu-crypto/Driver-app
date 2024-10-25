@@ -1,4 +1,12 @@
-import { Alert, Keyboard, Pressable, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
+import {
+  Alert,
+  Keyboard,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -19,7 +27,7 @@ const VehicleType = ({ navigation }) => {
   const [vehicleNumber, setVehicleNumber] = useState("");
   const [dropdownValue, setDropdownValue] = useState(null);
   const [isDropdownFocused, setIsDropdownFocused] = useState(false);
-const dispatch = useDispatch()
+  const dispatch = useDispatch();
   // Dummy data for vehicle categories
   const carTypes = [
     { label: "SEDAN", value: "sedan" },
@@ -28,74 +36,78 @@ const dispatch = useDispatch()
     { label: "COUPE", value: "coupe" },
     { label: "CONVERTIBLE", value: "convertible" },
   ];
-  const onNext=() => {
+  const onNext = () => {
     if (selectedCategory && vehicleNumber) {
-      dispatch(vehicleInfo({
-        vehicleType: selectedCategory.value,
-        vehicleNumber
-      }));
+      dispatch(
+        vehicleInfo({
+          vehicleType: selectedCategory.value,
+          vehicleNumber,
+        })
+      );
       navigation.navigate(Route.VEHICLEINSPECION);
+    } else {
+      Alert.alert("Add all the fields");
     }
-    else{
-      Alert.alert("Add all the fields")
-    }
-
-  }
+  };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: Color.AlmostWhiteBackGround }}>
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: Color.AlmostWhiteBackGround }}
+    >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View
-        style={{
-          width: width * 0.9,
-          justifyContent: "center",
-          alignSelf: "center",
-          gap: 10,
-        }}
-      >
-        <Text style={styles.header}>Please enter your vehicle details</Text>
-        <Text style={[styles.btnText]}>Select category</Text>
-
-        {/* Dropdown for selecting car type */}
-        <Dropdown
-          style={[
-            styles.dropdown,
-            isDropdownFocused && { borderColor: Color.appDefaultColor },
-          ]}
-          placeholderStyle={styles.placeholderStyle}
-          selectedTextStyle={styles.selectedTextStyle}
-          iconStyle={styles.iconStyle}
-          itemTextStyle={{ fontSize: 14 }}
-          data={carTypes}
-          maxHeight={200}
-          labelField="label"
-          valueField="value"
-          placeholder={!isDropdownFocused ? "Select Type" : "..."}
-          value={selectedCategory}
-          onFocus={() => setIsDropdownFocused(true)}
-          onBlur={() => setIsDropdownFocused(false)}
-          onChange={(item) => {
-            setSelectedCategory(item);
-            setIsDropdownFocused(false); // Reset focus after selection
+        <View
+          style={{
+            width: width * 0.9,
+            justifyContent: "center",
+            alignSelf: "center",
+            gap: 10,
           }}
-        />
+        >
+          <Text style={styles.header}>Please enter your vehicle details</Text>
+          <Text style={[styles.btnText]}>Select category</Text>
 
-        <Text style={[styles.btnText]}>Vehicle number</Text>
-        <TextInput
-          style={styles.hiddenInput}
-          value={vehicleNumber}
-          outlineColor={Color.borderColor}
-          activeOutlineColor={Color.appDefaultColor}
-          onChangeText={(text) => setVehicleNumber(text)}
-          mode="outlined"
-          theme={{
-            roundness: 10, // Set borderRadius
-          }}
-          right={<TextInput.Icon icon="alert-circle-outline" color="gray" />}
-        />
-<Button  onPress={onNext} title="Continue" btnWidth={width*0.9}/>
-   
-      </View>
+          {/* Dropdown for selecting car type */}
+          <Dropdown
+            style={[
+              styles.dropdown,
+              isDropdownFocused && { borderColor: Color.appDefaultColor },
+            ]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            iconStyle={styles.iconStyle}
+            itemTextStyle={{ fontSize: 14 }}
+            data={carTypes}
+            maxHeight={200}
+            labelField="label"
+            valueField="value"
+            placeholder={!isDropdownFocused ? "Select Type" : "..."}
+            value={selectedCategory}
+            onFocus={() => setIsDropdownFocused(true)}
+            onBlur={() => setIsDropdownFocused(false)}
+            onChange={(item) => {
+              setSelectedCategory(item);
+              setIsDropdownFocused(false); // Reset focus after selection
+            }}
+          />
+
+          <Text style={[styles.btnText]}>Vehicle number</Text>
+          <TextInput
+            style={styles.hiddenInput}
+            value={vehicleNumber}
+            outlineColor={Color.borderColor}
+            activeOutlineColor={Color.appDefaultColor}
+            onChangeText={(text) => setVehicleNumber(text)}
+            mode="outlined"
+            theme={{
+              roundness: 10, // Set borderRadius
+            }}
+            right={<TextInput.Icon icon="alert-circle-outline" color="gray" />}
+          />
+
+          <View >
+            <Button onPress={onNext} title="Continue" btnWidth={width * 0.9} />
+          </View>
+        </View>
       </TouchableWithoutFeedback>
     </SafeAreaView>
   );

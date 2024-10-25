@@ -27,7 +27,7 @@ const DriverRegistration = ({ navigation }) => {
   const dispatch = useDispatch();
   const profile = useSelector((state) => state.driver.data);
   console.log(profile);
-  
+  const number = useSelector(state=>state.number.number)
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -39,12 +39,7 @@ const DriverRegistration = ({ navigation }) => {
 
   const [loading, setLoading] = useState(false);
 
-  // Use useEffect to navigate when the profile is updated
-  useEffect(() => {
-    if (profile?.id) {
-      navigation.navigate(Route.WELCOME);
-    }
-  }, [profile, navigation]);
+
 
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -72,6 +67,7 @@ const DriverRegistration = ({ navigation }) => {
       email: formData.email,  // Ensure you send email if required by your backend
       city: formData.city,
       termsAccepted: true,
+      phoneNumber:number
       // referralCode: formData.referralCode || null,  // Handle optional referralCode
     };
 
@@ -86,6 +82,7 @@ const DriverRegistration = ({ navigation }) => {
 
       // Check if registration was successful
       Alert.alert("Success", t("registrationSuccess"));
+      navigation.navigate(Route.WELCOME);
     } catch (error) {
       // Handle network or server errors
       const errorMessage =

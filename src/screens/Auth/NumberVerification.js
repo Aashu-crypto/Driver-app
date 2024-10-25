@@ -18,30 +18,35 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { Color, FontFamily } from "../../../GlobalStyles";
 import { Route } from "../../../routes";
 import { Button } from "react-native-zaptric-ui";
-
+import { useDispatch } from "react-redux";
+import { number } from "../../Redux/Slice/NumberSlice";
 const { width, height } = Dimensions.get("window");
 
 export default function NumberVerfication({ navigation }) {
   const [phoneNumber, setPhoneNumber] = useState("");
-
+  const dispatch = useDispatch();
   const handleContinue = () => {
-    // if (phoneNumber.length === 10 && /^[0-9]+$/.test(phoneNumber)) {
-    //
-    // } else {
-    //   Alert.alert(
-    //     "Invalid Phone Number",
-    //     "Please enter a valid 10-digit phone number."
-    //   );
-    // }
+    if(phoneNumber.length === 0){
+      Alert.alert(
+        "Phone Number Required",
+        "Please enter your phone number to proceed."
+      );
+      return;
+    }
+    dispatch(number(phoneNumber));
     navigation.navigate(Route.OTPVERFICATION);
   };
+  
 
   return (
     <TouchableNativeFeedback onPress={() => Keyboard.dismiss()}>
       <SafeAreaView style={styles.container}>
-        <StatusBar barStyle="light-content" backgroundColor={"#1C4BF4"} />
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor={Color.appDefaultColor}
+        />
         <LinearGradient
-          colors={["#1C4BF4", "#3b5998", "#192f6a"]}
+          colors={[Color.appDefaultColor, "#192f6a"]}
           style={styles.headerContainer}
         >
           <Image
@@ -94,12 +99,13 @@ export default function NumberVerfication({ navigation }) {
           >
             Changed your number? Find your account
           </Text>
-        <View style={styles.btnPosition}>
-        <Button onPress={handleContinue} btnWidth={width*0.9} title={"Continue"}/>
-        </View>
-           
-          
-         
+          <View style={styles.btnPosition}>
+            <Button
+              onPress={handleContinue}
+              btnWidth={width * 0.9}
+              title={"Continue"}
+            />
+          </View>
         </View>
       </SafeAreaView>
     </TouchableNativeFeedback>
@@ -230,8 +236,8 @@ const styles = StyleSheet.create({
   appleButtonText: {
     color: "#ffffff",
   },
-  btnPosition:{
-    position:'absolute',
-    bottom:10
-  }
+  btnPosition: {
+    position: "absolute",
+    bottom: 10,
+  },
 });

@@ -7,161 +7,153 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import { Color, FontFamily } from "../../GlobalStyles";
 import { backend_Host } from "../../config";
 import { useSelector } from "react-redux";
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-const UploadPhoto = ({ visible, hideModal,id ,type}) => {
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+const UploadPhoto = ({ visible, hideModal, id, type }) => {
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
-//   const [type, setType] = useState(Camera.Constants.Type.back);
+  //   const [type, setType] = useState(Camera.Constants.Type.back);
   const [image, setImage] = useState(null);
   const [permission, requestPermission] = useCameraPermissions();
-const driver = useSelector(state=>state.driver.data)
-const vehicle = useSelector(state=>state.vehicle.data)
-console.log("Vehicle Info");
+  const driver = useSelector((state) => state.driver.data);
+  const vehicle = useSelector((state) => state.vehicle.data);
+  console.log("Vehicle Info");
 
   // Requesting camera permission in useEffect
-  useEffect(() => {
-    (async () => {
-      const { status } = await Camera.requestCameraPermissionsAsync();
-      setHasPermission(status === "granted");
-    })();
-  }, []);
 
-  // Function to flip the camera
-  const toggleCameraFacing = () => {
-    // setType(
-    //   type === Camera.Constants.Type.back
-    //     ? Camera.Constants.Type.front
-    //     : Camera.Constants.Type.back
-    // );
-  };
 
-  // Function to take a photo
-  const takePhoto = async () => {
-    if (cameraRef) {
-      let photo = await cameraRef.takePictureAsync();
-      console.log("Photo captured: ", photo.uri);
-      setImage(photo.uri);
-      hideModal(); // Close modal after taking a photo
-    }
-  };
-  const uploadDocumentAndImage = async () => {
+  //
+  const uploadDocumentAndImage = async (img) => {
     const formData = new FormData();
-  
+
     // Append the document data (driverId and documentId)
     formData.append("driverId", driver.id);
     formData.append("documentId", id);
-  
+
     // Generate a random name for the image
     const randomFileName = `image_${Math.floor(Math.random() * 1000000)}.jpg`;
-  
+
     // Append the image (file) to the formData
-    if (image) {
+    console.log("Image",image);
+    
+    
       formData.append("document", {
-        uri: image,
+        uri: img,
         name: randomFileName, // Use the generated random name
         type: "image/jpeg", // Image MIME type
       });
-    }
-    console.log(type);
     
-  if(type == "Driver"){
-    try {
-      console.log("Uploading data of driver");
-      
-      const response = await fetch(
-        `${backend_Host}/driver/${driver.id}/driver-document-upload/${id}`,
-        {
-          method: "PUT",
-          body: formData, // The body should be FormData
-          headers: {
-            // DO NOT set 'Content-Type' here, let fetch handle it automatically
-            Accept: "application/json", // Optional, depending on your backend setup
-          },
+    console.log(type);
+
+    if (type == "Driver") {
+      try {
+        console.log("Uploading data of driver",formData);
+
+        const response = await fetch(
+          `${backend_Host}/driver/${driver.id}/driver-document-upload/${id}`,
+          {
+            method: "PUT",
+            body: formData, // The body should be FormData
+            headers: {
+              // DO NOT set 'Content-Type' here, let fetch handle it automatically
+              Accept: "application/json", // Optional, depending on your backend setup
+            },
+          }
+        );
+
+        if (!response.ok) {
+          // Provide a more detailed error message
+          let message = "An error occurred. Please try again.";
+
+          if (response.status === 400) {
+            message = "Invalid request. Please check the document data.";
+          } else if (response.status === 500) {
+            message = "Server error. Please try again later.";
+          }
+
+          throw new Error(message);
         }
-      );
-  
-      if (!response.ok) {
-        // Provide a more detailed error message
-        let message = "An error occurred. Please try again.";
-        
-        if (response.status === 400) {
-          message = "Invalid request. Please check the document data.";
-        } else if (response.status === 500) {
-          message = "Server error. Please try again later.";
+
+        const result = await response.json();
+        console.log("Upload successful:", result);
+        hideModal();
+
+        // Success alert
+        Alert.alert("Success", "Document uploaded successfully!");
+      } catch (error) {
+        console.error("Error occurred while uploading:", error.message);
+
+        // Detailed alert for error
+        if (error.message.includes("Network request failed")) {
+          Alert.alert(
+            "Network Error",
+            "Please check your internet connection and try again."
+          );
+        } else {
+          Alert.alert(
+            "Upload Failed",
+            error.message || "An unexpected error occurred."
+          );
         }
-        
-        throw new Error(message);
       }
-  
-      const result = await response.json();
-      console.log("Upload successful:", result);
-  
-      // Success alert
-      Alert.alert("Success", "Document uploaded successfully!");
-    } catch (error) {
-      console.error("Error occurred while uploading:", error.message);
-  
-      // Detailed alert for error
-      if (error.message.includes("Network request failed")) {
-        Alert.alert("Network Error", "Please check your internet connection and try again.");
-      } else {
-        Alert.alert("Upload Failed", error.message || "An unexpected error occurred.");
+    } else if (type == "Vehicle") {
+      try {
+        console.log("Uploading data of Vehicle");
+
+        const response = await fetch(
+          `${backend_Host}/vehicle/vehicle-document-upload/${id}`,
+          {
+            method: "PUT",
+            body: formData, // The body should be FormData
+            headers: {
+              // DO NOT set 'Content-Type' here, let fetch handle it automatically
+              Accept: "application/json", // Optional, depending on your backend setup
+            },
+          }
+        );
+        console.log(response);
+
+        if (!response.ok) {
+          // Provide a more detailed error message
+          let message = "An error occurred. Please try again.";
+
+          if (response.status === 400) {
+            message = "Invalid request. Please check the document data.";
+          } else if (response.status === 500) {
+            message = "Server error. Please try again later.";
+          }
+
+          throw new Error(message);
+        }
+
+        const result = await response.json();
+        console.log("Upload successful:", result);
+
+        // Success alert
+        hideModal();
+        Alert.alert("Success", "Document uploaded successfully!");
+      } catch (error) {
+        console.error("Error occurred while uploading:", error.message);
+
+        // Detailed alert for error
+        if (error.message.includes("Network request failed")) {
+          Alert.alert(
+            "Network Error",
+            "Please check your internet connection and try again."
+          );
+        } else {
+          Alert.alert(
+            "Upload Failed",
+            error.message || "An unexpected error occurred."
+          );
+        }
       }
     }
-  }
-  else if (type=="Vehicle"){
-    try {
-      console.log("Uploading data of Vehicle");
-      
-      const response = await fetch(
-        `${backend_Host}/vehicle/vehicle-document-upload/${id}`,
-        {
-          method: "PUT",
-          body: formData, // The body should be FormData
-          headers: {
-            // DO NOT set 'Content-Type' here, let fetch handle it automatically
-            Accept: "application/json", // Optional, depending on your backend setup
-          },
-        }
-      );
-      console.log(response);
-      
-  
-      if (!response.ok) {
-        // Provide a more detailed error message
-        let message = "An error occurred. Please try again.";
-        
-        if (response.status === 400) {
-          message = "Invalid request. Please check the document data.";
-        } else if (response.status === 500) {
-          message = "Server error. Please try again later.";
-        }
-        
-        throw new Error(message);
-      }
-  
-      const result = await response.json();
-      console.log("Upload successful:", result);
-  
-      // Success alert
-      Alert.alert("Success", "Document uploaded successfully!");
-    } catch (error) {
-      console.error("Error occurred while uploading:", error.message);
-  
-      // Detailed alert for error
-      if (error.message.includes("Network request failed")) {
-        Alert.alert("Network Error", "Please check your internet connection and try again.");
-      } else {
-        Alert.alert("Upload Failed", error.message || "An unexpected error occurred.");
-      }
-    }
-  }
-  
   };
-  
+
   // Function to pick an image from gallery
   const pickImage = async () => {
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!permissionResult.granted) {
       Alert.alert("Permission denied", "You need to grant gallery access.");
       return;
@@ -177,8 +169,9 @@ console.log("Vehicle Info");
     if (!result.canceled) {
       setImage(result.assets[0].uri);
       console.log("Image chosen: ", result.assets[0].uri);
-      uploadDocumentAndImage()
-      hideModal();
+      let img =  result.assets[0].uri
+      uploadDocumentAndImage(img);
+    
     }
   };
 
@@ -186,34 +179,42 @@ console.log("Vehicle Info");
   if (!permission) {
     return <View />;
   }
+  const openCamera = async () => {
+    // Ask for camera permissions
+    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
 
- 
+    if (permissionResult.granted === false) {
+      Alert.alert(
+        "Camera Access Denied",
+        "You need to allow camera access to take a photo."
+      );
+      return;
+    }
 
+    // Open the camera
+    const result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+      console.log("Image chosen: ", result.assets[0].uri);
+      uploadDocumentAndImage();
+    
+    }
+  };
   return (
     <View style={{ flex: 1 }}>
-      {/* Camera View */}
-      {/* {hasPermission && visible && (
-        <Camera
-          style={styles.camera}
-        //   type={type}
-          ref={(ref) => setCameraRef(ref)}
-        >
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.flipButton} onPress={toggleCameraFacing}>
-              <Text style={styles.text}>Flip Camera</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.captureButton} onPress={takePhoto}>
-              <Text style={styles.text}>Capture</Text>
-            </TouchableOpacity>
-          </View>
-        </Camera>
-      )} */}
-
-      {/* Modal for Upload Options */}
       <Portal>
-        <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={styles.modalContainer}>
+        <Modal
+          visible={visible}
+          onDismiss={hideModal}
+          contentContainerStyle={styles.modalContainer}
+        >
           <Text style={styles.modalTitle}>Select upload option</Text>
-          <TouchableOpacity style={styles.optionStyle} onPress={takePhoto}>
+          <TouchableOpacity style={styles.optionStyle} onPress={openCamera}>
             <AntDesign name="camera" size={24} color={Color.appDefaultColor} />
             <Text style={styles.optionText}>Take a Photo</Text>
           </TouchableOpacity>
@@ -221,7 +222,6 @@ console.log("Vehicle Info");
             <AntDesign name="picture" size={24} color={Color.appDefaultColor} />
             <Text style={styles.optionText}>Choose from Gallery</Text>
           </TouchableOpacity>
-          <Divider />
         </Modal>
       </Portal>
     </View>

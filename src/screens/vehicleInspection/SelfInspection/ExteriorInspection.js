@@ -7,26 +7,29 @@ import {
   StyleSheet,
   SafeAreaView,
   Alert,
-  BackHandler
+  BackHandler,
 } from "react-native";
 import HeaderComponent from "../../../components/HeaderComponent";
 import { Button } from "react-native-zaptric-ui";
 import { width } from "../../../../GlobalStyles";
 import { backend_Host } from "../../../../config";
 import * as ImagePicker from "expo-image-picker";
+import { useSelector } from "react-redux";
 
 const ExteriorInspection = ({ navigation, route }) => {
   const [selectedImageId, setSelectedImageId] = useState(null); // To track the selected image
   const [uploadedImages, setUploadedImages] = useState([]); // To track uploaded images
   const [images, setImages] = useState({}); // To track images by option ID
   const [vehiclePhotoDetails, setVehiclePhotoDetails] = useState([]); // For vehicle photo details from the API
+  const vehicle = useSelector((state) => state.vehicle.data);
 
   const value = route.params.value;
   console.log(value);
 
   // Image picker function
   const pickImage = async () => {
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!permissionResult.granted) {
       Alert.alert("Permission denied", "You need to grant gallery access.");
       return;
@@ -43,43 +46,48 @@ const ExteriorInspection = ({ navigation, route }) => {
       return result.assets[0].uri; // Return image URI
     }
   };
-
+  const [allUploaded, setAllUploaded] = useState();
   // Fetch vehicle photo details from the API
   useEffect(() => {
     const fetchVehiclePhotos = async () => {
       try {
-        const response = await fetch(`${backend_Host}/vehicle/vehicle-photo/1?photoType=EXTERIOR`);
+        const response = await fetch(
+          `${backend_Host}/vehicle/vehicle-photo/${vehicle.id}?photoType=EXTERIOR`
+        );
 
         if (!response.ok) {
-          throw new Error('Failed to fetch vehicle photos');
+          throw new Error("Failed to fetch vehicle photos");
         }
 
         const data = await response.json();
-        console.log('Vehicle Photos:', data);
+        const uploadedAll = data.every((item) => item.uploadStatus === true);
+        console.log("UploadAll", uploadedAll);
+        setAllUploaded(uploadedAll);
+        console.log("Vehicle Photos:", data);
         setVehiclePhotoDetails(data);
       } catch (error) {
-        console.error('Error fetching vehicle photos:', error);
+        console.error("Error fetching vehicle photos:", error);
       }
     };
 
     fetchVehiclePhotos();
-  }, []);
+  }, [uploadedImages]);
 
   useEffect(() => {
     const backAction = () => {
-      Alert.alert('Hold on!', 'Are you sure you want to go back?', [
+      Alert.alert("Hold on!", "Please Upload all the Photos", [
         {
-          text: 'Cancel',
+          text: "Cancel",
           onPress: () => null,
-          style: 'cancel',
+          style: "cancel",
         },
-        { text: 'YES', onPress: () => BackHandler.exitApp() },
+        { text: "YES", onPress: () => navigation.goBack() },
       ]);
       return true;
     };
 
     const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
+      "hardwareBackPress",
       backAction
     );
 
@@ -116,7 +124,9 @@ const ExteriorInspection = ({ navigation, route }) => {
 
   // Merge vehiclePhotoDetails with imageOptions
   const mergedPhotos = imageOptions.map((option) => {
-    const apiPhoto = vehiclePhotoDetails.find((photo) => photo.photoType === option.photoType);
+    const apiPhoto = vehiclePhotoDetails.find(
+      (photo) => photo.photoType === option.photoType
+    );
     return {
       ...option,
       photoUrl: apiPhoto ? apiPhoto.photoUrl : null, // Use API photoUrl if available
@@ -144,14 +154,16 @@ const ExteriorInspection = ({ navigation, route }) => {
 
     const formData = new FormData();
     formData.append("id", id);
-
+    const randomFileName = `image_${Math.floor(Math.random() * 1000000)}.jpeg`;
     formData.append("document", {
       uri: selectedImageUri, // The image URI from the picker
-      name: `photo_${selectedOption.label}.jpg`, // A unique name for the image file
+      name: randomFileName, // A unique name for the image file
       type: "image/jpeg", // The image MIME type
     });
 
     try {
+      console.log("Starting Upload of Exterior");
+      
       const response = await fetch(
         `${backend_Host}/vehicle/vehicle-photo-upload`,
         {
@@ -165,9 +177,14 @@ const ExteriorInspection = ({ navigation, route }) => {
 
       if (response.ok) {
         const result = await response.json();
+        console.log(result);
+        
+      
+
         console.log("Upload successful:", result);
 
         setUploadedImages((prev) => [...prev, id]); // Update uploaded images state
+      
         Alert.alert("Success", "Image uploaded successfully.");
       } else {
         const errorResponse = await response.json();
@@ -177,6 +194,8 @@ const ExteriorInspection = ({ navigation, route }) => {
         );
       }
     } catch (error) {
+      console.log(error);
+      
       Alert.alert("Error", "An error occurred while uploading the image.");
     }
   };
@@ -185,15 +204,15 @@ const ExteriorInspection = ({ navigation, route }) => {
     <SafeAreaView style={styles.container}>
       <HeaderComponent title="Photo Uploads" />
       <View style={styles.imageGrid}>
-        {mergedPhotos.map((option) => (
+        {vehiclePhotoDetails.map((option) => (
           <TouchableOpacity
             key={option.id}
             activeOpacity={0.7}
             onPress={() => handleSelectImage(option.id)}
-            disabled={uploadedImages.includes(option.id)} // Disable the button if the image is already uploaded
+            disabled={option.uploadStatus} // Disable the button if the image is already uploaded
             style={[
               styles.imageContainer,
-              uploadedImages.includes(option.id) && styles.disabledImage, // Change style if disabled
+              option.uploadStatus && styles.disabledImage, // Change style if disabled
             ]}
           >
             {/* Show picked image or default image */}
@@ -203,25 +222,25 @@ const ExteriorInspection = ({ navigation, route }) => {
                   ? { uri: images[option.id] }
                   : option.photoUrl
                   ? { uri: option.photoUrl }
-                  : option.imageUrl // Use the default image from imageOptions
+                  : option.imageUrl
               }
               style={styles.image}
             />
-            <Text style={styles.label}>{option.label}</Text>
+            <Text style={styles.label}>{option.vehiclePhotoName}</Text>
           </TouchableOpacity>
         ))}
       </View>
-      <View style={{ alignItems: "center" }}>
-        <Button
-          title={uploadedImages.length === mergedPhotos.length ? "Go Back" : "Upload"}
-          btnWidth={width * 0.9}
-          onPress={() => {
-            uploadedImages.length === mergedPhotos.length
-              ? navigation.goBack()
-              : handleSelectImage(selectedImageId);
-          }}
-        />
-      </View>
+      {allUploaded && (
+        <View style={{ alignItems: "center" }}>
+          <Button
+            title={"Go Back"}
+            btnWidth={width * 0.9}
+            onPress={() => {
+              navigation.goBack();
+            }}
+          />
+        </View>
+      )}
     </SafeAreaView>
   );
 };

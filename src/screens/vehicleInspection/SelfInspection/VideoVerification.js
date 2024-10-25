@@ -64,14 +64,14 @@ const VideoVerificationScreen = () => {
         />
       </View>
 
-      <Button placeholder={"Record Video"}/>
+      <Button placeholder={"Record Video"} onPress={recordVideo} />
 
       {video && (
         <View style={styles.videoContainer}>
           <Text style={styles.videoText}>Video Recorded Successfully!</Text>
           {/* Add the video player preview here */}
           {/* Replace this with your video player if needed */}
-          <Button placeholder={"Record Video"}/>
+          <Button placeholder={"Record Video"} />
         </View>
       )}
     </SafeAreaView>

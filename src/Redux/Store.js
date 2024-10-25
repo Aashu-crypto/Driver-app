@@ -1,5 +1,5 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import indexSlice from "./Slice/indexSlice";
+
 import screenSlice from "./Slice/screenNameSlice";
 
 import profileSlice from "./Slice/ProfileDataSlice";
@@ -18,19 +18,21 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import UserStatusSlice from "./Slice/UserStatusSlice";
 import DriverProfile from "./Slice/DriverProfile";
-import VehicleRegistrationSlice, { vehicleInfo }  from "./Slice/VehicleRegistrationSlice";
-import  vehicleInfoSlice  from "./Slice/vehicleInfoSlice";
-
+import VehicleRegistrationSlice, {
+  vehicleInfo,
+} from "./Slice/VehicleRegistrationSlice";
+import vehicleInfoSlice from "./Slice/vehicleInfoSlice";
+import NumberSlice from "./Slice/NumberSlice";
 
 const rootReducer = combineReducers({
   screen: screenSlice,
   status: UserStatusSlice,
-  index: indexSlice,
+  number: NumberSlice,
   vehicleInfo: vehicleInfoSlice,
   option: OptionSlice,
   profile: profileSlice,
   driver: DriverProfile,
-  vehicle:VehicleRegistrationSlice
+  vehicle: VehicleRegistrationSlice,
 });
 
 const persistConfig = {

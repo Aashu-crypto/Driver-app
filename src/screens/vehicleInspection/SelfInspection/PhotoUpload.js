@@ -23,7 +23,7 @@ const PhotoUploadScreen = () => {
       quality: 1,
     });
 
-    if (!result.cancelled) {
+    if (!result.canceled) {
       setImage(result.uri);
     }
   };
@@ -40,7 +40,7 @@ const PhotoUploadScreen = () => {
               size={32}
               color={Color.appDefaultColor}
             />
-            <Text style={styles.uploadText}>Upload Interior Photo</Text>
+            <Text style={styles.uploadText}>Upload Live Vehicle Photo </Text>
           </>
         )}
       </TouchableOpacity>

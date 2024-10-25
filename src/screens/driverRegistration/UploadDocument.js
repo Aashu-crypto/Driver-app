@@ -70,13 +70,7 @@ const UploadDocument = ({ navigation }) => {
   }, [visible, profileModalVisible]);
   const [type, setType] = useState("");
   const [profileModalVisible, setProfileModalVisible] = useState(false);
-  const areAllDocumentsSubmitted = () => {
-    // Combine both vehicle and driver documents
-    const allDocuments = [...vehicleDocument, ...driverDocument];
-
-    // Check if any document has status "NOT_SUBMITTED"
-    return allDocuments.every((doc) => doc.approvalStatus !== "NOT_SUBMITTED");
-  };
+ 
   const [selectedId, setSelectedId] = useState();
   const onPress = (id, title, type, statusText) => {
     // Open the modal for other documents
@@ -86,11 +80,12 @@ const UploadDocument = ({ navigation }) => {
         setType(type);
         setSelectedId(id);
       } else if (title == "Aadhar Card" && type == "Driver") {
-        navigation.navigate(Route.AADHAARCARD);
+        navigation.navigate(Route.AADHAARCARD,{id:id});
         setType(type);
       } else if (type == "Vehicle") {
-        showModal();
         setSelectedId(id);
+        showModal();
+     
         setType(type);
       } else {
         showModal();
@@ -182,7 +177,7 @@ const UploadDocument = ({ navigation }) => {
             Earnings are only a few steps away.
           </Text>
           <Text style={styles.sectionTitle}>Driver’s documents</Text>
-          {driverDocument.map((item) => (
+          {driverDocument?.map((item) => (
             <DocumentCard
               key={item.id}
               id={item.id}
@@ -197,7 +192,7 @@ const UploadDocument = ({ navigation }) => {
           </Text>
 
           <Text style={styles.sectionTitle}>Vehicle documents</Text>
-          {vehicleDocument.map((item) => (
+          {vehicleDocument?.map((item) => (
             <DocumentCard
               key={item.id}
               id={item.id}

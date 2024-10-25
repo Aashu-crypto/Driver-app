@@ -5,32 +5,80 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
+  Alert,
+  Platform,
 } from "react-native";
 import { FontAwesome, AntDesign, MaterialIcons } from "@expo/vector-icons";
-import HeaderComponent from "../../components/HeaderComponent";
-import { Color } from "../../../GlobalStyles";
-import Button from "../../components/Button";
 import { TextInput } from "react-native-paper";
-
+import { useSelector } from "react-redux";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import Button from "../../components/Button";
+import axios from "axios"; // For API requests
+import { Color } from "../../../GlobalStyles";
+import { backend_Host } from "../../../config";
+import { useDispatch } from "react-redux";
+import { driverProfile } from "../../Redux/Slice/DriverProfile";
 const EditProfile = () => {
-  // Define state for form inputs
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [city, setCity] = useState("");
-  const [dob, setDob] = useState("");
-  const [gender, setGender] = useState(null);
+  const driver = useSelector((state) => state.driver.data);
+const dispatch = useDispatch()
+  const [firstName, setFirstName] = useState(driver.firstName || "");
+  const [lastName, setLastName] = useState(driver.lastName || "");
+  const [phone, setPhone] = useState(driver.phoneNumber || "");
+  const [email, setEmail] = useState(driver.email || "");
+  const [city, setCity] = useState(driver.city || "");
+  const [dob, setDob] = useState(
+    driver.dob ? new Date(driver.dob) : new Date()
+  );
+  const [gender, setGender] = useState(driver.gender || null);
+  const [profilePicture, setProfilePicture] = useState(driver.photoUrl || "");
+  const [showDatePicker, setShowDatePicker] = useState(false); // For showing date picker
 
-  // Handle Update button press
-  const handleUpdate = () => {
-    // You can add validation and API requests here
-    console.log("Profile updated", { firstName, lastName, phone, email, city, dob, gender });
+  // Handle the Update button press and send the updated data to the backend
+  const handleUpdate = async () => {
+    try {
+      const payload = {
+        firstName,
+        lastName,
+        phoneNumber: phone,
+        email,
+        city,
+        dob: dob ? dob.toISOString() : null,
+        gender,
+        // photoUrl: profilePicture,
+      };
+
+      const response = await axios.put(
+        `${backend_Host}/driver/edit-profile/${driver.id}`,
+        payload
+      ); // Update the API endpoint accordingly
+
+      if (response.status === 200) {
+        dispatch(driverProfile(response.data))
+        console.log(driver);
+        
+        Alert.alert(
+          "Profile Updated",
+          "Your profile has been updated successfully."
+        );
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      Alert.alert(
+        "Update Failed",
+        "There was a problem updating your profile. Please try again."
+      );
+    }
+  };
+
+  // Handle date change from DateTimePicker
+  const onDateChange = (event, selectedDate) => {
+    const currentDate = selectedDate || dob;
+    setShowDatePicker(Platform.OS === "ios"); // Close the picker on Android after selection
+    setDob(currentDate);
   };
 
   return (
-    <ScrollView style={{flex:1}}>
-  
+    <ScrollView style={{ flex: 1, backgroundColor: "#F9F9F9" }}>
       <View style={styles.container}>
         {/* Profile Picture */}
         <View style={styles.profilePicContainer}>
@@ -49,142 +97,142 @@ const EditProfile = () => {
               value={firstName}
               onChangeText={setFirstName}
               style={styles.nameInput}
-              placeholder="First name"
+              placeholder="First Name"
               outlineColor="#EEEEEE"
               activeOutlineColor={Color.appDefaultColor}
               mode="outlined"
-              placeholderTextColor={"#B9AAAA"}
               theme={{ roundness: 10 }}
             />
             <TextInput
               value={lastName}
               onChangeText={setLastName}
               style={styles.nameInput}
-              placeholder="Last name"
+              placeholder="Last Name"
               outlineColor="#EEEEEE"
               activeOutlineColor={Color.appDefaultColor}
               mode="outlined"
-              placeholderTextColor={"#B9AAAA"}
               theme={{ roundness: 10 }}
             />
           </View>
+
           <TextInput
             value={phone}
             onChangeText={setPhone}
             style={styles.inputFullWidth}
-            placeholder="+91 1234567891"
+            placeholder="Phone Number"
             outlineColor="#EEEEEE"
             activeOutlineColor={Color.appDefaultColor}
             mode="outlined"
-            placeholderTextColor={"#B9AAAA"}
             theme={{ roundness: 10 }}
           />
+
           <TextInput
             value={email}
             onChangeText={setEmail}
             style={styles.inputFullWidth}
-            placeholder="Email address"
+            placeholder="Email Address"
             outlineColor="#EEEEEE"
             activeOutlineColor={Color.appDefaultColor}
             mode="outlined"
-            placeholderTextColor={"#B9AAAA"}
             theme={{ roundness: 10 }}
           />
-          <View style={styles.row}>
-            <TextInput
-              value={city}
-              onChangeText={setCity}
-              style={styles.nameInput}
-              placeholder="City"
-              outlineColor="#EEEEEE"
-              activeOutlineColor={Color.appDefaultColor}
-              mode="outlined"
-              placeholderTextColor={"#B9AAAA"}
-              theme={{ roundness: 10 }}
-            />
-            <MaterialIcons
-              name="arrow-drop-down"
-              size={24}
-              color="gray"
-              style={styles.dropdownIcon}
-            />
-          </View>
-          <View style={styles.row}>
-            <TextInput
-              value={dob}
-              onChangeText={setDob}
-              style={styles.nameInput}
-              placeholder="DOB"
-              outlineColor="#EEEEEE"
-              activeOutlineColor={Color.appDefaultColor}
-              mode="outlined"
-              placeholderTextColor={"#B9AAAA"}
-              theme={{ roundness: 10 }}
-            />
-            <MaterialIcons
-              name="calendar-today"
-              size={24}
-              color="gray"
-              style={styles.calendarIcon}
-            />
-          </View>
-        </View>
 
-        {/* Gender Selection */}
-        <Text style={styles.genderLabel}>Select gender</Text>
-        <View style={styles.genderContainer}>
-          <TouchableOpacity
-            style={[
-              styles.genderButton,
-              gender === "male" && styles.genderButtonSelected,
-            ]}
-            onPress={() => setGender("male")}
-          >
-            <Text
-              style={[
-                styles.genderText,
-                gender === "male" && styles.genderTextSelected,
-              ]}
-            >
-              Male
-            </Text>
+          <TextInput
+            value={city}
+            onChangeText={setCity}
+            style={styles.inputFullWidth}
+            placeholder="City"
+            outlineColor="#EEEEEE"
+            activeOutlineColor={Color.appDefaultColor}
+            mode="outlined"
+            theme={{ roundness: 10 }}
+          />
+
+          {/* DOB Field with Date Picker */}
+          <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+            <TextInput
+              value={dob.toISOString().split("T")[0]} // Display the date in YYYY-MM-DD format
+              style={styles.inputFullWidth}
+              placeholder="Date of Birth"
+              editable={false} // Disable manual typing
+              outlineColor="#EEEEEE"
+              activeOutlineColor={Color.appDefaultColor}
+              mode="outlined"
+              theme={{ roundness: 10 }}
+              right={<TextInput.Icon name="calendar-today" />}
+            />
           </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.genderButton,
-              gender === "female" && styles.genderButtonSelected,
-            ]}
-            onPress={() => setGender("female")}
-          >
-            <Text
+
+          {/* Show DateTimePicker */}
+          {showDatePicker && (
+            <DateTimePicker
+              value={dob}
+              mode="date"
+              display="default"
+              onChange={onDateChange}
+              maximumDate={new Date()} // Ensure the DOB can't be in the future
+            />
+          )}
+
+          {/* Gender Selection */}
+          <Text style={styles.genderLabel}>Select Gender</Text>
+          <View style={styles.genderContainer}>
+            <TouchableOpacity
               style={[
-                styles.genderText,
-                gender === "female" && styles.genderTextSelected,
+                styles.genderButton,
+                gender === "MALE" && styles.genderButtonSelected,
               ]}
+              onPress={() => setGender("MALE")}
             >
-              Female
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.genderButton,
-              gender === "others" && styles.genderButtonSelected,
-            ]}
-            onPress={() => setGender("others")}
-          >
-            <Text
+              <Text
+                style={
+                  gender === "MALE"
+                    ? styles.genderTextSelected
+                    : styles.genderText
+                }
+              >
+                Male
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
               style={[
-                styles.genderText,
-                gender === "others" && styles.genderTextSelected,
+                styles.genderButton,
+                gender === "FEMALE" && styles.genderButtonSelected,
               ]}
+              onPress={() => setGender("FEMALE")}
             >
-              Others
-            </Text>
-          </TouchableOpacity>
+              <Text
+                style={
+                  gender === "FEMALE"
+                    ? styles.genderTextSelected
+                    : styles.genderText
+                }
+              >
+                Female
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.genderButton,
+                gender === "OTHERS" && styles.genderButtonSelected,
+              ]}
+              onPress={() => setGender("OTHERS")}
+            >
+              <Text
+                style={
+                  gender === "OTHERS"
+                    ? styles.genderTextSelected
+                    : styles.genderText
+                }
+              >
+                Others
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         {/* Update Button */}
-        <Button onPress={handleUpdate} placeholder={"Update"} />
+        <Button onPress={handleUpdate} placeholder={"Update Profile"} />
       </View>
     </ScrollView>
   );
@@ -193,7 +241,7 @@ const EditProfile = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Color.AlmostWhiteBackGround,
+    backgroundColor: "#F9F9F9",
     padding: 20,
   },
   profilePicContainer: {
@@ -224,54 +272,32 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     justifyContent: "space-between",
+    marginBottom: 10,
   },
   nameInput: {
     height: 50,
-    borderColor: "#EEEEEE",
-    borderWidth: 1.5,
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    marginBottom: 10,
     backgroundColor: "#fff",
     width: "49%",
-    fontSize: 14,
   },
   inputFullWidth: {
     height: 50,
-    borderColor: "#EEEEEE",
-    borderWidth: 1.5,
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    marginBottom: 10,
     backgroundColor: "#fff",
-    width: "100%",
-    fontSize: 14,
-  },
-  dropdownIcon: {
-    position: "absolute",
-    right: 15,
-    top: 30,
-  },
-  calendarIcon: {
-    position: "absolute",
-    right: 15,
-    top: 30,
+    marginBottom: 15,
   },
   genderLabel: {
-    fontSize: 16,
-    marginVertical: 10,
-    color: "#333",
+    fontSize: 13,
+    color: Color.gray,
+    marginBottom: 10,
   },
   genderContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 20,
   },
   genderButton: {
     flex: 1,
     backgroundColor: "#fff",
     padding: 15,
-    borderRadius: 10,
+    borderRadius: 25,
     alignItems: "center",
     marginHorizontal: 5,
     borderColor: Color.appDefaultColor,

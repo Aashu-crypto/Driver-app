@@ -5,34 +5,40 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import { Color } from "../../../GlobalStyles";
 import { Route } from "../../../routes";
 import HeaderComponent from "../../components/HeaderComponent";
+import { useTranslation } from "react-i18next";
 const Welcome = ({ navigation }) => {
+  const { t } = useTranslation(); 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Color.AlmostWhiteBackGround }}>
-      <HeaderComponent title="Welcome Rakesh!" />
-      <Pressable
-        style={styles.btn}
-        onPress={() => {
-          console.log("Working");
+    {/* Replace the title with a translated string */}
+    <HeaderComponent title={t("welcomeUser", { name: "Rakesh" })} />
+    
+    {/* Use translated strings in the UI */}
+    <Pressable
+      style={styles.btn}
+      onPress={() => {
+        console.log("Working");
+        navigation.navigate(Route.VEHICLETYPE);
+      }}
+    >
+      <Text style={styles.btnText}>{t("startApplication")}</Text>
+      <AntDesign name="right" size={20} color={Color.appDefaultColor} />
+    </Pressable>
+    
+    <Text style={[styles.btnText, { paddingLeft: 15, marginLeft: 5 }]}>
+      {t("settings")}
+    </Text>
 
-          navigation.navigate(Route.VEHICLETYPE);
-        }}
-      >
-        <Text style={styles.btnText}>Start Application</Text>
-        <AntDesign name="right" size={20} color={Color.appDefaultColor} />
-      </Pressable>
-      <Text style={[styles.btnText, { paddingLeft: 15, marginLeft: 5 }]}>
-        Settings
-      </Text>
-      <Pressable
-        style={styles.btn}
-        onPress={() => {
-          navigation.navigate(Route.PROFILESETTING);
-        }}
-      >
-        <Text style={styles.btnText}>Profile Settings</Text>
-        <AntDesign name="right" size={20} color={Color.appDefaultColor} />
-      </Pressable>
-    </SafeAreaView>
+    <Pressable
+      style={styles.btn}
+      onPress={() => {
+        navigation.navigate(Route.PROFILESETTING);
+      }}
+    >
+      <Text style={styles.btnText}>{t("profileSettings")}</Text>
+      <AntDesign name="right" size={20} color={Color.appDefaultColor} />
+    </Pressable>
+  </SafeAreaView>
   );
 };
 

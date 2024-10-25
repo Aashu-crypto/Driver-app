@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.backGroundColor,
   },
   sectionContainer: {
-    backgroundColor: "#f0ede6",
+    backgroundColor: "#F4F4F4",
     borderRadius: 15,
     padding: 10,
     marginBottom:8
