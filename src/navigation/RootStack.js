@@ -15,11 +15,11 @@ const RootStack = () => {
 
   switch (navigation) {
     case Route.MAIN:
-      return <OnBoardingStack />;
+      return  <MyDrawer />;
     case Route.REGISTRATION_STACK:
       return <RegistrationStack />;
     case Route.HOME_STACK:
-      return <MyDrawer />;
+      return <OnBoardingStack />;
 
     default:
       return <RegistrationStack />;

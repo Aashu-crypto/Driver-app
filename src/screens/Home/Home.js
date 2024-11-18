@@ -6,6 +6,7 @@ import {
   Image,
   StatusBar,
   ImageBackground,
+  Pressable,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import HomeScreenHeader from "../../components/HomeScreenHeader";
@@ -22,7 +23,7 @@ import Animated, {
 } from "react-native-reanimated";
 import SimpleRideLocation from "./SimpleRideLocation";
 import SharedRide from "./SharedRide";
-
+import PhonePePaymentSDK from "react-native-phonepe-pg";
 const HomeScreen = ({ navigation }) => {
   const status = useSelector((state) => state.status.status);
 
@@ -61,6 +62,56 @@ const HomeScreen = ({ navigation }) => {
       fetchRideAvailability();
     }, 6000);
   }, []);
+  const generateTransactionId = () => {
+    const timeStamp = Date.now();
+    const random = Math.floor(Math.random() * 1000000);
+    const merchantPrefix = "T";
+
+    return `${merchantPrefix}${timeStamp}${random}`;
+  };
+
+  const paymentHandler = async () => {
+    if (!PhonePePaymentSDK) {
+      Alert.alert("PhonePe SDK is not loaded.");
+      console.log("hh",PhonePePaymentSDK);
+      
+      return;
+    }
+    console.log(PhonePePaymentSDK);
+    
+    PhonePePaymentSDK.init("SANDBOX", "1222","4545",true)
+      .then((resp) => {
+        const requestBody = {
+          merchantId: merchantId,
+          merchantTransactionId: generateTransactionId(),
+          merchantUserId: "",
+          amount: 1,
+          mobileNumber: "8521610724",
+          callbackURL: "",
+          paymentInstructions: {
+            type: "PAY_PAGE",
+          },
+        };
+
+        const salt_key = "099eb0cd-02cf-4e2a-8aca-3e6c6aff0399";
+        const salt_index = 1;
+        const payload = JSON.stringify(requestBody);
+        const payload_main = base64().encode(payload);
+        const string = payload_main + "/pg/v1/pay" + salt_key;
+        const checksum = sha256(string) + "###" + salt_index;
+
+        PhonePePaymentSDK.startTransaction()
+          .then(() => {
+            payload_main, checksum, null, null;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <View style={styles.container}>
@@ -72,10 +123,10 @@ const HomeScreen = ({ navigation }) => {
           <View style={styles.iconWrapper}>
             <FontAwesome name="rupee" size={20} color="white" />
           </View>
-          <View>
+          <Pressable onPress={paymentHandler}>
             <Text style={styles.cardText}>Today's Earning</Text>
             <Text style={styles.cardValue}>₹250.0</Text>
-          </View>
+          </Pressable>
         </View>
         <View style={styles.card}>
           <View style={styles.iconWrapper}>
@@ -141,7 +192,7 @@ const HomeScreen = ({ navigation }) => {
         <SimpleRideLocation />
       )}
       {status === "Online" && typeOfRide === "Shared" && findRide && (
-    <SharedRide/>
+        <SharedRide />
       )}
     </View>
   );
